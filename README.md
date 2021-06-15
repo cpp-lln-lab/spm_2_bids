@@ -96,10 +96,12 @@ This will set up everything automatically in your current directory.
 We use the [MISS_HIT linter](https://github.com/florianschanda/miss_hit/) to
 automatically enforce / fix some code style issues and check for code quality.
 
-The linter is a python package that can be installed with:
+To install the linter as part of a python virtual environment do the following:
 
 ```bash
-pip3 install --user miss_hit
+virtualenv -p /usr/bin/python3 env
+source env/bin/activate
+pip install -r requirements.txt
 ```
 
 The rules followed by MISS_HIT are in the
@@ -137,10 +139,17 @@ The code style and quality is also checked during the
 For more information about MISS_HIT see its
 [documentation](https://florianschanda.github.io/miss_hit/).
 
-## Python environment
+#### Pre-commit
 
-More on this
-[here](https://the-turing-way.netlify.app/reproducible-research/renv/renv-package.html)
+There is a [pre-commit hook](https://pre-commit.com/) that you can use to
+reformat files as you commit them.
+
+If you have used the `requirments.txt` to install the required pything packages
+you should just have to install the pre-commit git hook with the following:
+
+```bash
+pre-commit install
+```
 
 ## Testing your code
 

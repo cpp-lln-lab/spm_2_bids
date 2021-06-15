@@ -1,9 +1,14 @@
-name: miss_hit
+name: code quality
+# runs the miss hit linter on the code base
+# https://github.com/florianschanda/miss_hit/
+# see CONTRIBUTING.md for more information
 
 on:
   push:
     branches:
       - master
+      - main
+      - dev
   pull_request:
     branches: '*'
 
@@ -27,12 +32,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools
-        pip3 install install miss_hit
+        pip3 install -r requirements.txt   
 
-    - name: Miss_hit code quality
+    - name: MISS_HIT Metrics
       run: |
-        mh_metric . --ci
+        mh_metric --ci
 
-    - name: Miss_hit code style
+    - name: MISS_HIT Bug finder
       run: |
-        mh_style .
+        mh_lint
