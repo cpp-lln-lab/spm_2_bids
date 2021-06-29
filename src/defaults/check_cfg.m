@@ -38,6 +38,8 @@ function fields_to_set = set_default_cfg()
 
     SPM_SPACE = 'IXI549Space';
 
+    desc_gen = @(x) struct('entities', struct('space', 'individual', 'desc', x));
+
     segment.normalized = struct('entities', struct('space', 'IXI549Space'));
 
     % Segmentation output
@@ -79,23 +81,21 @@ function fields_to_set = set_default_cfg()
     fields_to_set.spm_2_bids.segment = segment;
 
     % Preprocessed data
-    fields_to_set.spm_2_bids.stc = struct('entities', struct('space', 'individual', ...
-                                                             'desc', 'stc'));
-    fields_to_set.spm_2_bids.realign_unwarp = struct('entities', struct('space', 'individual', ...
-                                                                        'desc', 'realignUnwarp'));
-    fields_to_set.spm_2_bids.mean = struct('entities', struct('space', 'individual', ...
-                                                              'desc', 'mean'));
+    fields_to_set.spm_2_bids.stc = desc_gen('stc');
+
+    fields_to_set.spm_2_bids.realign_unwarp = desc_gen('realignUnwarp');
+
+    fields_to_set.spm_2_bids.mean = desc_gen('mean');
     fields_to_set.spm_2_bids.normalized_mean = fields_to_set.spm_2_bids.mean;
     fields_to_set.spm_2_bids.normalized_mean.entities.space = SPM_SPACE;
 
-    fields_to_set.spm_2_bids.preproc = struct('entities', struct('space', 'individual', ...
-                                                                 'desc', 'preproc'));
-
+    fields_to_set.spm_2_bids.preproc = desc_gen('preproc');
     fields_to_set.spm_2_bids.preproc_norm = fields_to_set.spm_2_bids.preproc;
     fields_to_set.spm_2_bids.preproc_norm.entities.space = SPM_SPACE;
 
-    fields_to_set.spm_2_bids.smooth = struct('entities', struct('space', 'individual', ...
-                                                                'desc', 'smth'));
+    % Smooth
+    fields_to_set.spm_2_bids.smooth.fwhm = [];
+    fields_to_set.spm_2_bids.smooth = desc_gen('smth');
     fields_to_set.spm_2_bids.smooth_norm = fields_to_set.spm_2_bids.smooth;
     fields_to_set.spm_2_bids.smooth_norm.entities.space = SPM_SPACE;
 

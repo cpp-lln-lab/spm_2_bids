@@ -8,19 +8,19 @@ function test_suite = test_spm_2_bids %#ok<*STOUT>
     initTestSuite;
 end
 
-function test_spm_2_bids_basic()
-
-    input_dir = fullfile(fileparts(mfilename('fullpath')), ...
-                         'data', 'MoAE', 'derivatives', 'cpp_spm-preproc');
-    use_schema = false;
-    tolerant = true;
-    verbose = false;
-    index_derivatives = false;
-    BIDS = bids.layout(input_dir, use_schema, index_derivatives, tolerant, verbose);
-
-    prefixes =  bids.query(BIDS, 'prefixes')';
-
-end
+% function test_spm_2_bids_basic()
+%
+%     input_dir = fullfile(fileparts(mfilename('fullpath')), ...
+%                          'data', 'MoAE', 'derivatives', 'cpp_spm-preproc');
+%     use_schema = false;
+%     tolerant = true;
+%     verbose = false;
+%     index_derivatives = false;
+%     BIDS = bids.layout(input_dir, use_schema, index_derivatives, tolerant, verbose);
+%
+%     prefixes =  bids.query(BIDS, 'prefixes')';
+%
+% end
 
 function test_spm_2_bids_segmentation()
 
