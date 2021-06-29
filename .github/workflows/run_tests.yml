@@ -41,7 +41,12 @@ jobs:
     - name: Update octave path
       run: |
         octave $OCTFLAGS --eval "initCppSpm; savepath();"
-        octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'tests', 'utils')); savepath();"            
+        octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'tests', 'utils')); savepath();"  
+        
+    - name: get bids-matlab
+      run: |
+        make install_dev
+        octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'tests', 'utils')); savepath();"         
 
         
     - name: MOxUnit Action

@@ -3,11 +3,9 @@
 *.m~
 *octave-workspace
 
-# exclude content of logfiles folders
-*.tsv
-*.mat
-
 env/
+
+lib/bids-matlab
 
 
 ## MATLAB / OCTAVE gitignore template
