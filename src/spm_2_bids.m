@@ -11,6 +11,8 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     prfx = get_spm_prefix_list();
 
+    p.prefix;
+
     switch p.prefix
 
         case prfx.bias_cor
@@ -45,7 +47,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
              }
             spec = cfg.spm_2_bids.preproc_norm;
 
-        case [prfx.norm, 'mean' prfx.unwarp]
+        case [prfx.norm, 'mean', prfx.unwarp]
             spec = cfg.spm_2_bids.normalized_mean;
 
         case [prfx.norm, 'c1']
