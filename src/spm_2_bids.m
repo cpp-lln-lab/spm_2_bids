@@ -11,8 +11,6 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     prfx = get_spm_prefix_list();
 
-    fprintf('%s', p.prefix);
-
     switch p.prefix
 
         case prfx.bias_cor
@@ -81,10 +79,20 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     end
 
+    % add the FWHM to smoothing description
     if isfield(spec.entities, 'desc') && ...
             strcmp(spec.entities.desc, 'smth') && ...
             ~isempty(cfg.spm_2_bids.fwhm)
         spec.entities.desc = sprintf('smth%i', cfg.spm_2_bids.fwhm);
+    end
+
+    % adapt "from" label to the suffix of the input image
+    if strcmp(p.prefix, 'y_')
+        spec.entities.from = p.suffix;
+        spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
+    elseif strcmp(p.prefix, 'iy_')
+        spec.entities.to = p.suffix;
+        spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
     end
 
     spec.prefix = '';

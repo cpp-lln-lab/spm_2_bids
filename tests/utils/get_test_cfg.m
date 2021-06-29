@@ -1,4 +1,4 @@
-function test_cfg = set_test_cfg()
+function test_cfg = get_test_cfg()
     %
     % (C) Copyright 2021 spm_2_bids developers
 

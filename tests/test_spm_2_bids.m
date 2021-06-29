@@ -22,12 +22,47 @@ end
 %
 % end
 
+function test_spm_2_bids_defor_field()
+
+    print_here('\n', '');
+
+    prefix_input_output = {'y_', ...
+                           'sub-01_T1w.nii', ...
+                           'sub-01_from-T1w_to-IXI549Space_mode-image_xfm.nii'; ...
+                           'y_', ...
+                           'sub-01_T2w.nii', ...
+                           'sub-01_from-T2w_to-IXI549Space_mode-image_xfm.nii'; ...
+                           'iy_', ...
+                           'sub-01_T1w.nii', ...
+                           'sub-01_from-IXI549Space_to-T1w_mode-image_xfm.nii'; ...
+                           'iy_', ...
+                           'sub-01_T2w.nii', ...
+                           'sub-01_from-IXI549Space_to-T2w_mode-image_xfm.nii' ...
+                          };
+
+    for i = 1:size(prefix_input_output, 1)
+
+        prefixes = get_prefixes(prefix_input_output, i);
+
+        for j = 1:numel(prefixes)
+
+            file = [prefixes{j} prefix_input_output{i, 2}];
+
+            print_here('%s\n', file);
+
+            filename = spm_2_bids(file);
+
+            expected = prefix_input_output{i, 3};
+            assertEqual(filename, expected);
+
+        end
+    end
+
+end
+
 function test_spm_2_bids_smooth_fwhm()
 
-    test_cfg = set_test_cfg();
-    if test_cfg.verbosity
-        fprintf(1, '\n');
-    end
+    print_here('\n', '');
 
     cfg.spm_2_bids.fwhm = 6;
 
@@ -43,9 +78,7 @@ function test_spm_2_bids_smooth_fwhm()
 
             file = [prefixes{j} func_file];
 
-            if test_cfg.verbosity
-                fprintf(1, '%s\n', file);
-            end
+            print_here('%s\n', file);
 
             filename = spm_2_bids(file, cfg);
 
@@ -59,10 +92,7 @@ end
 
 function test_spm_2_bids_anat()
 
-    test_cfg = set_test_cfg();
-    if test_cfg.verbosity
-        fprintf(1, '\n');
-    end
+    print_here('\n', '');
 
     anat_file = 'sub-01_T1w.nii';
 
@@ -87,9 +117,7 @@ function test_spm_2_bids_anat()
 
             file = [prefixes{j} anat_file];
 
-            if test_cfg.verbosity
-                fprintf(1, '%s\n', file);
-            end
+            print_here('%s\n', file);
 
             filename = spm_2_bids(file);
 
@@ -103,10 +131,7 @@ end
 
 function test_spm_2_bids_func()
 
-    test_cfg = set_test_cfg();
-    if test_cfg.verbosity
-        fprintf(1, '\n');
-    end
+    print_here('\n', '');
 
     func_file = 'sub-01_task-auditory_bold.nii';
 
@@ -135,9 +160,7 @@ function test_spm_2_bids_func()
 
             file = [prefixes{j} func_file];
 
-            if test_cfg.verbosity
-                fprintf(1, '%s\n', file);
-            end
+            print_here('%s\n', file);
 
             filename = spm_2_bids(file);
 
@@ -167,5 +190,12 @@ function prefixes = get_prefixes(prefix_and_output, row)
     prefixes = prefix_and_output{row, 1};
     if ~iscell(prefixes)
         prefixes = {prefixes};
+    end
+end
+
+function print_here(string, file)
+    test_cfg = get_test_cfg();
+    if test_cfg.verbosity
+        fprintf(1, string, file);
     end
 end

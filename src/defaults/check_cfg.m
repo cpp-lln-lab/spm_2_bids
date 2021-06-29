@@ -36,16 +36,27 @@ function fields_to_set = set_default_cfg()
 
     SPM_SPACE = 'IXI549Space';
 
-    desc_gen = @(x) struct('entities', struct('space', 'individual', 'desc', x));
+    fields_to_set.entity_order = {'hemi'; ...
+                                  'space'; ...
+                                  'res'; ...
+                                  'den'; ...
+                                  'label'; ...
+                                  'desc'};
 
-    segment.normalized = struct('entities', struct('space', 'IXI549Space'));
+    fields_to_set.spm_2_bids.fwhm = [];
+
+    % fucntion to generate structures
+    desc_gen = @(x) struct('entities', struct('space', 'individual', 'desc', x));
+    segment_gen = @(x) struct('entities', struct('space', 'individual', ...
+                                                 'label', x), ...
+                              'suffix', 'probseg');
+    norm_segment_gen = @(x) struct('entities', struct('space', SPM_SPACE, ...
+                                                      'label', x), ...
+                                   'suffix', 'probseg');
 
     % Segmentation output
     segment.bias_corrected = struct('entities', struct('desc', 'biascor'));
 
-    segment_gen = @(x) struct('entities', struct('space', 'individual', ...
-                                                 'label', x), ...
-                              'suffix', 'probseg');
     segment.gm = segment_gen('GM');
     segment.wm = segment_gen('WM');
     segment.csf = segment_gen('CSF');
@@ -53,9 +64,6 @@ function fields_to_set = set_default_cfg()
     segment.soft = segment_gen('ST');
     segment.air = segment_gen('air');
 
-    norm_segment_gen = @(x) struct('entities', struct('space', SPM_SPACE, ...
-                                                      'label', x), ...
-                                   'suffix', 'probseg');
     segment.gm_norm = norm_segment_gen('GM');
     segment.wm_norm = norm_segment_gen('WM');
     segment.csf_norm = norm_segment_gen('CSF');
@@ -92,7 +100,6 @@ function fields_to_set = set_default_cfg()
     fields_to_set.spm_2_bids.preproc_norm.entities.space = SPM_SPACE;
 
     % Smooth
-    fields_to_set.spm_2_bids.fwhm = [];
     fields_to_set.spm_2_bids.smooth = desc_gen('smth');
     fields_to_set.spm_2_bids.smooth_norm = fields_to_set.spm_2_bids.smooth;
     fields_to_set.spm_2_bids.smooth_norm.entities.space = SPM_SPACE;
