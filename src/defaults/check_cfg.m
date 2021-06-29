@@ -94,6 +94,9 @@ function fields_to_set = set_default_cfg()
     fields_to_set.spm_2_bids.preproc_norm = fields_to_set.spm_2_bids.preproc;
     fields_to_set.spm_2_bids.preproc_norm.entities.space = SPM_SPACE;
 
+    fields_to_set.spm_2_bids.smooth.entities.space = struct('entities', struct('space', 'individual', ...
+                                                            'desc', 'smth'));
+
 end
 
 function check_fields(cfg)

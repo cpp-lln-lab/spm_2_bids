@@ -8,14 +8,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     p = bids.internal.parse_filename(file);
 
-    spm_defaults = spm_get_defaults();
-    prfx.stc = spm_defaults.slicetiming.prefix;
-    prfx.realign = spm_defaults.realign.write.prefix;
-    prfx.unwarp = spm_defaults.unwarp.write.prefix;
-    prfx.coreg = spm_defaults.coreg.write.prefix;
-    prfx.bias_cor = spm_defaults.deformations.modulate.prefix;
-    prfx.norm = spm_defaults.normalise.write.prefix;
-    prfx.smooth = spm_defaults.smooth.prefix;
+    prfx = get_spm_prefix_list();
 
     switch p.prefix
 
@@ -42,10 +35,13 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
               ['mean' prfx.unwarp]}
             spec = cfg.spm_2_bids.mean;
 
-        case {[prfx.norm prfx.unwarp prfx.stc], ...
+        case {prfx.norm, ...
+            [prfx.norm prfx.bias_cor], ...
+            [prfx.norm prfx.unwarp prfx.stc], ...
+            [prfx.norm prfx.realign prfx.stc], ... 
               [prfx.norm prfx.unwarp], ...
-              [prfx.norm prfx.realign], ...
-              [prfx.norm prfx.realign prfx.stc]}
+              [prfx.norm prfx.realign]
+                          }
             spec = cfg.spm_2_bids.preproc_norm;
 
         case [prfx.norm 'mean' prfx.unwarp]
@@ -58,10 +54,11 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
         case [prfx.norm 'c3']
             spec = cfg.spm_2_bids.segment.csf_norm;
 
-        case {'w', 'wua', 'wu', 'wr', 'wra', 'wm'}
-            spec = cfg.spm_2_bids.preproc_norm;
-
-        case {'swu', 'swr', 'swua', 'swra'}
+        case {[prfx.smooth prfx.norm prfx.unwarp prfx.stc], ...
+            [prfx.smooth prfx.norm prfx.realign prfx.stc] 
+              [prfx.smooth prfx.norm prfx.unwarp], ...
+              [prfx.smooth prfx.norm prfx.realign], ...
+              }
 
         case {'su' 'sr', 'sua' 'sra'}
 
@@ -75,6 +72,19 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     [new_filename, pth, json] = bids.create_filename(p, file);
 
     % TODO update json content
+
+end
+
+function prefix_list = get_spm_prefix_list()
+
+    spm_defaults = spm_get_defaults();
+    prefix_list.stc = spm_defaults.slicetiming.prefix;
+    prefix_list.realign = spm_defaults.realign.write.prefix;
+    prefix_list.unwarp = spm_defaults.unwarp.write.prefix;
+    prefix_list.coreg = spm_defaults.coreg.write.prefix;
+    prefix_list.bias_cor = spm_defaults.deformations.modulate.prefix;
+    prefix_list.norm = spm_defaults.normalise.write.prefix;
+    prefix_list.smooth = spm_defaults.smooth.prefix;
 
 end
 
