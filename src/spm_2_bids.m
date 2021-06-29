@@ -2,9 +2,10 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     %
     % (C) Copyright 2021 spm_2_bids developers
 
-    if nargin < 2 || isempty(cfg)
-        cfg = check_cfg();
+    if nargin < 2
+        cfg = struct();
     end
+    cfg = check_cfg(cfg);
 
     p = bids.internal.parse_filename(file);
 
@@ -76,6 +77,12 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
             json = [];
             return
 
+    end
+
+    if isfield(spec.entities, 'desc') && ...
+            strcmp(spec.entities.desc, 'smth') && ...
+            ~isempty(cfg.spm_2_bids.fwhm)
+        spec.entities.desc = sprintf('smth%i', cfg.spm_2_bids.fwhm);
     end
 
     spec.prefix = '';

@@ -26,8 +26,6 @@ function cfg = check_cfg(cfg)
 
     cfg = set_missing_fields(cfg, fields_to_set);
 
-    cfg = set_missing_fields(cfg, fields_to_set);
-
     check_fields(cfg);
 
     cfg = orderfields(cfg);
@@ -94,7 +92,7 @@ function fields_to_set = set_default_cfg()
     fields_to_set.spm_2_bids.preproc_norm.entities.space = SPM_SPACE;
 
     % Smooth
-    fields_to_set.spm_2_bids.smooth.fwhm = [];
+    fields_to_set.spm_2_bids.fwhm = [];
     fields_to_set.spm_2_bids.smooth = desc_gen('smth');
     fields_to_set.spm_2_bids.smooth_norm = fields_to_set.spm_2_bids.smooth;
     fields_to_set.spm_2_bids.smooth_norm.entities.space = SPM_SPACE;

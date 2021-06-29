@@ -22,29 +22,42 @@ end
 %
 % end
 
-function test_spm_2_bids_segmentation()
+function test_spm_2_bids_smooth_fwhm()
 
-    anat_file = 'sub-01_T1w.nii';
+    test_cfg = set_test_cfg();
+    if test_cfg.verbosity
+        fprintf(1, '\n');
+    end
 
-    prefix_and_output = { ...
-                         'c1',  'sub-01_space-individual_label-GM_probseg.nii'; ...
-                         'c2',  'sub-01_space-individual_label-WM_probseg.nii'; ...
-                         'c3',  'sub-01_space-individual_label-CSF_probseg.nii'; ...
-                         'iy_', 'sub-01_from-IXI549Space_to-T1w_mode-image_xfm.nii'; ...
-                         'y_',  'sub-01_from-T1w_to-IXI549Space_mode-image_xfm.nii'; ...
-                         'm',   'sub-01_desc-biascor_T1w.nii'};
+    cfg.spm_2_bids.fwhm = 6;
 
-    for iTest = 1:size(prefix_and_output, 1)
-        prefix = prefix_and_output{iTest, 1};
-        filename = spm_2_bids([prefix anat_file]);
+    func_file = 'sub-01_task-auditory_bold.nii';
 
-        expected = prefix_and_output{iTest, 2};
-        assertEqual(filename, expected);
+    prefix_and_output = {'su', 'sub-01_task-auditory_space-individual_desc-smth6_bold.nii'};
+
+    for i = 1:size(prefix_and_output, 1)
+
+        prefixes = get_prefixes(prefix_and_output, i);
+
+        for j = 1:numel(prefixes)
+
+            file = [prefixes{j} func_file];
+
+            if test_cfg.verbosity
+                fprintf(1, '%s\n', file);
+            end
+
+            filename = spm_2_bids(file, cfg);
+
+            expected = prefix_and_output{i, 2};
+            assertEqual(filename, expected);
+
+        end
     end
 
 end
 
-function test_spm_2_bids_preproc_anat()
+function test_spm_2_bids_anat()
 
     test_cfg = set_test_cfg();
     if test_cfg.verbosity
@@ -54,6 +67,12 @@ function test_spm_2_bids_preproc_anat()
     anat_file = 'sub-01_T1w.nii';
 
     prefix_and_output = { ...
+                         'c1',  'sub-01_space-individual_label-GM_probseg.nii'; ...
+                         'c2',  'sub-01_space-individual_label-WM_probseg.nii'; ...
+                         'c3',  'sub-01_space-individual_label-CSF_probseg.nii'; ...
+                         'iy_', 'sub-01_from-IXI549Space_to-T1w_mode-image_xfm.nii'; ...
+                         'y_',  'sub-01_from-T1w_to-IXI549Space_mode-image_xfm.nii'; ...
+                         'm',   'sub-01_desc-biascor_T1w.nii'; ...
                          {'wm', 'w'},  'sub-01_space-IXI549Space_desc-preproc_T1w.nii'; ...
                          'wc1',  'sub-01_space-IXI549Space_label-GM_probseg.nii'; ...
                          'wc2',  'sub-01_space-IXI549Space_label-WM_probseg.nii'; ...
@@ -82,7 +101,7 @@ function test_spm_2_bids_preproc_anat()
 
 end
 
-function test_spm_2_bids_preproc_func()
+function test_spm_2_bids_func()
 
     test_cfg = set_test_cfg();
     if test_cfg.verbosity
