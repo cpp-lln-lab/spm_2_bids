@@ -93,6 +93,7 @@ function add_dependencies()
 
     pth = fileparts(mfilename('fullpath'));
     addpath(fullfile(pth, 'lib', 'bids-matlab'));
+    addpath(fullfile(pth, 'tests', 'utils'));
     addpath(genpath(fullfile(pth, 'src')));
 
 end
