@@ -13,6 +13,15 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     switch p.prefix
 
+        % TODO
+        % case 'rc1'
+        % case 'rc2'
+        % case 'rc3'
+        % case 'rc1wmeanu'
+        % case 'rc2wmeanu'
+        % case 'rc3wmeanu'
+        % case 'ru'
+
         case prfx.bias_cor
             spec = cfg.spm_2_bids.segment.bias_corrected;
         case 'c1'
@@ -32,8 +41,12 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
         case prfx.unwarp
             spec = cfg.spm_2_bids.realign_unwarp;
 
+        case {'rp_', ['rp_' prfx.stc]}
+            spec = cfg.spm_2_bids.real_param;
+
         case {'mean', ...
-              ['mean' prfx.unwarp]}
+              ['mean' prfx.unwarp], ...
+              ['mean' prfx.unwarp, prfx.stc]}
             spec = cfg.spm_2_bids.mean;
 
         case { prfx.norm, ...
@@ -79,27 +92,17 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     end
 
-    % add the FWHM to smoothing description
-    if isfield(spec.entities, 'desc') && ...
-            strcmp(spec.entities.desc, 'smth') && ...
-            ~isempty(cfg.spm_2_bids.fwhm)
-        spec.entities.desc = sprintf('smth%i', cfg.spm_2_bids.fwhm);
-    end
+    spec = add_fwhm_to_smoth_label(spec, cfg);
 
-    % adapt "from" label to the suffix of the input image
-    if strcmp(p.prefix, 'y_')
-        spec.entities.from = p.suffix;
-        spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
-    elseif strcmp(p.prefix, 'iy_')
-        spec.entities.to = p.suffix;
-        spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
-    end
+    spec = adapt_from_label_to_input(spec, p);
 
-    spec.prefix = '';
-    spec.use_schema = false;
+    spec = use_config_spec(spec, p, cfg);
 
     overwrite = true;
+    spec.prefix = '';
+    spec.use_schema = false;
     p = set_missing_fields(p, spec, overwrite);
+
     [new_filename, pth, json] = bids.create_filename(p, file);
 
     % TODO update json content
@@ -119,11 +122,43 @@ function prefix_list = get_spm_prefix_list()
 
 end
 
-% case 'rc1'
-% case 'rc2'
-% case 'rc3'
-% case 'rc1wmeanu'
-% case 'rc2wmeanu'
-% case 'rc3wmeanu'
-% case 'rp_'
-% case 'ru'
+function spec = add_fwhm_to_smoth_label(spec, cfg)
+
+    if isfield(spec.entities, 'desc') && ...
+            strcmp(spec.entities.desc, 'smth') && ...
+            ~isempty(cfg.spm_2_bids.fwhm)
+        spec.entities.desc = sprintf('smth%i', cfg.spm_2_bids.fwhm);
+    end
+
+end
+
+function spec = adapt_from_label_to_input(spec, p)
+
+    if strcmp(p.prefix, 'y_')
+        spec.entities.from = p.suffix;
+        spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
+    elseif strcmp(p.prefix, 'iy_')
+        spec.entities.to = p.suffix;
+        spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
+    end
+
+end
+
+function spec = use_config_spec(spec, p, cfg)
+
+    % overwrite with user defined spec
+    % and reorder entities
+
+    overwrite = true;
+
+    if ~isempty(cfg.spm_2_bids.spec) && ~any(strcmp(p.prefix, {'iy_', 'y_', 'rp_'}))
+
+        spec = set_missing_fields(spec, cfg.spm_2_bids.spec, overwrite);
+
+        present_entities = ismember(cfg.spm_2_bids.entity_order, fieldnames(spec.entities));
+        entity_order = cfg.spm_2_bids.entity_order(present_entities);
+
+        spec.entities = orderfields(spec.entities, entity_order);
+    end
+
+end
