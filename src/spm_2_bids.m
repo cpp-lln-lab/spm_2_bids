@@ -32,6 +32,9 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
         case prfx.unwarp
             spec = cfg.spm_2_bids.realign_unwarp;
 
+        case 'rp_'
+            spec = cfg.spm_2_bids.real_param;
+
         case {'mean', ...
               ['mean' prfx.unwarp]}
             spec = cfg.spm_2_bids.mean;
@@ -125,5 +128,4 @@ end
 % case 'rc1wmeanu'
 % case 'rc2wmeanu'
 % case 'rc3wmeanu'
-% case 'rp_'
 % case 'ru'
