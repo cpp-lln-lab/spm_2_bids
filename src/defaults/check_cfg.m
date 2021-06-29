@@ -96,6 +96,7 @@ function fields_to_set = set_default_cfg()
 
     fields_to_set.spm_2_bids.smooth = struct('entities', struct('space', 'individual', ...
                                                                 'desc', 'smth'));
+    fields_to_set.spm_2_bids.smooth_norm = fields_to_set.spm_2_bids.smooth;
     fields_to_set.spm_2_bids.smooth_norm.entities.space = SPM_SPACE;
 
 end
