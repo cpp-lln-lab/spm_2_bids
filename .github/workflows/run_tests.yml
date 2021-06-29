@@ -32,11 +32,11 @@ jobs:
 
     - name: Install SPM
       run: |
-         git clone https://github.com/spm/spm12.git --depth 1
-         make -C spm12/src PLATFORM=octave distclean
-         make -C spm12/src PLATFORM=octave
-         make -C spm12/src PLATFORM=octave install
-         octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'spm12')); savepath();"
+         git clone https://github.com/spm/spm12.git --depth 1 lib/spm12
+         make -C lib/spm12/src PLATFORM=octave distclean
+         make -C lib/spm12/src PLATFORM=octave
+         make -C lib/spm12/src PLATFORM=octave install
+         octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'lib', 'spm12')); savepath();"
           
     - name: get bids-matlab and set up paths
       run: |
