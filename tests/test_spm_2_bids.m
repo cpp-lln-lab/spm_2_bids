@@ -8,19 +8,36 @@ function test_suite = test_spm_2_bids %#ok<*STOUT>
     initTestSuite;
 end
 
-% function test_spm_2_bids_basic()
-%
-%     input_dir = fullfile(fileparts(mfilename('fullpath')), ...
-%                          'data', 'MoAE', 'derivatives', 'cpp_spm-preproc');
-%     use_schema = false;
-%     tolerant = true;
-%     verbose = false;
-%     index_derivatives = false;
-%     BIDS = bids.layout(input_dir, use_schema, index_derivatives, tolerant, verbose);
-%
-%     prefixes =  bids.query(BIDS, 'prefixes')';
-%
-% end
+function test_spm_2_bids_cfg()
+
+    cfg.spm_2_bids.spec.entities.res = 'T1w';
+
+    print_here('\n', '');
+
+    prefix_input_output = {'wu', ...
+                           'sub-01_task-aud_bold.nii', ...
+                           'sub-01_task-aud_space-IXI549Space_res-T1w_desc-preproc_bold.nii' ...
+                          };
+
+    for i = 1:size(prefix_input_output, 1)
+
+        prefixes = get_prefixes(prefix_input_output, i);
+
+        for j = 1:numel(prefixes)
+
+            file = [prefixes{j} prefix_input_output{i, 2}];
+
+            print_here('%s\n', file);
+
+            filename = spm_2_bids(file, cfg);
+
+            expected = prefix_input_output{i, 3};
+            assertEqual(filename, expected);
+
+        end
+    end
+
+end
 
 function test_spm_2_bids_defor_field()
 
@@ -140,9 +157,9 @@ function test_spm_2_bids_func()
                          'sub-01_task-auditory_space-individual_desc-stc_bold.nii'; ...
                          {'u'},  ...
                          'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'; ...
-                         {'rp_'}, ...
+                         {'rp_', 'rp_a'}, ...
                          'sub-01_task-auditory_desc-confounds_regressors.tsv'; ...
-                         {'mean', 'meanu'}, ...
+                         {'mean', 'meanu', 'meanua'}, ...
                          'sub-01_task-auditory_space-individual_desc-mean_bold.nii'; ...
                          {'w', 'wua', 'wu', 'wr', 'wra'}, ...
                          'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'; ...
