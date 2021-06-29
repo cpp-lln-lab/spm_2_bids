@@ -11,7 +11,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     prfx = get_spm_prefix_list();
 
-    p.prefix;
+    print(p.prefix);
 
     switch p.prefix
 
