@@ -59,8 +59,13 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
               [prfx.smooth prfx.norm prfx.unwarp], ...
               [prfx.smooth prfx.norm prfx.realign] ...
              }
+            spec = cfg.spm_2_bids.smooth;
 
-        case {'su' 'sr', 'sua' 'sra'}
+        otherwise
+            warning('Unknown prefix: %s', p.prefix);
+            [new_filename, pth] = spm_fileparts(file);
+            json = [];
+            return
 
     end
 
