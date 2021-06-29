@@ -37,18 +37,12 @@ jobs:
          make -C spm12/src PLATFORM=octave
          make -C spm12/src PLATFORM=octave install
          octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'spm12')); savepath();"
-         
-    - name: Update octave path
-      run: |
-        octave $OCTFLAGS --eval "initCppSpm; savepath();"
-        octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'tests', 'utils')); savepath();"  
-        
-    - name: get bids-matlab
+          
+    - name: get bids-matlab and set up paths
       run: |
         make install_dev
-        octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'tests', 'utils')); savepath();"         
-
-        
+        octave $OCTFLAGS --eval "init_env; savepath();"
+      
     - name: MOxUnit Action
       uses: joergbrech/moxunit-action@master
       with:
