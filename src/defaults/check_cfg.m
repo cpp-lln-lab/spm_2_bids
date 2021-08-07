@@ -14,7 +14,38 @@ function cfg = check_cfg(cfg)
     %
     % - :cfg: the option structure with missing values filled in by the defaults.
     %
-    % REQUIRED FIELDS:
+    % ``cfg`` fields::
+    %
+    % :param entity_order: order of the entities in bids derivatives
+    % :param fwhm: value to append to smoothing desctiption label
+    % :param spec: specfication details to over ride some of the defaults
+    %
+    % BIDS derivatives defining fields:
+    %
+    % Each of those fields contain a structure that lists the BIDS suffix
+    % and entities-label pairs for each type of preprocessed image.
+    %
+    % :param segment:
+    % :param stc:
+    % :param realign_unwarp:
+    % :param real_param:
+    % :param mean:
+    % :param normalized_mean:
+    % :param preproc:
+    % :param preproc_norm:
+    % :param smooth:
+    % :param smooth_norm:
+    %
+    % For example::
+    %
+    %   % for grey matter segmentation output
+    %   cfg.segment.gm = struct('entities', struct('space', 'individual', ...
+    %                                              'label', x), ...
+    %                           'suffix', 'probseg')
+    %
+    %
+    % :mapping: a n X 2 cell that maps a prefix ``mapping{i, 1}`` to a
+    %             to a given bids-derivatives name specification ``mapping{i, 2}``
     %
     % (C) Copyright 2021 spm_2_bids developers
 
@@ -25,6 +56,8 @@ function cfg = check_cfg(cfg)
     fields_to_set = set_default_cfg();
 
     cfg = set_missing_fields(cfg, fields_to_set);
+
+    cfg.spm_2_bids.mapping = return_mapping(cfg);
 
     check_fields(cfg);
 

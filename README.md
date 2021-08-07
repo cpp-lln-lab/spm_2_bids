@@ -16,4 +16,14 @@ When you have set up your repo
 -->
 # spm_2_bids
 
-Small code base to help convert spm output to a valid bids derivatives.
+Small code base to help convert the MRI spm output to a valid bids derivatives.
+
+This code only generates the plausible BIDS derivatives filename for given file that has
+been preprocessed with SPM.
+
+Most of the renaming is based on the SPM prefixes combinations.
+
+It is configurable to adapt to new set of prefixes.
+
+- [Dependencies](./lib/README.md)
+- [Documentation](https://spm-2-bids.readthedocs.io/en/latest/)

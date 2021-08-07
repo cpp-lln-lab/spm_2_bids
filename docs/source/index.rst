@@ -7,7 +7,15 @@ Welcome to CPP BIDS documentation!
    :maxdepth: 2
    :caption: Content
 
-   function_description
+----
+
+``spm_2_bids`` only provides names to use but does not actually rename the files.
+
+.. automodule:: src
+.. autofunction:: spm_2_bids
+
+.. automodule:: src.defaults
+.. autofunction:: check_cfg
 
 
 Indices and tables

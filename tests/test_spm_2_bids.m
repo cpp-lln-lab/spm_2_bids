@@ -10,32 +10,27 @@ end
 
 function test_spm_2_bids_cfg()
 
+    % define the renaming specification to use for this file
     cfg.spm_2_bids.spec.entities.res = 'T1w';
+    cfg.spm_2_bids.spec.entities.desc = 'something';
+    cfg.spm_2_bids.spec.entities.space = '';
 
     print_here('\n', '');
 
     prefix_input_output = {'wu', ...
                            'sub-01_task-aud_bold.nii', ...
-                           'sub-01_task-aud_space-IXI549Space_res-T1w_desc-preproc_bold.nii' ...
+                           'sub-01_task-aud_res-T1w_desc-something_bold.nii' ...
                           };
 
-    for i = 1:size(prefix_input_output, 1)
+    prefix = prefix_input_output{1, 1};
+    file = [prefix prefix_input_output{1, 2}];
 
-        prefixes = get_prefixes(prefix_input_output, i);
+    print_here('%s\n', file);
 
-        for j = 1:numel(prefixes)
+    filename = spm_2_bids(file, cfg);
 
-            file = [prefixes{j} prefix_input_output{i, 2}];
-
-            print_here('%s\n', file);
-
-            filename = spm_2_bids(file, cfg);
-
-            expected = prefix_input_output{i, 3};
-            assertEqual(filename, expected);
-
-        end
-    end
+    expected = prefix_input_output{1, 3};
+    assertEqual(filename, expected);
 
 end
 
