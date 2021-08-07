@@ -30,8 +30,16 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
         cfg = struct();
     end
     cfg = check_cfg(cfg);
+    
+    pth = spm_fileparts(file);
+    new_filename = spm_file(file, 'filename');
+    json = [];
 
     p = bids.internal.parse_filename(file);
+    
+    if isempty(p.prefix)
+        return
+    end
 
     spec = [];
     for iMapping = 1:size(cfg.spm_2_bids.mapping, 1)
@@ -42,9 +50,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     end
 
     if isempty(spec)
-        warning('Unknown prefix: %s', p.prefix);
-        [new_filename, pth] = spm_fileparts(file);
-        json = [];
+        warning('spm_2_bids:unknown_prefix', 'Unknown prefix: %s', p.prefix);
         return
     end
 
@@ -62,6 +68,8 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     [new_filename, pth, json] = bids.create_filename(p, file);
 
     % TODO update json content
+    p = bids.internal.parse_filename(file);
+    json.content.RawSources{1} = strrep(p.filename, p.prefix, '');
 
 end
 
