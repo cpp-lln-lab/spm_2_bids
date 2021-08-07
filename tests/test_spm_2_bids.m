@@ -32,7 +32,6 @@ function test_spm_2_bids_cfg()
     expected = prefix_input_output{1, 3};
     assertEqual(filename, expected);
 
-
 end
 
 function test_spm_2_bids_defor_field()

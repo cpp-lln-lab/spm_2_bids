@@ -21,29 +21,29 @@ function cfg = check_cfg(cfg)
     % :param spec: specfication details to over ride some of the defaults
     %
     % BIDS derivatives defining fields:
-    % 
-    % Each of those fields contain a structure that lists the BIDS suffix 
+    %
+    % Each of those fields contain a structure that lists the BIDS suffix
     % and entities-label pairs for each type of preprocessed image.
     %
-    % :param segment: 
-    % :param stc: 
-    % :param realign_unwarp: 
-    % :param real_param: 
-    % :param mean: 
-    % :param normalized_mean: 
-    % :param preproc: 
+    % :param segment:
+    % :param stc:
+    % :param realign_unwarp:
+    % :param real_param:
+    % :param mean:
+    % :param normalized_mean:
+    % :param preproc:
     % :param preproc_norm:
-    % :param smooth: 
-    % :param smooth_norm: 
+    % :param smooth:
+    % :param smooth_norm:
     %
-    % For example:: 
+    % For example::
     %
     %   % for grey matter segmentation output
     %   cfg.segment.gm = struct('entities', struct('space', 'individual', ...
     %                                              'label', x), ...
     %                           'suffix', 'probseg')
     %
-    %  
+    %
     % :mapping: a n X 2 cell that maps a prefix ``mapping{i, 1}`` to a
     %             to a given bids-derivatives name specification ``mapping{i, 2}``
     %
@@ -148,5 +148,3 @@ end
 
 function check_fields(cfg)
 end
-
-
