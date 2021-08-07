@@ -26,4 +26,4 @@ Most of the renaming is based on the SPM prefixes combinations.
 It is configurable to adapt to new set of prefixes.
 
 - [Dependencies](./lib/README.md)
-- [Documentation]
+- [Documentation](https://spm-2-bids.readthedocs.io/en/latest/)
