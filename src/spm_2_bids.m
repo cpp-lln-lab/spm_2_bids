@@ -33,87 +33,19 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     p = bids.internal.parse_filename(file);
 
-    prfx = get_spm_prefix_list();
+    spec = [];
+    for iMapping = 1:size(cfg.spm_2_bids.mapping, 1)
+        if ismember(p.prefix, cfg.spm_2_bids.mapping{iMapping, 1})
+            spec = cfg.spm_2_bids.mapping{iMapping, 2};
+            break;
+        end
+    end
 
-    switch p.prefix
-
-        % TODO
-        % case 'rc1'
-        % case 'rc2'
-        % case 'rc3'
-        % case 'rc1wmeanu'
-        % case 'rc2wmeanu'
-        % case 'rc3wmeanu'
-        % case 'ru'
-
-        case prfx.bias_cor
-            spec = cfg.spm_2_bids.segment.bias_corrected;
-        case 'c1'
-            spec = cfg.spm_2_bids.segment.gm;
-        case 'c2'
-            spec = cfg.spm_2_bids.segment.wm;
-        case 'c3'
-            spec = cfg.spm_2_bids.segment.csf;
-        case 'iy_'
-            spec = cfg.spm_2_bids.segment.deformation_field.from_mni;
-        case 'y_'
-            spec = cfg.spm_2_bids.segment.deformation_field.to_mni;
-
-        case prfx.stc
-            spec = cfg.spm_2_bids.stc;
-
-        case prfx.unwarp
-            spec = cfg.spm_2_bids.realign_unwarp;
-
-        case {'rp_', ['rp_' prfx.stc]}
-            spec = cfg.spm_2_bids.real_param;
-
-        case {'mean', ...
-              ['mean' prfx.unwarp], ...
-              ['mean' prfx.unwarp, prfx.stc]}
-            spec = cfg.spm_2_bids.mean;
-
-        case { prfx.norm, ...
-              [prfx.norm, prfx.bias_cor], ...
-              [prfx.norm, prfx.unwarp,  prfx.stc], ...
-              [prfx.norm, prfx.realign, prfx.stc], ...
-              [prfx.norm, prfx.unwarp], ...
-              [prfx.norm, prfx.realign]
-             }
-            spec = cfg.spm_2_bids.preproc_norm;
-
-        case [prfx.norm, 'mean', prfx.unwarp]
-            spec = cfg.spm_2_bids.normalized_mean;
-
-        case [prfx.norm, 'c1']
-            spec = cfg.spm_2_bids.segment.gm_norm;
-        case [prfx.norm, 'c2']
-            spec = cfg.spm_2_bids.segment.wm_norm;
-        case [prfx.norm, 'c3']
-            spec = cfg.spm_2_bids.segment.csf_norm;
-
-        case {[prfx.smooth, prfx.norm], ...
-              [prfx.smooth, prfx.norm, prfx.unwarp,  prfx.stc], ...
-              [prfx.smooth, prfx.norm, prfx.realign, prfx.stc], ...
-              [prfx.smooth, prfx.norm, prfx.unwarp], ...
-              [prfx.smooth, prfx.norm, prfx.realign] ...
-             }
-            spec = cfg.spm_2_bids.smooth_norm;
-
-        case { prfx.smooth, ...
-              [prfx.smooth, prfx.unwarp,  prfx.stc], ...
-              [prfx.smooth, prfx.realign, prfx.stc], ...
-              [prfx.smooth, prfx.unwarp], ...
-              [prfx.smooth, prfx.realign] ...
-             }
-            spec = cfg.spm_2_bids.smooth;
-
-        otherwise
-            warning('Unknown prefix: %s', p.prefix);
-            [new_filename, pth] = spm_fileparts(file);
-            json = [];
-            return
-
+    if isempty(spec)
+        warning('Unknown prefix: %s', p.prefix);
+        [new_filename, pth] = spm_fileparts(file);
+        json = [];
+        return
     end
 
     spec = add_fwhm_to_smooth_label(spec, cfg);
@@ -130,22 +62,6 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     [new_filename, pth, json] = bids.create_filename(p, file);
 
     % TODO update json content
-
-end
-
-function prefix_list = get_spm_prefix_list()
-    %
-    % load SPM default prefix values
-    %
-    
-    spm_defaults = spm_get_defaults();
-    prefix_list.stc = spm_defaults.slicetiming.prefix;
-    prefix_list.realign = spm_defaults.realign.write.prefix;
-    prefix_list.unwarp = spm_defaults.unwarp.write.prefix;
-    prefix_list.coreg = spm_defaults.coreg.write.prefix;
-    prefix_list.bias_cor = spm_defaults.deformations.modulate.prefix;
-    prefix_list.norm = spm_defaults.normalise.write.prefix;
-    prefix_list.smooth = spm_defaults.smooth.prefix;
 
 end
 

@@ -53,6 +53,8 @@ function cfg = check_cfg(cfg)
 
     cfg = set_missing_fields(cfg, fields_to_set);
 
+    cfg.spm_2_bids.mapping = return_mapping(cfg);
+
     check_fields(cfg);
 
     cfg = orderfields(cfg);
@@ -142,3 +144,5 @@ end
 
 function check_fields(cfg)
 end
+
+
