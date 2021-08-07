@@ -8,29 +8,28 @@ function test_suite = test_spm_2_bids %#ok<*STOUT>
     initTestSuite;
 end
 
-
 function test_spm_2_bids_no_prefix()
 
-   file = 'sub-01_ses-02_T1w.nii';                 
-   new_filename = spm_2_bids(file);
-   assertEqual(new_filename, file)
-   
+    file = 'sub-01_ses-02_T1w.nii';
+    new_filename = spm_2_bids(file);
+    assertEqual(new_filename, file);
+
 end
 
 function test_spm_2_bids_unknown_prefix()
 
-   file = 'wtfsub-01_ses-02_T1w.nii';                 
-   assertWarning( ...
-                        @()spm_2_bids(file), ...
-                        'spm_2_bids:unknown_prefix');
-   
+    file = 'wtfsub-01_ses-02_T1w.nii';
+    assertWarning( ...
+                  @()spm_2_bids(file), ...
+                  'spm_2_bids:unknown_prefix');
+
 end
 
 function test_spm_2_bids_json()
 
-    file = 'c1sub-01_ses-02_T1w.nii';                 
-   [new_filename, pth, json] = spm_2_bids(file);
-   
+    file = 'c1sub-01_ses-02_T1w.nii';
+    [new_filename, pth, json] = spm_2_bids(file);
+
 end
 
 function test_spm_2_bids_cfg()

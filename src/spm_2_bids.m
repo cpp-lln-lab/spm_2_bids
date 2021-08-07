@@ -30,21 +30,23 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
         cfg = struct();
     end
     cfg = check_cfg(cfg);
-    
+
     pth = spm_fileparts(file);
     new_filename = spm_file(file, 'filename');
     json = [];
 
     p = bids.internal.parse_filename(file);
-    
+
     if isempty(p.prefix)
         return
     end
 
     spec = [];
-    for iMapping = 1:size(cfg.spm_2_bids.mapping, 1)
-        if ismember(p.prefix, cfg.spm_2_bids.mapping{iMapping, 1})
-            spec = cfg.spm_2_bids.mapping{iMapping, 2};
+    % look for the right prefix in the mapping
+    % assumes that the prefix is only present once in the mapping
+    for iMapping = 1:numel(cfg.spm_2_bids.mapping)
+        if ismember(p.prefix, cfg.spm_2_bids.mapping(iMapping).prefix)
+            spec = cfg.spm_2_bids.mapping(iMapping).name_spec;
             break
         end
     end
