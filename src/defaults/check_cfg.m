@@ -25,16 +25,16 @@ function cfg = check_cfg(cfg)
     % Each of those fields contain a structure that lists the BIDS suffix 
     % and entities-label pairs for each type of preprocessed image.
     %
-    %   :param segment: 
-    %   :param stc: 
-    %   :param realign_unwarp: 
-    %   :param real_param: 
-    %   :param mean: 
-    %   :param normalized_mean: 
-    %   :param preproc: 
-    %   :param preproc_norm:
-    %   :param smooth: 
-    %   :param smooth_norm: 
+    % :param segment: 
+    % :param stc: 
+    % :param realign_unwarp: 
+    % :param real_param: 
+    % :param mean: 
+    % :param normalized_mean: 
+    % :param preproc: 
+    % :param preproc_norm:
+    % :param smooth: 
+    % :param smooth_norm: 
     %
     % For example:: 
     %
@@ -42,6 +42,10 @@ function cfg = check_cfg(cfg)
     %   cfg.segment.gm = struct('entities', struct('space', 'individual', ...
     %                                              'label', x), ...
     %                           'suffix', 'probseg')
+    %
+    %  
+    % :mapping: a n X 2 cell that maps a prefix ``mapping{i, 1}`` to a
+    %             to a given bids-derivatives name specification ``mapping{i, 2}``
     %
     % (C) Copyright 2021 spm_2_bids developers
 
