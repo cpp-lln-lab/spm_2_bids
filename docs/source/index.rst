@@ -7,7 +7,13 @@ Welcome to CPP BIDS documentation!
    :maxdepth: 2
    :caption: Content
 
-   function_description
+----
+
+.. automodule:: src
+.. autofunction:: spm_2_bids
+
+.. automodule:: src.defaults
+.. autofunction:: check_cfg
 
 
 Indices and tables

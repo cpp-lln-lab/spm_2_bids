@@ -1,5 +1,29 @@
 function [new_filename, pth, json] = spm_2_bids(file, cfg)
     %
+    % Provides a bids derivatives name for a file preprocessed with SPM
+    %
+    % USAGE::
+    % 
+    %   [new_filename, pth, json] = spm_2_bids(file)
+    %   [new_filename, pth, json] = spm_2_bids(file, cfg)
+    %
+    % :param file: SPM preprocessed filename (can be fullpath);
+    %              for example ``wmsub-01_ses-01_T1w.nii``
+    % :type file: string
+    % :param cfg: optional spm_2_bids configuration to overwrite the default
+    %   conffiguration (see check_cfg)
+    % :param cfg: structure
+    %
+    % :returns: - :new_filename: (string) BIDS compatible filename 
+    %               for example ``sub-01_ses-01_space-IXI549Space_desc-preproc_T1w.nii``;
+    %           - :pth: (string) relative BIDS path
+    %               for example ``sub-01/ses-01``
+    %           - :json: (structure) JSON derivatives content
+    %
+    % The behaviour of which prefix gives which BIDS derivatives can be modified by 
+    % adapting the ``cfg``.
+    %
+    %
     % (C) Copyright 2021 spm_2_bids developers
 
     if nargin < 2
@@ -92,7 +116,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     end
 
-    spec = add_fwhm_to_smoth_label(spec, cfg);
+    spec = add_fwhm_to_smooth_label(spec, cfg);
 
     spec = adapt_from_label_to_input(spec, p);
 
@@ -110,7 +134,10 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 end
 
 function prefix_list = get_spm_prefix_list()
-
+    %
+    % load SPM default prefix values
+    %
+    
     spm_defaults = spm_get_defaults();
     prefix_list.stc = spm_defaults.slicetiming.prefix;
     prefix_list.realign = spm_defaults.realign.write.prefix;
@@ -122,7 +149,10 @@ function prefix_list = get_spm_prefix_list()
 
 end
 
-function spec = add_fwhm_to_smoth_label(spec, cfg)
+function spec = add_fwhm_to_smooth_label(spec, cfg)
+    %
+    % adds the FWHM to the description label for smoothing
+    %
 
     if isfield(spec.entities, 'desc') && ...
             strcmp(spec.entities.desc, 'smth') && ...
@@ -133,6 +163,9 @@ function spec = add_fwhm_to_smoth_label(spec, cfg)
 end
 
 function spec = adapt_from_label_to_input(spec, p)
+    %
+    % for deformation fields
+    %
 
     if strcmp(p.prefix, 'y_')
         spec.entities.from = p.suffix;
@@ -145,9 +178,10 @@ function spec = adapt_from_label_to_input(spec, p)
 end
 
 function spec = use_config_spec(spec, p, cfg)
-
+    %
     % overwrite with user defined spec
     % and reorder entities
+    %
 
     overwrite = true;
 
