@@ -62,15 +62,13 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     spec = adapt_from_label_to_input(spec, p);
 
     spec = use_config_spec(spec, cfg);
-
+    
     overwrite = true;
     spec.prefix = '';
     spec.use_schema = false;
     p = set_missing_fields(p, spec, overwrite);
     
-%     present_entities = ismember(cfg.spm_2_bids.entity_order, fieldnames(p.entities));
-%     entity_order = cfg.spm_2_bids.entity_order(present_entities);
-%     p.entities = orderfields(p.entities, entity_order);
+    p = reorder_entities(p, cfg);
 
     [new_filename, pth, json] = bids.create_filename(p, file);
 
@@ -126,4 +124,25 @@ function spec = use_config_spec(spec, cfg)
         spec.entities = orderfields(spec.entities, entity_order);
     end
 
+end
+
+function p = reorder_entities(p, cfg)
+    %
+    % put entity from raw bids before those of derivatives
+    % and make sure that derivatives entities are in the right order
+    % 
+    %
+    
+    entities = fieldnames(p.entities);
+    
+    is_raw_entity = ~ismember(entities, cfg.spm_2_bids.entity_order);
+    
+    raw_entities = entities(is_raw_entity);
+    
+    derivative_entities_present = ismember(cfg.spm_2_bids.entity_order, ...
+                                            entities(~is_raw_entity));
+    derivative_entities = cfg.spm_2_bids.entity_order(derivative_entities_present);
+    
+    p.entity_order = cat(1, raw_entities, derivative_entities);
+    
 end
