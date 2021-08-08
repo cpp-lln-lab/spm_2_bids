@@ -8,6 +8,14 @@ function test_suite = test_spm_2_bids %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_order_entities()
+
+    file = 'wmsub-01_desc-skullstripped_T1w.nii';
+    new_filename = spm_2_bids(file);
+    assertEqual(new_filename, 'sub-01_space-IXI549Space_desc-preproc_T1w.nii');
+
+end
+
 function test_spm_2_bids_no_prefix()
 
     file = 'sub-01_ses-02_T1w.nii';
@@ -21,7 +29,16 @@ function test_spm_2_bids_unknown_prefix()
     file = 'wtfsub-01_ses-02_T1w.nii';
     assertWarning( ...
                   @()spm_2_bids(file), ...
-                  'spm_2_bids:unknown_prefix');
+                  'spm_2_bids:unknownPrefix');
+
+end
+
+function test_spm_2_bids_smooth()
+
+    cfg.spm_2_bids.fwhm = 6;
+    file = 'swuasub-01_task-auditory_bold.nii';
+    new_filename = spm_2_bids(file, cfg);
+    assertEqual(new_filename, 'sub-01_task-auditory_space-IXI549Space_desc-smth6_bold.nii');
 
 end
 

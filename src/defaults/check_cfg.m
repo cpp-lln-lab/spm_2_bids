@@ -57,7 +57,9 @@ function cfg = check_cfg(cfg)
 
     cfg = set_missing_fields(cfg, fields_to_set);
 
-    cfg.spm_2_bids.mapping = return_mapping(cfg);
+    if ~isfield(cfg.spm_2_bids, 'mapping')
+        cfg.spm_2_bids.mapping = return_mapping(cfg);
+    end
 
     check_fields(cfg);
 
@@ -68,6 +70,8 @@ end
 function fields_to_set = set_default_cfg()
 
     SPM_SPACE = 'IXI549Space';
+    
+    fields_to_set.spm_2_bids.space = SPM_SPACE;
 
     fields_to_set.spm_2_bids.entity_order = {'hemi'; ...
                                              'space'; ...

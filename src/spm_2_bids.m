@@ -52,7 +52,8 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     end
 
     if isempty(spec)
-        warning('spm_2_bids:unknown_prefix', 'Unknown prefix: %s', p.prefix);
+        msg = sprintf( 'Unknown prefix: %s', p.prefix);
+        warning('spm_2_bids:unknownPrefix', msg);
         return
     end
 
@@ -66,6 +67,10 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     spec.prefix = '';
     spec.use_schema = false;
     p = set_missing_fields(p, spec, overwrite);
+    
+%     present_entities = ismember(cfg.spm_2_bids.entity_order, fieldnames(p.entities));
+%     entity_order = cfg.spm_2_bids.entity_order(present_entities);
+%     p.entities = orderfields(p.entities, entity_order);
 
     [new_filename, pth, json] = bids.create_filename(p, file);
 
