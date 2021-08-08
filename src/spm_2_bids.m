@@ -53,7 +53,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     if isempty(spec)
         msg = sprintf( 'Unknown prefix: %s', p.prefix);
-        warning('spm_2_bids:unknownPrefix', msg);
+        warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
         return
     end
 
@@ -61,7 +61,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
 
     spec = adapt_from_label_to_input(spec, p);
 
-    spec = use_config_spec(spec, p, cfg);
+    spec = use_config_spec(spec, cfg);
 
     overwrite = true;
     spec.prefix = '';
@@ -108,7 +108,7 @@ function spec = adapt_from_label_to_input(spec, p)
 
 end
 
-function spec = use_config_spec(spec, p, cfg)
+function spec = use_config_spec(spec, cfg)
     %
     % overwrite with user defined spec
     % and reorder entities
@@ -116,7 +116,7 @@ function spec = use_config_spec(spec, p, cfg)
 
     overwrite = true;
 
-    if ~isempty(cfg.spm_2_bids.spec) && ~any(strcmp(p.prefix, {'iy_', 'y_', 'rp_'}))
+    if ~isempty(cfg.spm_2_bids.spec)
 
         spec = set_missing_fields(spec, cfg.spm_2_bids.spec, overwrite);
 
