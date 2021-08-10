@@ -31,6 +31,8 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     end
     cfg = check_cfg(cfg);
 
+    mapping = cfg.spm_2_bids.mapping;
+
     pth = spm_fileparts(file);
     new_filename = spm_file(file, 'filename');
     json = [];
@@ -42,17 +44,49 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     end
 
     spec = [];
+
     % look for the right prefix in the mapping
-    % assumes that the prefix is only present once in the mapping
-    for iMapping = 1:numel(cfg.spm_2_bids.mapping)
-        if ismember(p.prefix, cfg.spm_2_bids.mapping(iMapping).prefix)
-            spec = cfg.spm_2_bids.mapping(iMapping).name_spec;
-            break
+    prefix_match = strcmp({mapping.prefix}', p.prefix);
+
+    % if any suffix mentioned in the mapping we check for that as well
+    % if none is mentioned anywhere in the mapping then any suffix goes
+    suffix_match = true(size(mapping));
+    if ~all(cellfun('isempty', {mapping.suffix}'))
+        suffix_match = strcmp({mapping.suffix}', p.suffix);
+    end
+
+    % we compare the entities-label pairs present in the file
+    % to those required in the mapping (if any)
+    % if no entity requirement anywhere in the mapping then anything goes
+    entitiy_match = true(size(mapping));
+    needs_entity_check = ~cellfun('isempty', {mapping.entities}');
+    if any(needs_entity_check)
+        entitiy_match = false(size(mapping));
+        idx = find(needs_entity_check);
+        for i = 1:numel(idx)
+            status = check_field_content(p.entities, mapping(idx(i)).entities);
+            entitiy_match(idx(i)) = status;
         end
     end
 
+    this_mapping = [prefix_match, suffix_match, entitiy_match];
+
+    % We check whether all conditons are met
+    % otherwise we only rely on the prefix
+    if any(sum(this_mapping, 2) > 0) && any(prefix_match)
+
+        MAX = size(this_mapping, 2);
+        if any(sum(this_mapping, 2) == MAX)
+            idx = sum(this_mapping, 2) == MAX;
+        else
+            idx = all([sum(this_mapping, 2) == 1, prefix_match], 2);
+        end
+
+        spec = mapping(idx).name_spec;
+    end
+
     if isempty(spec)
-        msg = sprintf( 'Unknown prefix: %s', p.prefix);
+        msg = sprintf('Unknown prefix: %s', p.prefix);
         warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
         return
     end
@@ -62,12 +96,12 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     spec = adapt_from_label_to_input(spec, p);
 
     spec = use_config_spec(spec, cfg);
-    
+
     overwrite = true;
     spec.prefix = '';
     spec.use_schema = false;
     p = set_missing_fields(p, spec, overwrite);
-    
+
     p = reorder_entities(p, cfg);
 
     [new_filename, pth, json] = bids.create_filename(p, file);
@@ -130,19 +164,19 @@ function p = reorder_entities(p, cfg)
     %
     % put entity from raw bids before those of derivatives
     % and make sure that derivatives entities are in the right order
-    % 
     %
-    
+    %
+
     entities = fieldnames(p.entities);
-    
+
     is_raw_entity = ~ismember(entities, cfg.spm_2_bids.entity_order);
-    
+
     raw_entities = entities(is_raw_entity);
-    
+
     derivative_entities_present = ismember(cfg.spm_2_bids.entity_order, ...
-                                            entities(~is_raw_entity));
+                                           entities(~is_raw_entity));
     derivative_entities = cfg.spm_2_bids.entity_order(derivative_entities_present);
-    
+
     p.entity_order = cat(1, raw_entities, derivative_entities);
-    
+
 end

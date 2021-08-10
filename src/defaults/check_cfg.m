@@ -70,7 +70,7 @@ end
 function fields_to_set = set_default_cfg()
 
     SPM_SPACE = 'IXI549Space';
-    
+
     fields_to_set.spm_2_bids.space = SPM_SPACE;
 
     fields_to_set.spm_2_bids.entity_order = {'hemi'; ...

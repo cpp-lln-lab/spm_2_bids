@@ -2,6 +2,8 @@ function prefix_list = get_spm_prefix_list()
     %
     % load SPM default prefix values
     %
+    %
+    % (C) Copyright 2021 spm_2_bids developers
 
     spm_defaults = spm_get_defaults();
     prefix_list.stc = spm_defaults.slicetiming.prefix;

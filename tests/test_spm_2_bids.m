@@ -8,6 +8,55 @@ function test_suite = test_spm_2_bids %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_new_mapping()
+
+    cfg = check_cfg();
+    cfg.spm_2_bids.mapping(end + 1).prefix = 'wm';
+    cfg.spm_2_bids.mapping(end).suffix = 'T1w';
+    cfg.spm_2_bids.mapping(end).entities = struct('desc', 'skullstripped');
+    cfg.spm_2_bids.mapping(end).name_spec = cfg.spm_2_bids.preproc_norm;
+    cfg.spm_2_bids.mapping(end).name_spec.entities.res = 'onemm';
+
+    input_output = {'wmsub-01_desc-skullstripped_T1w.nii', ...
+                    'sub-01_space-IXI549Space_res-onemm_desc-preproc_T1w.nii'
+                    'wmsub-01_desc-skullstripped_T2w.nii', ... % wrong suffix
+                    'sub-01_space-IXI549Space_desc-preproc_T2w.nii'; ...
+                    'wmsub-01_desc-preproc_T1w.nii', ... % wrong entity
+                    'sub-01_space-IXI549Space_desc-preproc_T1w.nii'};
+    for i = 1:size(input_output, 1)
+
+        print_here('%s\n', input_output{i, 1});
+
+        filename = spm_2_bids(input_output{i, 1}, cfg);
+
+        expected = input_output{i, 2};
+        assertEqual(filename, expected);
+
+    end
+
+end
+
+% Not yet implemented
+
+% function test_spm_2_bids_suffix()
+%
+%     input_output = {
+%     'sub-01_T1w_seg8.mat', 'sub-01_label-T1w_segparam.mat';
+%     'sub-01_task-auditory_bold_uw.mat', 'sub-01_task-auditory_label-bold_unwarpparam.mat'};
+%
+%     for i = 1:numel(size(input_output, 1))
+%
+%         print_here('%s\n', input_output{i,1});
+%
+%         filename = spm_2_bids(input_output{i,1});
+%
+%         expected = input_output{i, 2};
+%         assertEqual(filename, expected);
+%
+%     end
+%
+% end
+
 function test_spm_2_bids_order_entities()
 
     file = 'wmsub-01_desc-skullstripped_T1w.nii';
