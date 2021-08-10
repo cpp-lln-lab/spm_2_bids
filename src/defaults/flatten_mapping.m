@@ -19,6 +19,7 @@ function mapping = flatten_mapping(mapping)
             tmp(end).suffix = mapping(i).suffix;
             tmp(end).entities = mapping(i).entities;
             tmp(end).name_spec = mapping(i).name_spec;
+            tmp(end).ext = mapping(i).ext;
         end
 
     end

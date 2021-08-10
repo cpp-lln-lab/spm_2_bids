@@ -22,6 +22,7 @@ function mapping = return_mapping(cfg)
     mapping(1).prefix = { prfx.bias_cor };
     mapping(1).suffix = ''; % initialize those fields once so they are present for all mappings
     mapping(1).entities = '';
+    mapping(1).ext = '';
     mapping(1).name_spec = cfg.spm_2_bids.segment.bias_corrected;
 
     mapping(end + 1, 1).prefix = { 'c1' };

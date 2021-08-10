@@ -8,6 +8,10 @@ function status = check_field_content(struct_1, struct_2)
         return
     end
 
+    if strcmp(struct_2, '*')
+        return
+    end
+
     shared_fields = intersect(fieldnames(struct_1), fieldnames(struct_2));
 
     if isempty(shared_fields)

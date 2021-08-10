@@ -48,11 +48,17 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     % look for the right prefix in the mapping
     prefix_match = strcmp({mapping.prefix}', p.prefix);
 
-    % if any suffix mentioned in the mapping we check for that as well
-    % if none is mentioned anywhere in the mapping then any suffix goes
+    % if any suffix / extention mentioned in the mapping we check for that as well
+    % if none is mentioned anywhere in the mapping then anything goes
     suffix_match = true(size(mapping));
     if ~all(cellfun('isempty', {mapping.suffix}'))
-        suffix_match = strcmp({mapping.suffix}', p.suffix);
+        suffix_match = any([strcmp({mapping.suffix}', p.suffix), ...
+                            strcmp({mapping.suffix}', '*')], 2);
+    end
+    ext_match = true(size(mapping));
+    if ~all(cellfun('isempty', {mapping.ext}'))
+        ext_match = any([strcmp({mapping.ext}', p.ext), ...
+                         strcmp({mapping.ext}', '*')], 2);
     end
 
     % we compare the entities-label pairs present in the file
@@ -69,7 +75,7 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
         end
     end
 
-    this_mapping = [prefix_match, suffix_match, entitiy_match];
+    this_mapping = [prefix_match, suffix_match, entitiy_match, ext_match];
 
     % We check whether all conditons are met
     % otherwise we only rely on the prefix

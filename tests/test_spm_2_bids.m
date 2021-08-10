@@ -11,17 +11,29 @@ end
 function test_spm_2_bids_new_mapping()
 
     cfg = check_cfg();
+
     cfg.spm_2_bids.mapping(end + 1).prefix = 'wm';
     cfg.spm_2_bids.mapping(end).suffix = 'T1w';
+    cfg.spm_2_bids.mapping(end).ext = '.nii';
     cfg.spm_2_bids.mapping(end).entities = struct('desc', 'skullstripped');
     cfg.spm_2_bids.mapping(end).name_spec = cfg.spm_2_bids.preproc_norm;
     cfg.spm_2_bids.mapping(end).name_spec.entities.res = 'onemm';
 
-    input_output = {'wmsub-01_desc-skullstripped_T1w.nii', ...
+    cfg.spm_2_bids.mapping(end + 1).prefix = 'c1';
+    cfg.spm_2_bids.mapping(end).suffix = 'T1w';
+    cfg.spm_2_bids.mapping(end).entities = '*'; % allows any entity, if empty only prefix is used
+    cfg.spm_2_bids.mapping(end).ext = '.surf.gii';
+    cfg.spm_2_bids.mapping(end).name_spec = struct('suffix', 'T1w', ...
+                                                   'ext', '.gii', ...
+                                                   'entities', struct('desc', 'pialsurf'));
+
+    input_output = {'c1sub-01_T1w.surf.gii', ... % new mapping for surface data
+                    'sub-01_desc-pialsurf_T1w.gii'; ...
+                    'wmsub-01_desc-skullstripped_T1w.nii', ... % new mapping for skulltripped data
                     'sub-01_space-IXI549Space_res-onemm_desc-preproc_T1w.nii'
-                    'wmsub-01_desc-skullstripped_T2w.nii', ... % wrong suffix
+                    'wmsub-01_desc-skullstripped_T2w.nii', ... % wrong suffix: use only prefix
                     'sub-01_space-IXI549Space_desc-preproc_T2w.nii'; ...
-                    'wmsub-01_desc-preproc_T1w.nii', ... % wrong entity
+                    'wmsub-01_desc-preproc_T1w.nii', ... % wrong entity: use only prefix
                     'sub-01_space-IXI549Space_desc-preproc_T1w.nii'};
     for i = 1:size(input_output, 1)
 
@@ -36,7 +48,7 @@ function test_spm_2_bids_new_mapping()
 
 end
 
-% Not yet implemented
+% Not yet implemented as this makes the filename parsing crash
 
 % function test_spm_2_bids_suffix()
 %
