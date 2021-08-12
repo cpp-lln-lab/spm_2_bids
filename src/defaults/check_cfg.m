@@ -98,7 +98,8 @@ function fields_to_set = set_default_cfg()
                                    'suffix', 'probseg');
 
     % Segmentation output
-    segment.bias_corrected = struct('entities', struct('desc', 'biascor'));
+    segment.bias_corrected = struct('entities', struct('desc', 'biascor', ...
+                                                       'space', 'individual'));
 
     segment.gm = segment_gen('GM');
     segment.wm = segment_gen('WM');
