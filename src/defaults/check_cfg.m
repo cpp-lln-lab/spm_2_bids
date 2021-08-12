@@ -140,6 +140,9 @@ function fields_to_set = set_default_cfg()
                                                  'ext', '.tsv');
 
     fields_to_set.spm_2_bids.mean = desc_gen('mean');
+    % remove the run entity
+    fields_to_set.spm_2_bids.mean.entities.run = ''; 
+    
     fields_to_set.spm_2_bids.normalized_mean = fields_to_set.spm_2_bids.mean;
     fields_to_set.spm_2_bids.normalized_mean.entities.space = SPM_SPACE;
 
