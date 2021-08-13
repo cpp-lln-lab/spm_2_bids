@@ -40,7 +40,7 @@ function mapping = return_mapping(cfg)
     mapping(end + 1, 1).prefix = { 'y_' };
     mapping(end).name_spec = cfg.spm_2_bids.segment.deformation_field.to_mni;
 
-    mapping(end + 1, 1).prefix = { prfx.stc };
+    mapping(end + 1, 1).prefix = { prfx.stc, [prfx.unwarp, prfx.stc]};
     mapping(end).name_spec = cfg.spm_2_bids.stc;
 
     mapping(end + 1, 1).prefix = { prfx.unwarp };
