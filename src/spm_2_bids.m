@@ -65,9 +65,12 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     % to those required in the mapping (if any)
     % if no entity requirement anywhere in the mapping then anything goes
     entitiy_match = true(size(mapping));
+    
     needs_entity_check = ~cellfun('isempty', {mapping.entities}');
     if any(needs_entity_check)
+        
         entitiy_match = false(size(mapping));
+        
         idx = find(needs_entity_check);
         for i = 1:numel(idx)
             status = check_field_content(p.entities, mapping(idx(i)).entities);
