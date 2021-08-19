@@ -10,22 +10,27 @@ end
 
 function test_spm_2_bids_new_mapping()
 
-    cfg = check_cfg();
+    map = Mapping();
+    map = map.default();
 
-    cfg.spm_2_bids.mapping(end + 1).prefix = 'wm';
-    cfg.spm_2_bids.mapping(end).suffix = 'T1w';
-    cfg.spm_2_bids.mapping(end).ext = '.nii';
-    cfg.spm_2_bids.mapping(end).entities = struct('desc', 'skullstripped');
-    cfg.spm_2_bids.mapping(end).name_spec = cfg.spm_2_bids.preproc_norm;
-    cfg.spm_2_bids.mapping(end).name_spec.entities.res = 'onemm';
+    name_spec = map.cfg.preproc_norm;
+    name_spec.entities.res = 'onemm';
+    map = map.add_mapping('prefix', 'wm', ...
+                          'suffix',  'T1w', ...
+                          'ext', '.nii', ...
+                          'entities', struct('desc', 'skullstripped'), ...
+                          'name_spec', name_spec);
 
-    cfg.spm_2_bids.mapping(end + 1).prefix = 'c1';
-    cfg.spm_2_bids.mapping(end).suffix = 'T1w';
-    cfg.spm_2_bids.mapping(end).entities = '*'; % allows any entity, if empty only prefix is used
-    cfg.spm_2_bids.mapping(end).ext = '.surf.gii';
-    cfg.spm_2_bids.mapping(end).name_spec = struct('suffix', 'T1w', ...
-                                                   'ext', '.gii', ...
-                                                   'entities', struct('desc', 'pialsurf'));
+    name_spec = struct('suffix', 'T1w', ...
+                       'ext', '.gii', ...
+                       'entities', struct('desc', 'pialsurf'));
+    map = map.add_mapping('prefix', 'c1', ...
+                          'suffix',  'T1w', ...
+                          'ext', '.surf.gii', ...
+                          'entities', '*', ... % allows any entity, if empty only prefix is used
+                          'name_spec', name_spec);
+
+    map = map.flatten_mapping();
 
     input_output = {'c1sub-01_T1w.surf.gii', ... % new mapping for surface data
                     'sub-01_desc-pialsurf_T1w.gii'; ...
@@ -39,7 +44,7 @@ function test_spm_2_bids_new_mapping()
 
         print_here('%s\n', input_output{i, 1});
 
-        filename = spm_2_bids(input_output{i, 1}, cfg);
+        filename = spm_2_bids(input_output{i, 1}, map);
 
         expected = input_output{i, 2};
         assertEqual(filename, expected);
@@ -94,45 +99,10 @@ function test_spm_2_bids_unknown_prefix()
 
 end
 
-function test_spm_2_bids_smooth()
-
-    cfg.spm_2_bids.fwhm = 6;
-    file = 'swuasub-01_task-auditory_bold.nii';
-    new_filename = spm_2_bids(file, cfg);
-    assertEqual(new_filename, 'sub-01_task-auditory_space-IXI549Space_desc-smth6_bold.nii');
-
-end
-
 function test_spm_2_bids_json()
 
     file = 'c1sub-01_ses-02_T1w.nii';
     [new_filename, pth, json] = spm_2_bids(file);
-
-end
-
-function test_spm_2_bids_cfg()
-
-    % define the renaming specification to use for this file
-    cfg.spm_2_bids.spec.entities.res = 'T1w';
-    cfg.spm_2_bids.spec.entities.desc = 'something';
-    cfg.spm_2_bids.spec.entities.space = '';
-
-    print_here('\n', '');
-
-    prefix_input_output = {'wu', ...
-                           'sub-01_task-aud_bold.nii', ...
-                           'sub-01_task-aud_res-T1w_desc-something_bold.nii' ...
-                          };
-
-    prefix = prefix_input_output{1, 1};
-    file = [prefix prefix_input_output{1, 2}];
-
-    print_here('%s\n', file);
-
-    filename = spm_2_bids(file, cfg);
-
-    expected = prefix_input_output{1, 3};
-    assertEqual(filename, expected);
 
 end
 
@@ -178,11 +148,15 @@ function test_spm_2_bids_smooth_fwhm()
 
     print_here('\n', '');
 
-    cfg.spm_2_bids.fwhm = 6;
+    map = Mapping();
+    map = map.default();
+    map.cfg.fwhm = 6;
 
     func_file = 'sub-01_task-auditory_bold.nii';
 
-    prefix_and_output = {'su', 'sub-01_task-auditory_space-individual_desc-smth6_bold.nii'};
+    prefix_and_output = {'su', 'sub-01_task-auditory_space-individual_desc-smth6_bold.nii'; ...
+                         'swua', 'sub-01_task-auditory_space-IXI549Space_desc-smth6_bold.nii' ...
+                        };
 
     for i = 1:size(prefix_and_output, 1)
 
@@ -194,7 +168,7 @@ function test_spm_2_bids_smooth_fwhm()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file, cfg);
+            filename = spm_2_bids(file, map);
 
             expected = prefix_and_output{i, 2};
             assertEqual(filename, expected);

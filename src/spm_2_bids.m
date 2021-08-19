@@ -1,4 +1,4 @@
-function [new_filename, pth, json] = spm_2_bids(file, cfg)
+function [new_filename, pth, json] = spm_2_bids(file, map)
     %
     % Provides a bids derivatives name for a file preprocessed with SPM
     %
@@ -27,11 +27,12 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     % (C) Copyright 2021 spm_2_bids developers
 
     if nargin < 2
-        cfg = struct();
+        map = Mapping();
+        map = map.default();
     end
-    cfg = check_cfg(cfg);
 
-    mapping = cfg.spm_2_bids.mapping;
+    mapping = map.mapping;
+    cfg = map.cfg;
 
     pth = spm_fileparts(file);
     new_filename = spm_file(file, 'filename');
@@ -65,12 +66,12 @@ function [new_filename, pth, json] = spm_2_bids(file, cfg)
     % to those required in the mapping (if any)
     % if no entity requirement anywhere in the mapping then anything goes
     entitiy_match = true(size(mapping));
-    
+
     needs_entity_check = ~cellfun('isempty', {mapping.entities}');
     if any(needs_entity_check)
-        
+
         entitiy_match = false(size(mapping));
-        
+
         idx = find(needs_entity_check);
         for i = 1:numel(idx)
             status = check_field_content(p.entities, mapping(idx(i)).entities);
@@ -128,8 +129,8 @@ function spec = add_fwhm_to_smooth_label(spec, cfg)
 
     if isfield(spec.entities, 'desc') && ...
             strcmp(spec.entities.desc, 'smth') && ...
-            ~isempty(cfg.spm_2_bids.fwhm)
-        spec.entities.desc = sprintf('smth%i', cfg.spm_2_bids.fwhm);
+            ~isempty(cfg.fwhm)
+        spec.entities.desc = sprintf('smth%i', cfg.fwhm);
     end
 
 end
@@ -157,12 +158,12 @@ function spec = use_config_spec(spec, cfg)
 
     overwrite = true;
 
-    if ~isempty(cfg.spm_2_bids.spec)
+    if ~isempty(cfg.spec)
 
-        spec = set_missing_fields(spec, cfg.spm_2_bids.spec, overwrite);
+        spec = set_missing_fields(spec, cfg.spec, overwrite);
 
-        present_entities = ismember(cfg.spm_2_bids.entity_order, fieldnames(spec.entities));
-        entity_order = cfg.spm_2_bids.entity_order(present_entities);
+        present_entities = ismember(cfg.entity_order, fieldnames(spec.entities));
+        entity_order = cfg.entity_order(present_entities);
 
         spec.entities = orderfields(spec.entities, entity_order);
     end
@@ -178,13 +179,13 @@ function p = reorder_entities(p, cfg)
 
     entities = fieldnames(p.entities);
 
-    is_raw_entity = ~ismember(entities, cfg.spm_2_bids.entity_order);
+    is_raw_entity = ~ismember(entities, cfg.entity_order);
 
     raw_entities = entities(is_raw_entity);
 
-    derivative_entities_present = ismember(cfg.spm_2_bids.entity_order, ...
+    derivative_entities_present = ismember(cfg.entity_order, ...
                                            entities(~is_raw_entity));
-    derivative_entities = cfg.spm_2_bids.entity_order(derivative_entities_present);
+    derivative_entities = cfg.entity_order(derivative_entities_present);
 
     p.entity_order = cat(1, raw_entities, derivative_entities);
 

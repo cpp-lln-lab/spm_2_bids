@@ -57,12 +57,6 @@ function cfg = check_cfg(cfg)
 
     cfg = set_missing_fields(cfg, fields_to_set);
 
-    if ~isfield(cfg.spm_2_bids, 'mapping')
-        cfg.spm_2_bids.mapping = return_mapping(cfg);
-    end
-
-    check_fields(cfg);
-
     cfg = orderfields(cfg);
 
 end
@@ -71,21 +65,21 @@ function fields_to_set = set_default_cfg()
 
     SPM_SPACE = 'IXI549Space';
 
-    fields_to_set.spm_2_bids.space = SPM_SPACE;
+    fields_to_set.space = SPM_SPACE;
 
-    fields_to_set.spm_2_bids.entity_order = {'hemi'; ...
-                                             'space'; ...
-                                             'res'; ...
-                                             'den'; ...
-                                             'label'; ...
-                                             'from'; ...
-                                             'to'; ...
-                                             'mode'; ...
-                                             'desc'};
+    fields_to_set.entity_order = {'hemi'; ...
+                                  'space'; ...
+                                  'res'; ...
+                                  'den'; ...
+                                  'label'; ...
+                                  'from'; ...
+                                  'to'; ...
+                                  'mode'; ...
+                                  'desc'};
 
-    fields_to_set.spm_2_bids.fwhm = [];
+    fields_to_set.fwhm = [];
 
-    fields_to_set.spm_2_bids.spec = struct([]);
+    fields_to_set.spec = struct([]);
 
     % fucntion to generate structures
     desc_gen = @(x) struct('entities', struct('space', 'individual', ...
@@ -128,34 +122,31 @@ function fields_to_set = set_default_cfg()
                                                        'mode', 'image'), ...
                                                 'suffix', 'xfm');
 
-    fields_to_set.spm_2_bids.segment = segment;
+    fields_to_set.segment = segment;
 
     % Preprocessed data
-    fields_to_set.spm_2_bids.stc = desc_gen('stc');
+    fields_to_set.stc = desc_gen('stc');
 
-    fields_to_set.spm_2_bids.realign_unwarp = desc_gen('realignUnwarp');
-    fields_to_set.spm_2_bids.real_param = struct('entities', ...
-                                                 struct('desc', 'confounds'), ...
-                                                 'suffix', 'regressors', ...
-                                                 'ext', '.tsv');
+    fields_to_set.realign_unwarp = desc_gen('realignUnwarp');
+    fields_to_set.real_param = struct('entities', ...
+                                      struct('desc', 'confounds'), ...
+                                      'suffix', 'regressors', ...
+                                      'ext', '.tsv');
 
-    fields_to_set.spm_2_bids.mean = desc_gen('mean');
+    fields_to_set.mean = desc_gen('mean');
     % remove the run entity
-    fields_to_set.spm_2_bids.mean.entities.run = ''; 
-    
-    fields_to_set.spm_2_bids.normalized_mean = fields_to_set.spm_2_bids.mean;
-    fields_to_set.spm_2_bids.normalized_mean.entities.space = SPM_SPACE;
+    fields_to_set.mean.entities.run = '';
 
-    fields_to_set.spm_2_bids.preproc = desc_gen('preproc');
-    fields_to_set.spm_2_bids.preproc_norm = fields_to_set.spm_2_bids.preproc;
-    fields_to_set.spm_2_bids.preproc_norm.entities.space = SPM_SPACE;
+    fields_to_set.normalized_mean = fields_to_set.mean;
+    fields_to_set.normalized_mean.entities.space = SPM_SPACE;
+
+    fields_to_set.preproc = desc_gen('preproc');
+    fields_to_set.preproc_norm = fields_to_set.preproc;
+    fields_to_set.preproc_norm.entities.space = SPM_SPACE;
 
     % Smooth
-    fields_to_set.spm_2_bids.smooth = desc_gen('smth');
-    fields_to_set.spm_2_bids.smooth_norm = fields_to_set.spm_2_bids.smooth;
-    fields_to_set.spm_2_bids.smooth_norm.entities.space = SPM_SPACE;
+    fields_to_set.smooth = desc_gen('smth');
+    fields_to_set.smooth_norm = fields_to_set.smooth;
+    fields_to_set.smooth_norm.entities.space = SPM_SPACE;
 
-end
-
-function check_fields(cfg)
 end
