@@ -33,6 +33,16 @@ function test_add_mapping()
 
 end
 
+function test_find_mapping()
+
+    map = Mapping();
+    map = map.default();
+    idx = map.find_mapping('prefix', 'rp_');
+
+    assertEqual(find(idx), 10);
+
+end
+
 function test_flatten_mapping()
 
     map = Mapping();
