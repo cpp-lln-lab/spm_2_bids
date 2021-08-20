@@ -1,5 +1,31 @@
 classdef Mapping
     %
+    % Creates a mapping object that will contain the list how an spm file will be renamed
+    % into a bids derivatives.
+    %
+    % Has the following attributes::
+    %
+    %   - mapping : (n X 1) structure with the following fiels
+    %
+    %         - prefix 
+    %         - suffix 
+    %         - entities 
+    %         - ext 
+    %         - name_spec: structure that must resemble the output of bids.internal.parse_filename
+    % 
+    %   - cfg : describes the common properties to be used for several names in the output.
+    %           See ``check_cfg``
+    % 
+    %   - list of SPM prefixes from ``get_spm_prefix_list()``
+    %
+    %    - stc = ''
+    %    - realign = ''
+    %    - unwarp = ''
+    %    - coreg = ''
+    %    - bias_cor = ''
+    %    - norm = ''
+    %    - smooth = ''
+    %
     % (C) Copyright 2021 spm_2_bids developers
 
     properties
@@ -25,6 +51,14 @@ classdef Mapping
     methods
 
         function obj = Mapping(cfg)
+            %
+            % Creates the mapping object with a given configuration
+            %
+            % USAGE::
+            %
+            %  map = Mapping(cfg)
+            %
+            % 
 
             if nargin == 1
                 obj.cfg = cfg;
@@ -45,6 +79,14 @@ classdef Mapping
         end
 
         function obj = add_mapping(obj, varargin)
+            %
+            % Add a mapping to the for a given files or set of spm files to a
+            % specific name output.
+            %
+            % USAGE::
+            %
+            %  map = add_mapping('prefix', prefix, 'suffix', 'entities', 'ext', 'name_spec')
+            %
 
             p = inputParser;
 
@@ -73,6 +115,8 @@ classdef Mapping
             %
             % ensures that there is only one prefix, suffix, entity for each mapping
             %
+            % typically to be run before using ``spm_2_bids``
+            %
             % (C) Copyright 2021 spm_2_bids developers
 
             % TODO add a check to make sure each prefix is only present once
@@ -100,8 +144,14 @@ classdef Mapping
         end
 
         function obj = default(obj)
-
-            % map of prefix to name specification
+            %
+            % Load into the the mapping objects the default map for SPM --> bids derivatives
+            %
+            % USAGE::
+            %
+            %   map = map.default;
+            %
+            
             prfx_spec = { ...
                          { obj.bias_cor },               obj.cfg.segment.bias_corrected; ...
                          { 'c1' },                       obj.cfg.segment.gm; ...
