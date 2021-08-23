@@ -46,6 +46,9 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     spec = [];
 
+    % TODO se if some of the bids-query machinery cannot be kept for identifying
+    % the right mapping
+    
     % look for the right prefix in the mapping
     prefix_match = map.find_mapping('prefix', p.prefix);
 
