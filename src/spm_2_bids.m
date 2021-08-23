@@ -33,6 +33,21 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     mapping = map.mapping;
     cfg = map.cfg;
+    
+    use_suffix_as_label = false;
+    
+    % deal with suffixes modified by SPM
+    % turns them into prefixes that can be handled by the default mapping
+    if strfind(file, '_uw.mat') %#ok<*STRIFCND>
+        file = spm_file(file, 'prefix', 'unwarpparam_');
+        file = strrep(file, '_uw.mat', '.mat');
+        use_suffix_as_label = true;
+    end
+    if strfind(file, '_seg8.mat') %#ok<*STRIFCND>
+        file = spm_file(file, 'prefix', 'segparam_');
+        file = strrep(file, '_seg8.mat', '.mat');
+        use_suffix_as_label = true;
+    end
 
     pth = spm_fileparts(file);
     new_filename = spm_file(file, 'filename');
@@ -40,6 +55,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     p = bids.internal.parse_filename(file);
 
+    % TO DO allow renaming even if there is no prefix ?
     if isempty(p.prefix)
         return
     end
@@ -111,6 +127,10 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     spec = add_fwhm_to_smooth_label(spec, cfg);
 
     spec = adapt_from_label_to_input(spec, p);
+    
+    if use_suffix_as_label
+        spec.entities.label = p.suffix;
+    end
 
     spec = use_config_spec(spec, cfg);
 
@@ -134,7 +154,8 @@ function spec = add_fwhm_to_smooth_label(spec, cfg)
     % adds the FWHM to the description label for smoothing
     %
 
-    if isfield(spec.entities, 'desc') && ...
+    if isfield(spec, 'entities') && ...
+        isfield(spec.entities, 'desc') && ...
             strcmp(spec.entities.desc, 'smth') && ...
             ~isempty(cfg.fwhm)
         spec.entities.desc = sprintf('smth%i', cfg.fwhm);

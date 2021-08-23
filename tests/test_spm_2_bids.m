@@ -8,6 +8,25 @@ function test_suite = test_spm_2_bids %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_suffix()
+
+    input_output = {
+    'sub-01_T1w_seg8.mat', 'sub-01_label-T1w_segparam.mat';
+    'sub-01_task-auditory_bold_uw.mat', 'sub-01_task-auditory_label-bold_unwarpparam.mat'};
+
+    for i = 1:numel(size(input_output, 1))
+
+        print_here('%s\n', input_output{i,1});
+
+        filename = spm_2_bids(input_output{i,1});
+
+        expected = input_output{i, 2};
+        assertEqual(filename, expected);
+
+    end
+
+end
+
 function test_spm_2_bids_new_mapping()
 
     map = Mapping();
@@ -52,27 +71,6 @@ function test_spm_2_bids_new_mapping()
     end
 
 end
-
-% Not yet implemented as this makes the filename parsing crash
-
-% function test_spm_2_bids_suffix()
-%
-%     input_output = {
-%     'sub-01_T1w_seg8.mat', 'sub-01_label-T1w_segparam.mat';
-%     'sub-01_task-auditory_bold_uw.mat', 'sub-01_task-auditory_label-bold_unwarpparam.mat'};
-%
-%     for i = 1:numel(size(input_output, 1))
-%
-%         print_here('%s\n', input_output{i,1});
-%
-%         filename = spm_2_bids(input_output{i,1});
-%
-%         expected = input_output{i, 2};
-%         assertEqual(filename, expected);
-%
-%     end
-%
-% end
 
 function test_spm_2_bids_order_entities()
 

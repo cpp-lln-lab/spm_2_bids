@@ -122,12 +122,15 @@ function fields_to_set = set_default_cfg()
                                                        'mode', 'image'), ...
                                                 'suffix', 'xfm');
 
+    segment.param = struct('label', 'TBD', 'suffix', 'segparam');                                            
+                                            
     fields_to_set.segment = segment;
 
     % Preprocessed data
     fields_to_set.stc = desc_gen('stc');
 
     fields_to_set.realign_unwarp = desc_gen('realignUnwarp');
+    fields_to_set.realign_unwarp_param = struct('label', 'TBD', 'suffix', 'unwarpparam');
     fields_to_set.real_param = struct('entities', ...
                                       struct('desc', 'confounds'), ...
                                       'suffix', 'regressors', ...
