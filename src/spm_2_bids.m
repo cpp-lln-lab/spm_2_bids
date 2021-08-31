@@ -10,7 +10,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     % :param file: SPM preprocessed filename (can be fullpath);
     %              for example ``wmsub-01_ses-01_T1w.nii``
     % :type file: string
-    % :param map: optional spm_2_bids map to overwrite the default 
+    % :param map: optional spm_2_bids map to overwrite the default
     %             map (see Mapping)
     % :param map: Mapping object
     %
@@ -33,9 +33,9 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     mapping = map.mapping;
     cfg = map.cfg;
-    
+
     use_suffix_as_label = false;
-    
+
     % deal with suffixes modified by SPM
     % turns them into prefixes that can be handled by the default mapping
     if strfind(file, '_uw.mat') %#ok<*STRIFCND>
@@ -64,13 +64,13 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     % TODO se if some of the bids-query machinery cannot be kept for identifying
     % the right mapping
-    
+
     % look for the right prefix in the mapping
     prefix_match = map.find_mapping('prefix', p.prefix);
 
     % TODO implement methods in Mapping to filter by suffix / extention /
     % entities
-    
+
     % if any suffix / extention mentioned in the mapping we check for that as well
     % if none is mentioned anywhere in the mapping then anything goes
     suffix_match = true(size(mapping));
@@ -118,7 +118,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     end
 
     if isempty(spec)
-        %TODO this warning should probably go in the find_mapping methods
+        % TODO this warning should probably go in the find_mapping methods
         msg = sprintf('Unknown prefix: %s', p.prefix);
         warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
         return
@@ -127,7 +127,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     spec = add_fwhm_to_smooth_label(spec, cfg);
 
     spec = adapt_from_label_to_input(spec, p);
-    
+
     if use_suffix_as_label
         spec.entities.label = p.suffix;
     end

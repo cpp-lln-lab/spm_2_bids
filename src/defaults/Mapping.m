@@ -7,15 +7,15 @@ classdef Mapping
     %
     %   - mapping : (n X 1) structure with the following fiels
     %
-    %         - prefix 
-    %         - suffix 
-    %         - entities 
-    %         - ext 
+    %         - prefix
+    %         - suffix
+    %         - entities
+    %         - ext
     %         - name_spec: structure that must resemble the output of bids.internal.parse_filename
-    % 
+    %
     %   - cfg : describes the common properties to be used for several names in the output.
     %           See ``check_cfg``
-    % 
+    %
     %   - list of SPM prefixes from ``get_spm_prefix_list()``
     %
     %    - stc = ''
@@ -27,8 +27,8 @@ classdef Mapping
     %    - smooth = ''
     %
     % (C) Copyright 2021 spm_2_bids developers
-    
-    %TODO add a print_mapping method to allow easy visualization 
+
+    % TODO add a print_mapping method to allow easy visualization
     % of the input --> output relationship
 
     properties
@@ -61,7 +61,7 @@ classdef Mapping
             %
             %  map = Mapping(cfg)
             %
-            % 
+            %
 
             if nargin == 1
                 obj.cfg = cfg;
@@ -91,15 +91,15 @@ classdef Mapping
             %  map = add_mapping('prefix', prefix, 'suffix', 'entities', 'ext', 'name_spec')
             %
 
-            %TODO add possibility to pass "filter" arugment that is a structure
+            % TODO add possibility to pass "filter" arugment that is a structure
             % with shape (allows to chain the output from bids parsing)
             %
             % filter.prefix
             % filter.suffix
             % filter.entities
             % filter.ext
-            % 
-            
+            %
+
             p = inputParser;
 
             addParameter(p, 'prefix', obj.default_value);
@@ -163,7 +163,7 @@ classdef Mapping
             %
             %   map = map.default;
             %
-            
+
             prfx_spec = { ...
                          { obj.bias_cor },         obj.cfg.segment.bias_corrected; ...
                          { 'c1' },                 obj.cfg.segment.gm; ...
@@ -217,18 +217,18 @@ classdef Mapping
             addParameter(p, 'prefix', @ischar);
 
             parse(p, varargin{:});
-            
+
             available_mapped_prefixes = {obj.mapping.prefix}';
-            
+
             idx = strcmp(p.Results.prefix, available_mapped_prefixes);
 
         end
-        
+
         function obj = rm_mapping(obj, idx)
 
-              obj.mapping(idx) = [];
+            obj.mapping(idx) = [];
 
-        end        
+        end
 
     end
 end

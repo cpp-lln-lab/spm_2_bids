@@ -122,8 +122,8 @@ function fields_to_set = set_default_cfg()
                                                        'mode', 'image'), ...
                                                 'suffix', 'xfm');
 
-    segment.param = struct('label', 'TBD', 'suffix', 'segparam');                                            
-                                            
+    segment.param = struct('label', 'TBD', 'suffix', 'segparam');
+
     fields_to_set.segment = segment;
 
     % Preprocessed data
