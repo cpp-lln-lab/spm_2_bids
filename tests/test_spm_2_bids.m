@@ -11,8 +11,9 @@ end
 function test_spm_2_bids_suffix()
 
     input_output = {
-                    'sub-01_T1w_seg8.mat', 'sub-01_label-T1w_segparam.mat'
-                    'sub-01_task-auditory_bold_uw.mat', 'sub-01_task-auditory_label-bold_unwarpparam.mat'};
+                    'sub-01_T1w_seg8.mat', 'sub-01_label-T1w_segparam.mat'; ...
+                    'sub-01_task-auditory_bold_uw.mat', ...
+                    'sub-01_task-auditory_label-bold_unwarpparam.mat'};
 
     for i = 1:numel(size(input_output, 1))
 

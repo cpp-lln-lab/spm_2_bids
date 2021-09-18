@@ -3,28 +3,28 @@ classdef Mapping
     % Creates a mapping object that will contain the list how an spm file will be renamed
     % into a bids derivatives.
     %
-    % Has the following attributes::
+    % Has the following attributes:
     %
-    %   - mapping : (n X 1) structure with the following fiels
+    %   - mapping, (n X 1) structure with the following fields:
     %
-    %         - prefix
-    %         - suffix
-    %         - entities
-    %         - ext
-    %         - name_spec: structure that must resemble the output of bids.internal.parse_filename
+    %         - ``prefix``
+    %         - ``suffix``
+    %         - ``entities``
+    %         - ``ext``
+    %         - ``name_spec``: structure that must resemble the output of bids.File
     %
-    %   - cfg : describes the common properties to be used for several names in the output.
-    %           See ``check_cfg``
+    %   - cfg describes the common properties to be used for several names in the output.
+    %     (See ``check_cfg()``)
     %
-    %   - list of SPM prefixes from ``get_spm_prefix_list()``
+    %   - list of SPM prefixes from ``get_spm_prefix_list()``:
     %
-    %    - stc = ''
-    %    - realign = ''
-    %    - unwarp = ''
-    %    - coreg = ''
-    %    - bias_cor = ''
-    %    - norm = ''
-    %    - smooth = ''
+    %           - ``stc = ''``
+    %           - ``realign = ''``
+    %           - ``unwarp = ''``
+    %           - ``coreg = ''``
+    %           - ``bias_cor = ''``
+    %           - ``norm = ''``
+    %           - ``smooth = ''``
     %
     % (C) Copyright 2021 spm_2_bids developers
 
@@ -91,7 +91,7 @@ classdef Mapping
             %  map = add_mapping('prefix', prefix, 'suffix', 'entities', 'ext', 'name_spec')
             %
 
-            % TODO add possibility to pass "filter" arugment that is a structure
+            % TODO add possibility to pass "filter" argument that is a structure
             % with shape (allows to chain the output from bids parsing)
             %
             % filter.prefix

@@ -5,7 +5,7 @@ function cfg = check_cfg(cfg)
     %
     % USAGE::
     %
-    % cfg = check_cfg(cfg)
+    %   cfg = check_cfg(cfg)
     %
     % :param cfg: structure or json filename containing the spm_2_bids.anat.
     % :type cfg: structure

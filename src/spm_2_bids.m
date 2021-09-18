@@ -39,18 +39,18 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     % deal with suffixes modified by SPM
     % turns them into prefixes that can be handled by the default mapping
     if strfind(file, '_uw.mat') %#ok<*STRIFCND>
-        file = spm_file(file, 'prefix', 'unwarpparam_');
+        file = bids.internal.file_utils(file, 'prefix', 'unwarpparam_');
         file = strrep(file, '_uw.mat', '.mat');
         use_suffix_as_label = true;
     end
     if strfind(file, '_seg8.mat') %#ok<*STRIFCND>
-        file = spm_file(file, 'prefix', 'segparam_');
+        file = bids.internal.file_utils(file, 'prefix', 'segparam_');
         file = strrep(file, '_seg8.mat', '.mat');
         use_suffix_as_label = true;
     end
 
-    pth = spm_fileparts(file);
-    new_filename = spm_file(file, 'filename');
+    pth = fileparts(file);
+    new_filename = bids.internal.file_utils(file, 'filename');
     json = [];
 
     p = bids.internal.parse_filename(file);

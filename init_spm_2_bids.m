@@ -1,4 +1,4 @@
-function init_env
+function init_spm_2_bids
     %
     % 1 - Check if version requirements
     % are satisfied and the packages are
@@ -18,7 +18,7 @@ function init_env
     OCTAVE_VER = '4.0.3';
     MATLAB_VER = '8.6.0';
 
-    INSTALL_LIST = {'io', 'statistics', 'image'};
+    INSTALL_LIST = {};
 
     if is_octave
 
