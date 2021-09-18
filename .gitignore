@@ -7,6 +7,11 @@ env/
 
 lib/bids-matlab
 
+coverage_html
+coverage.xml
+test_report.log
+
+
 
 ## MATLAB / OCTAVE gitignore template
 

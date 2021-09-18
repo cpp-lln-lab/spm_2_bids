@@ -1,9 +1,5 @@
 % (C) Copyright 2019 spm_2_bids developers
 
-warning('OFF');
-
-spm('defaults', 'fMRI');
-
 folderToCover = fullfile(pwd, 'src');
 testFolder = fullfile(pwd, 'tests');
 
