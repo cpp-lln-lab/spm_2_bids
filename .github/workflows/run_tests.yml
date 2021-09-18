@@ -30,14 +30,6 @@ jobs:
         submodules: true
         fetch-depth: 2
 
-    - name: Install SPM
-      run: |
-         git clone https://github.com/spm/spm12.git --depth 1
-         make -C spm12/src PLATFORM=octave distclean
-         make -C spm12/src PLATFORM=octave
-         make -C spm12/src PLATFORM=octave install
-         octave $OCTFLAGS --eval "addpath(fullfile(pwd, 'spm12')); savepath();"
-
     - name: Install Moxunit and MOcov
       run: |
         git clone https://github.com/MOxUnit/MOxUnit.git --depth 1
@@ -48,7 +40,7 @@ jobs:
     - name: get bids-matlab and set up paths
       run: |
         make install_dev
-        octave $OCTFLAGS --eval "init_env; savepath();"
+        octave $OCTFLAGS --eval "init_spm_2_bids; savepath();" 
       
     - name: Run tests
       run: |
