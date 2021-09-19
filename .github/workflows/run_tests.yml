@@ -9,9 +9,6 @@ on:
   pull_request:
     branches: '*'
 
-env:
-  OCTFLAGS: --no-gui --no-window-system --silent
-
 jobs:
   build:
 
@@ -19,34 +16,41 @@ jobs:
 
     steps:
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get -y -qq update
-        sudo apt-get -y install octave liboctave-dev
-
     - name: Clone spm_2_bids         
       uses: actions/checkout@v2
       with:
         submodules: true
-        fetch-depth: 2
-
-    - name: Install Moxunit and MOcov
-      run: |
-        git clone https://github.com/MOxUnit/MOxUnit.git --depth 1
-        make -C MOxUnit install
-        git clone https://github.com/MOcov/MOcov.git --depth 1
-        make -C MOcov install         
+        fetch-depth: 2  
           
-    - name: get bids-matlab and set up paths
+    - name: get bids-matlab
       run: |
         make install_dev
-        octave $OCTFLAGS --eval "init_spm_2_bids; savepath();" 
-      
-    - name: Run tests
-      run: |
-        octave $OCTFLAGS --eval "run_tests"
-        cat test_report.log | grep 0
-        bash <(curl -s https://codecov.io/bash)
+
+    - name: MOxUnit Action
+      uses: joergbrech/moxunit-action@master
+      with:
+        tests: tests # files or directories containing the MOxUnit test cases
+        src: src lib  # directories to be added to the Octave search path before running the tests. 
+        ext: tests/utils # External resources to add to the search put (excluded from coverage)
+        # data: # Directory for test data  
+        with_coverage: true
+        cover_xml_file: coverage.xml
+
+    - name: Upload coverage
+      uses: actions/upload-artifact@v1 
+      with: 
+        name: coverage_file 
+        path: coverage.xml         
+
+    - name: Code coverage
+      uses: codecov/codecov-action@v1
+      with:
+       file:  coverage.xml # optional
+       flags: unittests # optional
+       name: codecov-umbrella # optional
+       fail_ci_if_error: true # optional (default = false)        
+
+
 
       
 
