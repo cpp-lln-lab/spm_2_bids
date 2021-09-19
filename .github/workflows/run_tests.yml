@@ -22,7 +22,7 @@ jobs:
         submodules: true
         fetch-depth: 2  
           
-    - name: get bids-matlab
+    - name: get bids-matlab and set up paths
       run: |
         make install_dev
 
@@ -30,7 +30,7 @@ jobs:
       uses: joergbrech/moxunit-action@master
       with:
         tests: tests # files or directories containing the MOxUnit test cases
-        src: src lib  # directories to be added to the Octave search path before running the tests. 
+        src: src lib/bids-matlab  # directories to be added to the Octave search path before running the tests. 
         ext: tests/utils # External resources to add to the search put (excluded from coverage)
         # data: # Directory for test data  
         with_coverage: true
