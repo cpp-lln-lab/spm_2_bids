@@ -21,6 +21,13 @@ jobs:
       with:
         submodules: true
         fetch-depth: 2  
+
+    - name: Install JSONio
+      run: |
+         git clone git://github.com/gllmflndn/JSONio.git --depth 1
+         cd JSONio
+         mkoctfile --mex jsonread.c jsmn.c -DJSMN_PARENT_LINKS
+         cd ..        
           
     - name: get bids-matlab and set up paths
       run: |
