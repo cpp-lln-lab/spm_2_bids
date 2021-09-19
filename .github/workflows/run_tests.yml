@@ -6,38 +6,36 @@ on:
       - master
       - main
       - dev
+
   pull_request:
     branches: '*'
 
 jobs:
   build:
-
     runs-on: ubuntu-20.04
 
     steps:
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get -y -qq update
+        sudo apt-get -y install octave liboctave-dev    
 
     - name: Clone spm_2_bids         
       uses: actions/checkout@v2
       with:
         submodules: true
-        fetch-depth: 2  
-
-    - name: Install JSONio
-      run: |
-         git clone git://github.com/gllmflndn/JSONio.git --depth 1
-         cd JSONio
-         mkoctfile --mex jsonread.c jsmn.c -DJSMN_PARENT_LINKS
-         cd ..        
+        fetch-depth: 2        
           
-    - name: get bids-matlab and set up paths
+    - name: get bids-matlab and JSONio
       run: |
-        make install_dev
+        make install_dev_octave
 
     - name: MOxUnit Action
       uses: joergbrech/moxunit-action@master
       with:
         tests: tests # files or directories containing the MOxUnit test cases
-        src: src lib/bids-matlab  # directories to be added to the Octave search path before running the tests. 
+        src: src lib/bids-matlab lib/JSONio # directories to be added to path before running the tests. 
         ext: tests/utils # External resources to add to the search put (excluded from coverage)
         # data: # Directory for test data  
         with_coverage: true
