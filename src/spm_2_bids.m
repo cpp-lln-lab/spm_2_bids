@@ -136,12 +136,18 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     overwrite = true;
     spec.prefix = '';
-    spec.use_schema = false;
+    use_schema = false;
     p = set_missing_fields(p, spec, overwrite);
 
     p = reorder_entities(p, cfg);
 
-    [new_filename, pth, json] = bids.create_filename(p, file);
+    bidsFile = bids.File(file, use_schema, p);
+    bidsFile = bidsFile.reorder_entities(p.entity_order);
+    bidsFile = bidsFile.create_filename;
+
+    new_filename = bidsFile.filename;
+    pth = bidsFile.pth;
+    json = bids.derivatives_json(new_filename);
 
     % TODO update json content
     p = bids.internal.parse_filename(file);

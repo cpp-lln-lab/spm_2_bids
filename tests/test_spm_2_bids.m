@@ -8,10 +8,19 @@ function test_suite = test_spm_2_bids %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_order_entities()
+
+    file = 'wmsub-01_desc-skullstripped_T1w.nii';
+    new_filename = spm_2_bids(file);
+    assertEqual(new_filename, 'sub-01_space-IXI549Space_desc-preproc_T1w.nii');
+
+end
+
 function test_spm_2_bids_suffix()
 
     input_output = {
-                    'sub-01_T1w_seg8.mat', 'sub-01_label-T1w_segparam.mat'; ...
+                    'sub-01_T1w_seg8.mat', ...
+                    'sub-01_label-T1w_segparam.mat'
                     'sub-01_task-auditory_bold_uw.mat', ...
                     'sub-01_task-auditory_label-bold_unwarpparam.mat'};
 
@@ -70,14 +79,6 @@ function test_spm_2_bids_new_mapping()
         assertEqual(filename, expected);
 
     end
-
-end
-
-function test_spm_2_bids_order_entities()
-
-    file = 'wmsub-01_desc-skullstripped_T1w.nii';
-    new_filename = spm_2_bids(file);
-    assertEqual(new_filename, 'sub-01_space-IXI549Space_desc-preproc_T1w.nii');
 
 end
 
