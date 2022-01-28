@@ -35,8 +35,8 @@ jobs:
       uses: joergbrech/moxunit-action@v1.2.0
       with:
         tests: tests # files or directories containing the MOxUnit test cases
-        src: src lib/bids-matlab lib/JSONio # directories to be added to path before running the tests.
-        ext: tests/utils # External resources to add to the search put (excluded from coverage)
+        src: src  # directories to be added to path before running the tests.
+        ext: tests/utils lib/bids-matlab lib/JSONio # External resources to add to the search put (excluded from coverage)
         # data: # Directory for test data
         with_coverage: true
         cover_xml_file: coverage.xml
