@@ -8,7 +8,7 @@ function prefix_list = get_spm_prefix_list()
     try
         spm_defaults = spm_get_defaults();
     catch
-        spm_defaults.slicetiming.prefix = 's';
+        spm_defaults.slicetiming.prefix = 'a';
         spm_defaults.realign.write.prefix = 'r';
         spm_defaults.unwarp.write.prefix = 'u';
         spm_defaults.coreg.write.prefix = 'r';
