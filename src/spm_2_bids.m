@@ -34,29 +34,23 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     mapping = map.mapping;
     cfg = map.cfg;
 
-    use_suffix_as_label = false;
-
     % deal with suffixes modified by SPM
     % turns them into prefixes that can be handled by the default mapping
-    if strfind(file, '_uw.mat') %#ok<*STRIFCND>
-        file = bids.internal.file_utils(file, 'prefix', 'unwarpparam_');
-        file = strrep(file, '_uw.mat', '.mat');
-        use_suffix_as_label = true;
-    end
-    if strfind(file, '_seg8.mat') %#ok<*STRIFCND>
-        file = bids.internal.file_utils(file, 'prefix', 'segparam_');
-        file = strrep(file, '_seg8.mat', '.mat');
+    use_suffix_as_label = false;
+    [file, status(1)] = turn_spm_suffix_in_prefix(file, '_uw.mat', 'unwarpparam_');
+    [file, status(2)] = turn_spm_suffix_in_prefix(file, '_seg8.mat', 'segparam_');
+    if any(status)
         use_suffix_as_label = true;
     end
 
-    pth = fileparts(file);
-    new_filename = bids.internal.file_utils(file, 'filename');
+    bf = bids.File(file, 'use_schema', false);
+    pth = bf.bids_path;
+    new_filename = bf.filename;
+
     json = [];
 
-    p = bids.internal.parse_filename(file);
-
     % TO DO allow renaming even if there is no prefix ?
-    if isempty(p.prefix)
+    if isempty(bf.prefix)
         return
     end
 
@@ -66,7 +60,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     % the right mapping
 
     % look for the right prefix in the mapping
-    prefix_match = map.find_mapping('prefix', p.prefix);
+    prefix_match = map.find_mapping('prefix', bf.prefix);
 
     % TODO implement methods in Mapping to filter by suffix / extention /
     % entities
@@ -75,12 +69,12 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     % if none is mentioned anywhere in the mapping then anything goes
     suffix_match = true(size(mapping));
     if ~all(cellfun('isempty', {mapping.suffix}'))
-        suffix_match = any([strcmp({mapping.suffix}', p.suffix), ...
+        suffix_match = any([strcmp({mapping.suffix}', bf.suffix), ...
                             strcmp({mapping.suffix}', '*')], 2);
     end
     ext_match = true(size(mapping));
     if ~all(cellfun('isempty', {mapping.ext}'))
-        ext_match = any([strcmp({mapping.ext}', p.ext), ...
+        ext_match = any([strcmp({mapping.ext}', bf.extension), ...
                          strcmp({mapping.ext}', '*')], 2);
     end
 
@@ -96,7 +90,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
         idx = find(needs_entity_check);
         for i = 1:numel(idx)
-            status = check_field_content(p.entities, mapping(idx(i)).entities);
+            status = check_field_content(bf.entities, mapping(idx(i)).entities);
             entitiy_match(idx(i)) = status;
         end
     end
@@ -119,66 +113,78 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     if isempty(spec)
         % TODO this warning should probably go in the find_mapping methods
-        msg = sprintf('Unknown prefix: %s', p.prefix);
+        msg = sprintf('Unknown prefix: %s', bf.prefix);
         warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
         return
     end
 
     spec = add_fwhm_to_smooth_label(spec, cfg);
 
-    spec = adapt_from_label_to_input(spec, p);
+    spec = adapt_from_label_to_input(spec, bf);
 
     if use_suffix_as_label
-        spec.entities.label = p.suffix;
+        spec.entities.label = bf.suffix;
     end
 
     spec = use_config_spec(spec, cfg);
 
-    overwrite = true;
-    spec.prefix = '';
-    use_schema = false;
-    p = set_missing_fields(p, spec, overwrite);
+    bf = update_filename(bf, spec, cfg);
 
-    p = reorder_entities(p, cfg);
+    % arg out
+    pth = bf.bids_path;
 
-    bidsFile = bids.File(file, use_schema, p);
-    bidsFile = bidsFile.reorder_entities(p.entity_order);
-    bidsFile = bidsFile.create_filename;
+    new_filename = bf.filename;
 
-    new_filename = bidsFile.filename;
-    pth = bidsFile.pth;
-    json = bids.derivatives_json(new_filename);
-
-    % TODO update json content
-    p = bids.internal.parse_filename(file);
-    json.content.RawSources{1} = strrep(p.filename, p.prefix, '');
+    json = bids.derivatives_json(bf.filename);
+    json.content.RawSources{1} = strrep(bf.filename, bf.prefix, '');
 
 end
 
-function spec = add_fwhm_to_smooth_label(spec, cfg)
+function bf = update_filename(bf, spec, cfg)
+
+    bf.prefix = '';
+    if isfield(spec, 'suffix')
+        bf.suffix = spec.suffix;
+    end
+    if isfield(spec, 'ext')
+        bf.extension = spec.ext;
+    end
+    if isfield(spec, 'entities')
+        entities = fieldnames(spec.entities);
+        for i = 1:numel(entities)
+            bf = bf.set_entity(entities{i}, spec.entities.(entities{i}));
+        end
+    end
+
+    bf = reorder_entities(bf, cfg);
+    bf = bf.update;
+
+end
+
+function bf = add_fwhm_to_smooth_label(bf, cfg)
     %
     % adds the FWHM to the description label for smoothing
     %
 
-    if isfield(spec, 'entities') && ...
-        isfield(spec.entities, 'desc') && ...
-            strcmp(spec.entities.desc, 'smth') && ...
+    if isfield(bf, 'entities') && ...
+        isfield(bf.entities, 'desc') && ...
+            strcmp(bf.entities.desc, 'smth') && ...
             ~isempty(cfg.fwhm)
-        spec.entities.desc = sprintf('smth%i', cfg.fwhm);
+        bf.entities.desc = sprintf('smth%i', cfg.fwhm);
     end
 
 end
 
-function spec = adapt_from_label_to_input(spec, p)
+function spec = adapt_from_label_to_input(spec, bf)
     %
     % for deformation fields
     %
 
-    if strcmp(p.prefix, 'y_')
-        spec.entities.from = p.suffix;
+    if strcmp(bf.prefix, 'y_')
+        spec.entities.from = bf.suffix;
         spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
-    elseif strcmp(p.prefix, 'iy_')
-        spec.entities.to = p.suffix;
+    elseif strcmp(bf.prefix, 'iy_')
+        spec.entities.to = bf.suffix;
         spec.entities = orderfields(spec.entities, {'from', 'to', 'mode'});
     end
 
@@ -204,14 +210,14 @@ function spec = use_config_spec(spec, cfg)
 
 end
 
-function p = reorder_entities(p, cfg)
+function bf = reorder_entities(bf, cfg)
     %
     % put entity from raw bids before those of derivatives
     % and make sure that derivatives entities are in the right order
     %
     %
 
-    entities = fieldnames(p.entities);
+    entities = fieldnames(bf.entities);
 
     is_raw_entity = ~ismember(entities, cfg.entity_order);
 
@@ -221,6 +227,18 @@ function p = reorder_entities(p, cfg)
                                            entities(~is_raw_entity));
     derivative_entities = cfg.entity_order(derivative_entities_present);
 
-    p.entity_order = cat(1, raw_entities, derivative_entities);
+    bf = bf.reorder_entities(cat(1, raw_entities, derivative_entities));
 
+end
+
+function [filename, status] = turn_spm_suffix_in_prefix(filename, pattern, string)
+    status = false;
+
+    if strfind(filename, pattern) %#ok<*STRIFCND>
+        filename = bids.internal.file_utils(filename, 'prefix', string);
+        filename = strrep(filename, ...
+                          pattern, ...
+                          ['.' bids.internal.file_utils(filename, 'ext')]);
+        status = true;
+    end
 end
