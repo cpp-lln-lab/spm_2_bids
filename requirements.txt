@@ -1,6 +1,6 @@
-Sphinx
-sphinxcontrib-matlabdomain
-sphinxcontrib-napoleon
-sphinx_rtd_theme
-miss_hit==0.9.22
+miss_hit==0.9.27
 pre-commit
+jupyterlab
+octave_kernel
+jinja2
+-r docs/requirements.txt

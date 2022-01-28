@@ -14,6 +14,7 @@ When you have set up your repo
 [![Build Status](https://travis-ci.com/Remi-gau/template_matlab_analysis.svg?branch=master)](https://travis-ci.com/Remi-gau/template_matlab_analysis)
 
 -->
+
 # spm_2_bids
 
 Small code base to help convert the MRI spm output to a valid bids derivatives.

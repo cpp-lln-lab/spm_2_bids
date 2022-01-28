@@ -6,7 +6,11 @@
 env/
 
 lib/bids-matlab
+lib/JSONio
 
+coverage_html
+coverage.xml
+test_report.log
 
 ## MATLAB / OCTAVE gitignore template
 
@@ -44,5 +48,3 @@ codegen/
 
 # Octave session info
 octave-workspace
-
-

@@ -3,8 +3,8 @@
 ## Set up virtual environment
 
 ```bash
-virtualenv -p python3 your_repo_name
-source your_repo_name/bin/activate
+virtualenv -p python3.8 env
+source env/bin/activate
 
 pip install -r requirements.txt
 ```
