@@ -22,6 +22,8 @@ function init_spm_2_bids
 
     if is_octave
 
+        more off;
+
         % Exit if min version is not satisfied
         if ~compare_versions(OCTAVE_VERSION, OCTAVE_VER, '>=')
             error('Minimum required Octave version: %s', OCTAVE_VER);

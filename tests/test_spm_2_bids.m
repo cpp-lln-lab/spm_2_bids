@@ -92,6 +92,10 @@ end
 
 function test_spm_2_bids_unknown_prefix()
 
+    if is_octave()
+        return
+    end
+
     file = 'wtfsub-01_ses-02_T1w.nii';
     assertWarning( ...
                   @()spm_2_bids(file), ...
