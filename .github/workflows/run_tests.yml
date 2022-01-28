@@ -19,14 +19,14 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get -y -qq update
-        sudo apt-get -y install octave liboctave-dev    
+        sudo apt-get -y install octave liboctave-dev
 
-    - name: Clone spm_2_bids         
+    - name: Clone spm_2_bids
       uses: actions/checkout@v2
       with:
         submodules: true
-        fetch-depth: 2        
-          
+        fetch-depth: 2
+
     - name: get bids-matlab and JSONio
       run: |
         make install_dev_octave
@@ -35,17 +35,17 @@ jobs:
       uses: joergbrech/moxunit-action@master
       with:
         tests: tests # files or directories containing the MOxUnit test cases
-        src: src lib/bids-matlab lib/JSONio # directories to be added to path before running the tests. 
+        src: src lib/bids-matlab lib/JSONio # directories to be added to path before running the tests.
         ext: tests/utils # External resources to add to the search put (excluded from coverage)
-        # data: # Directory for test data  
+        # data: # Directory for test data
         with_coverage: true
         cover_xml_file: coverage.xml
 
     - name: Upload coverage
-      uses: actions/upload-artifact@v1 
-      with: 
-        name: coverage_file 
-        path: coverage.xml         
+      uses: actions/upload-artifact@v1
+      with:
+        name: coverage_file
+        path: coverage.xml
 
     - name: Code coverage
       uses: codecov/codecov-action@v1
@@ -53,9 +53,4 @@ jobs:
        file:  coverage.xml # optional
        flags: unittests # optional
        name: codecov-umbrella # optional
-       fail_ci_if_error: true # optional (default = false)        
-
-
-
-      
-
+       fail_ci_if_error: true # optional (default = false)
