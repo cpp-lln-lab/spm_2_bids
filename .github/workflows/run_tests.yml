@@ -8,7 +8,7 @@ on:
       - dev
 
   pull_request:
-    branches: '*'
+    branches: ['*']
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
         make install_dev_octave
 
     - name: MOxUnit Action
-      uses: joergbrech/moxunit-action@master
+      uses: joergbrech/moxunit-action@v1.2.0
       with:
         tests: tests # files or directories containing the MOxUnit test cases
         src: src lib/bids-matlab lib/JSONio # directories to be added to path before running the tests.
