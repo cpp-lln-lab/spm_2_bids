@@ -88,7 +88,11 @@ classdef Mapping
             %
             % USAGE::
             %
-            %  map = add_mapping('prefix', prefix, 'suffix', 'entities', 'ext', 'name_spec')
+            %  map = add_mapping('prefix', prefix, ...
+            %                       'suffix', suffix, ...
+            %                       'entities', entities, ...
+            %                       'ext', ext, ...
+            %                       'name_spec', struct)
             %
 
             % TODO add possibility to pass "filter" argument that is a structure
@@ -209,6 +213,11 @@ classdef Mapping
         end
 
         function idx = find_mapping(obj, varargin)
+            %
+            % USAGE::
+            %
+            %    idx = obj.find_mapping('prefix', str)
+            %
 
             p = inputParser;
 
