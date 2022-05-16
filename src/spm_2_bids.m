@@ -217,6 +217,8 @@ function bf = reorder_entities(bf, cfg)
     %
     %
 
+    % TODO should be simplifiable with bids.File
+
     entities = fieldnames(bf.entities);
 
     is_raw_entity = ~ismember(entities, cfg.entity_order);

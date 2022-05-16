@@ -1,4 +1,7 @@
+# doc
 Sphinx
 sphinxcontrib-matlabdomain
-sphinxcontrib-napoleon
+sphinx-copybutton
 sphinx_rtd_theme
+rstcheck
+myst-parser
