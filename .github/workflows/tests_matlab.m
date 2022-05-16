@@ -3,8 +3,8 @@
 
 root_dir = getenv('GITHUB_WORKSPACE');
 
-disp(root_dir)
-ls(root_dir)
+disp(root_dir);
+ls(root_dir);
 
 addpath(fullfile(root_dir, 'MOcov', 'MOcov'));
 
