@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - main
       - dev
 
   pull_request:
@@ -22,7 +21,7 @@ jobs:
         sudo apt-get -y install octave liboctave-dev
 
     - name: Clone spm_2_bids
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: true
         fetch-depth: 2
@@ -40,12 +39,6 @@ jobs:
         # data: # Directory for test data
         with_coverage: true
         cover_xml_file: coverage.xml
-
-    - name: Upload coverage
-      uses: actions/upload-artifact@v1
-      with:
-        name: coverage_file
-        path: coverage.xml
 
     - name: Code coverage
       uses: codecov/codecov-action@v1
