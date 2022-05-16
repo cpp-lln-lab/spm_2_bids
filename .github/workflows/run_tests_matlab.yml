@@ -24,16 +24,16 @@ jobs:
           # MATLAB release to set up R2020a
           release: R2020a
 
-      - name: Install Moxunit and MOcov
-        run: |
-          git clone https://github.com/MOxUnit/MOxUnit.git --depth 1
-          git clone https://github.com/MOcov/MOcov.git --depth 1
-
       - name: Clone spm_2_bids
         uses: actions/checkout@v2
         with:
           submodules: true
           fetch-depth: 2
+
+      - name: Install Moxunit and MOcov
+        run: |
+          git clone https://github.com/MOxUnit/MOxUnit.git --depth 1
+          git clone https://github.com/MOcov/MOcov.git --depth 1
 
       - name: get bids-matlab and JSONio
         run: |
