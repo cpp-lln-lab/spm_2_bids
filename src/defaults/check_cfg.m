@@ -16,6 +16,7 @@ function cfg = check_cfg(cfg)
     %
     % ``cfg`` fields:
     %
+    % - ``all_entity_order``: order of all the official bids entities
     % - ``entity_order``: order of the entities in bids derivatives
     % - ``fwhm``: value to append to smoothing desctiption label
     % - ``spec``: specfication details to over ride some of the defaults
@@ -67,8 +68,13 @@ function fields_to_set = set_default_cfg()
 
     fields_to_set.space = SPM_SPACE;
 
+    bidsFile = bids.File('sub-01_T1.nii', 'use_schema', false);
+    bidsFile = bidsFile.reorder_entities;
+    fields_to_set.all_entity_order = bidsFile.entity_order;
+
     fields_to_set.entity_order = {'hemi'; ...
                                   'space'; ...
+                                  'atlas'; ...
                                   'res'; ...
                                   'den'; ...
                                   'label'; ...
@@ -81,7 +87,7 @@ function fields_to_set = set_default_cfg()
 
     fields_to_set.spec = struct([]);
 
-    % fucntion to generate structures
+    % function to generate structures
     desc_gen = @(x) struct('entities', struct('space', 'individual', ...
                                               'desc', x));
     segment_gen = @(x) struct('entities', struct('space', 'individual', ...
