@@ -1,5 +1,7 @@
 *DS_Store
 
+.vscode
+
 *.m~
 *octave-workspace
 
@@ -15,7 +17,6 @@ test_report.log
 ## MATLAB / OCTAVE gitignore template
 
 # From : https://github.com/github/gitignore/blob/master/Global/MATLAB.gitignore
-
 
 # Windows default autosave extension
 *.asv
