@@ -66,6 +66,12 @@ function fields_to_set = set_default_cfg()
 
     SPM_SPACE = 'IXI549Space';
 
+    % TODO DARTEL uses
+    % MNI152NLin2009[a-c][Sym|Asym]
+    %
+    % See section: standard-template-identifiers of
+    % https://bids-specification.readthedocs.io/en/latest/99-appendices/08-coordinate-systems.html
+
     fields_to_set.space = SPM_SPACE;
 
     % just to keep track of all the BIDS entities in the cfg

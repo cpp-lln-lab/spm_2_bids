@@ -19,7 +19,7 @@ function test_identify_rawsources_suffix()
 
         rawsource = identify_rawsources(input_output{i, 1}, verbose);
 
-        assertEqual(rawsource, ['sub-01/' input_output{i, 2}]);
+        assertEqual(rawsource, {['sub-01/' input_output{i, 2}]});
 
     end
 
@@ -50,7 +50,7 @@ function test_identify_rawsources_anat()
 
         rawsource = identify_rawsources(fullfile(pwd, 'sub-01', file), verbose);
 
-        assertEqual(rawsource, 'sub-01/sub-01_T1w.nii');
+        assertEqual(rawsource, {'sub-01/sub-01_T1w.nii'});
 
     end
 
@@ -89,7 +89,7 @@ function test_identify_rawsources_func()
 
         rawsource = identify_rawsources(file, verbose);
 
-        assertEqual(rawsource, 'sub-01/ses-02/sub-01_ses-02_task-foo_bold.nii');
+        assertEqual(rawsource, {'sub-01/ses-02/sub-01_ses-02_task-foo_bold.nii'});
 
     end
 

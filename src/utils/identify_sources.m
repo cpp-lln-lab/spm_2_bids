@@ -19,19 +19,38 @@ function sources = identify_sources(derivatives, map, verbose)
     %     'sra'
     %     'wr'
     %     'wra'
+    % those will throw warnings
 
-    % TODO mean may involve several files from the source (across runs
-    % and sessions
-    %     prefixes = {
-    %                 'mean'
-    %                 'meanu'
-    %                 'meanua'
-    %                 'wmeanu'
-    %                };
+    % TODO
+    % functional to anatomical coregistration
+    % anatomical to functional coregistration
 
     sources = '';
 
     prefix_based = true;
+
+    add_deformation_field = false;
+    deformation_field = 'TODO: add deformation field';
+
+    % TODO? grab all the anat suffixes from BIDS schema?
+    covered_suffixes = {'T1w', ...
+                        'T2w', ...
+                        'PDw', ...
+                        'T2starw', ...
+                        'inplaneT1', ...
+                        'inplaneT2', ...
+                        'PD', ...
+                        'PDT2', ...
+                        'T2star', ...
+                        'FLASH', ...
+                        'T1map', ...
+                        'T2map', ...
+                        'T2starmap', ...
+                        'R1map', ...
+                        'R2map', ...
+                        'R2starmap', ...
+                        'PDmap', ...
+                        'UNIT1'};
 
     if nargin < 1 || isempty(derivatives)
         return
@@ -63,6 +82,7 @@ function sources = identify_sources(derivatives, map, verbose)
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
     if prefix_based
+
         if numel(bf.prefix) < 2
 
             % needs at least 2 characters for this file to have some provenance in the
@@ -76,8 +96,12 @@ function sources = identify_sources(derivatives, map, verbose)
         else
             % remove the prefix of the last step
 
-            if startsWith(bf.prefix, 's') || startsWith(bf.prefix, 'w')
+            if startsWith(bf.prefix, 's') || startsWith(bf.prefix, 'u')
                 bf.prefix = bf.prefix(2:end);
+
+            elseif startsWith(bf.prefix, 'w')
+                bf.prefix = bf.prefix(2:end);
+                add_deformation_field = true;
 
             elseif startsWith(bf.prefix, 'rp_a')
                 bf.prefix = bf.prefix(4:end);
@@ -102,8 +126,29 @@ function sources = identify_sources(derivatives, map, verbose)
     end
 
     % call spm_2_bids what is the filename from the previous step
-    [new_filename] = spm_2_bids(bf.filename, map, verbose);
+    new_filename = spm_2_bids(bf.filename, map, verbose);
 
-    sources = fullfile(bf.bids_path, new_filename);
+    sources{1, 1} = fullfile(bf.bids_path, new_filename);
+
+    if add_deformation_field
+
+        % for anatomical data we assume that
+        % the deformation field comes from the anatomical file itself
+        if (~isempty(bf.modality) && ismember(bf.modality, {'anat'})) || ...
+           (~isempty(bf.suffix) && ismember(bf.suffix, covered_suffixes))
+
+            bf.prefix = 'y_';
+            bf = bf.update;
+            new_filename = spm_2_bids(bf.filename, map, verbose);
+            deformation_field = fullfile(bf.bids_path, new_filename);
+
+            % otherwise we can't guess it just from the file name
+        else
+
+        end
+
+        sources{2, 1} = deformation_field;
+
+    end
 
 end

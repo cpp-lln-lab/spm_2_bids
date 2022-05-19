@@ -43,6 +43,6 @@ function rawsource = identify_rawsources(derivatives, verbose)
 
     bf.prefix = '';
 
-    rawsource = fullfile(bf.bids_path, bf.filename);
+    rawsource{1} = fullfile(bf.bids_path, bf.filename);
 
 end

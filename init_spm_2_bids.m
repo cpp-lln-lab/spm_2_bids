@@ -53,7 +53,6 @@ function init_spm_2_bids
 
     end
 
-    % TODO check if bids-matlab is there ?
     add_dependencies();
 
     disp('Correct matlab/octave verions and added to the path!');

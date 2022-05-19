@@ -141,8 +141,8 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
 
     json = bids.derivatives_json(bf.filename);
 
-    json.content.RawSources{1} = identify_rawsources(file, verbose);
-    json.content.Sources{1} = identify_sources(file, map, verbose);
+    json.content.RawSources = identify_rawsources(file, verbose);
+    json.content.Sources = identify_sources(file, map, verbose);
 
 end
 
