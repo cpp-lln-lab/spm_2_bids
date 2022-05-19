@@ -1,4 +1,4 @@
-function sources = identify_sources(derivatives)
+function sources = identify_sources(derivatives, map, verbose)
     %
     % finds the most likely files in the detrivatives that was used to create
     % this file
@@ -37,6 +37,15 @@ function sources = identify_sources(derivatives)
         return
     end
 
+    if nargin < 2 || isempty(map)
+        map = Mapping();
+        map = map.default();
+    end
+
+    if nargin < 3
+        verbose = true;
+    end
+
     if endsWith(derivatives, '_seg8.mat')
 
         prefix_based = false;
@@ -51,7 +60,7 @@ function sources = identify_sources(derivatives)
 
     end
 
-    bf = bids.File(derivatives);
+    bf = bids.File(derivatives, 'verbose', verbose);
 
     if prefix_based
         if numel(bf.prefix) < 2
@@ -83,7 +92,7 @@ function sources = identify_sources(derivatives)
     end
 
     % call spm_2_bids what is the filename from the previous step
-    [new_filename] = spm_2_bids(bf.filename);
+    [new_filename] = spm_2_bids(bf.filename, map, verbose);
 
     sources = fullfile(bf.bids_path, new_filename);
 

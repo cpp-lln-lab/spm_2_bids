@@ -1,4 +1,4 @@
-function [new_filename, pth, json] = spm_2_bids(file, map)
+function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
     %
     % Provides a bids derivatives name for a file preprocessed with SPM
     %
@@ -26,9 +26,13 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     %
     % (C) Copyright 2021 spm_2_bids developers
 
-    if nargin < 2
+    if nargin < 2 || isempty(map)
         map = Mapping();
         map = map.default();
+    end
+
+    if nargin < 3
+        verbose = true;
     end
 
     mapping = map.mapping;
@@ -111,7 +115,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
         spec = mapping(idx).name_spec;
     end
 
-    if isempty(spec)
+    if isempty(spec) && verbose
         % TODO this warning should probably go in the find_mapping methods
         msg = sprintf('Unknown prefix: %s', bf.prefix);
         warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
@@ -136,7 +140,9 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     new_filename = bf.filename;
 
     json = bids.derivatives_json(bf.filename);
-    json.content.RawSources{1} = identify_rawsources(file, false);
+
+    json.content.RawSources{1} = identify_rawsources(file, verbose);
+    json.content.Sources{1} = identify_sources(file, map, verbose);
 
 end
 

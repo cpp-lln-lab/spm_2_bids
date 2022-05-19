@@ -20,7 +20,7 @@ function test_identify_sources_anat()
 
     for i  = 1:size(prefix_output, 1)
 
-        sources = identify_sources([prefix_output{i, 1} anat_file]);
+        sources = identify_sources([prefix_output{i, 1} anat_file], [], false);
 
         assertEqual(sources, prefix_output{i, 2});
 
@@ -47,7 +47,7 @@ function test_identify_sources_func()
 
     for i  = 1:size(prefix_output, 1)
 
-        sources = identify_sources([prefix_output{i, 1} func_file]);
+        sources = identify_sources([prefix_output{i, 1} func_file], [], false);
 
         assertEqual(sources, fullfile('sub-01', prefix_output{i, 2}));
 
@@ -64,7 +64,7 @@ function test_identify_sources_suffix()
 
     for i = 1:size(input_output, 1)
 
-        sources = identify_sources(input_output{i, 1});
+        sources = identify_sources(input_output{i, 1}, [], false);
 
         assertEqual(sources, ['sub-01/' input_output{i, 2}]);
 

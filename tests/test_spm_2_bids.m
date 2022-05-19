@@ -11,7 +11,7 @@ end
 function test_spm_2_bids_order_entities()
 
     file = 'wmsub-01_desc-skullstripped_T1w.nii';
-    new_filename = spm_2_bids(file);
+    new_filename = spm_2_bids(file, [], false);
     assertEqual(new_filename, 'sub-01_space-IXI549Space_desc-preproc_T1w.nii');
 
 end
@@ -25,7 +25,7 @@ function test_spm_2_bids_suffix()
 
         print_here('%s\n', input_output{i, 1});
 
-        filename = spm_2_bids(input_output{i, 1});
+        filename = spm_2_bids(input_output{i, 1}, [], false);
 
         expected = input_output{i, 2};
         assertEqual(filename, expected);
@@ -70,7 +70,7 @@ function test_spm_2_bids_new_mapping()
 
         print_here('%s\n', input_output{i, 1});
 
-        filename = spm_2_bids(input_output{i, 1}, map);
+        filename = spm_2_bids(input_output{i, 1}, map, false);
 
         expected = input_output{i, 2};
         assertEqual(filename, expected);
@@ -82,7 +82,7 @@ end
 function test_spm_2_bids_no_prefix()
 
     file = 'sub-01_ses-02_T1w.nii';
-    new_filename = spm_2_bids(file);
+    new_filename = spm_2_bids(file, [], false);
     assertEqual(new_filename, file);
 
 end
@@ -103,7 +103,7 @@ end
 function test_spm_2_bids_json()
 
     file = 'c1sub-01_ses-02_T1w.nii';
-    [new_filename, pth, json] = spm_2_bids(file);
+    [new_filename, pth, json] = spm_2_bids(file, [], false);
 
 end
 
@@ -135,7 +135,7 @@ function test_spm_2_bids_defor_field()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file);
+            filename = spm_2_bids(file, [], false);
 
             expected = prefix_input_output{i, 3};
             assertEqual(filename, expected);
@@ -169,7 +169,7 @@ function test_spm_2_bids_smooth_fwhm()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file, map);
+            filename = spm_2_bids(file, map, false);
 
             expected = prefix_and_output{i, 2};
             assertEqual(filename, expected);
@@ -208,7 +208,7 @@ function test_spm_2_bids_anat()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file);
+            filename = spm_2_bids(file, [], false);
 
             expected = prefix_and_output{i, 2};
             assertEqual(filename, expected);
@@ -253,7 +253,7 @@ function test_spm_2_bids_func()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file);
+            filename = spm_2_bids(file, [], false);
 
             expected = prefix_and_output{i, 2};
             assertEqual(filename, expected);

@@ -12,10 +12,10 @@ function test_spm_2_bids_metadata_basic()
 
     file = 'wmsub-01_T1w.nii';
 
-    [~, ~, json] = spm_2_bids(file);
+    [~, ~, json] = spm_2_bids(file, [], false);
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
     assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii');
-    assertEqual(json.content.Sources{1}, {'sub-01_desc-biasCorected_T1w.nii'});
+    assertEqual(json.content.Sources{1}, 'sub-01/sub-01_space-individual_desc-biascor_T1w.nii');
 
 end
