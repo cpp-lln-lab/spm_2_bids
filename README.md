@@ -2,6 +2,7 @@
 [![code style](https://github.com/cpp-lln-lab/spm_2_bids/actions/workflows/miss_hit_code_style.yml/badge.svg)](https://github.com/cpp-lln-lab/spm_2_bids/actions/workflows/miss_hit_code_style.yml)
 [![tests and coverage with matlab](https://github.com/cpp-lln-lab/spm_2_bids/actions/workflows/run_tests_matlab.yml/badge.svg)](https://github.com/cpp-lln-lab/spm_2_bids/actions/workflows/run_tests_matlab.yml)
 [![codecov](https://codecov.io/gh/cpp-lln-lab/spm_2_bids/branch/master/graph/badge.svg?token=yaL40GJK9y)](https://codecov.io/gh/cpp-lln-lab/spm_2_bids)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6564109.svg)](https://doi.org/10.5281/zenodo.6564109)
 
 # spm_2_bids
 
