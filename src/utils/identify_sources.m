@@ -1,11 +1,11 @@
-function sources = identify_sources(derivatives, map, verbose)
+function sources = identify_sources(varargin)
     %
     % finds the most likely files in the detrivatives that was used to create
     % this file
     %
     % USAGE::
     %
-    %   sources = identify_sources(derivatives, verbose)
+    %   sources = identify_sources(derivatives, map, verbose)
     %
     % :param file: SPM preprocessed filename (can be fullpath);
     %              for example ``wmsub-01_ses-01_T1w.nii``
@@ -24,6 +24,9 @@ function sources = identify_sources(derivatives, map, verbose)
     % TODO
     % functional to anatomical coregistration
     % anatomical to functional coregistration
+
+    default_map = Mapping();
+    default_map = default_map.default();
 
     sources = '';
 
@@ -52,17 +55,20 @@ function sources = identify_sources(derivatives, map, verbose)
                         'PDmap', ...
                         'UNIT1'};
 
-    if nargin < 1 || isempty(derivatives)
+    args = inputParser;
+
+    addOptional(args, 'derivatives', pwd, @ischar);
+    addOptional(args, 'map', default_map);
+    addOptional(args, 'verbose', true, @islogical);
+
+    parse(args, varargin{:});
+
+    derivatives = args.Results.derivatives;
+    map = args.Results.map;
+    verbose = args.Results.verbose;
+
+    if isempty(derivatives)
         return
-    end
-
-    if nargin < 2 || isempty(map)
-        map = Mapping();
-        map = map.default();
-    end
-
-    if nargin < 3
-        verbose = true;
     end
 
     if endsWith(derivatives, '_seg8.mat')
