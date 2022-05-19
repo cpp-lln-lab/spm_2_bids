@@ -199,6 +199,8 @@ classdef Mapping
 
                 output_is_json = true;
 
+                content = {};
+
             else
 
                 fid = 1;
@@ -239,6 +241,14 @@ classdef Mapping
 
                     fprintf(fid, '%s%s%s%s%s\n', ...
                             left, input.filename, separator, output.filename, right);
+
+                else
+
+                    input = obj.mapping(i);
+                    input = rmfield(input, 'name_spec');
+                    content{i, 1} = struct('input', input, ...
+                                           'output', obj.mapping(i).name_spec);
+
                 end
 
             end
@@ -248,6 +258,9 @@ classdef Mapping
                 if fid ~= 1
                     fclose(fid);
                 end
+            else
+                bids.util.jsonencode(filename, content);
+
             end
 
         end

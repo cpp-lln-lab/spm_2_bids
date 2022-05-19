@@ -15,5 +15,6 @@ function test_mapping_print_basic()
     map.print_mapping();
 
     map.print_mapping(fullfile('mapping.md'));
+    map.print_mapping(fullfile('mapping.json'));
 
 end
