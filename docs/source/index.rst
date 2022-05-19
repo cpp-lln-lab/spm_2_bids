@@ -9,3 +9,4 @@ Welcome to spm_2_bids documentation!
 
    general_information
    function_details
+   mapping
