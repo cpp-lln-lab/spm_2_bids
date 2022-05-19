@@ -16,11 +16,11 @@ clean: clean_doc clean_tests
 
 clean_doc:
 	cd docs && make clean
-	
 
-clean_tests: 
+
+clean_tests:
 	rm -rf coverage_html
-	rm -f coverage.xml	
+	rm -f coverage.xml
 	rm -f *.log
 
 version.txt: CITATION.cff
