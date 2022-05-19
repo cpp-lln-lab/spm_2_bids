@@ -39,7 +39,7 @@ function test_find_mapping()
     map = map.default();
     idx = map.find_mapping('prefix', 'rp_');
 
-    assertEqual(find(idx), 12);
+    assertEqual(find(idx), 13);
 
 end
 
