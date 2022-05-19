@@ -184,7 +184,7 @@ classdef Mapping
 
                 fid = 1;
 
-            elseif ~strcmp(spm_file(filename, 'ext'), 'json')
+            elseif ~strcmp(bids.intenal.file_utils(filename, 'ext'), 'json')
 
                 fid = fopen(filename, 'Wt');
                 if fid == -1
@@ -195,7 +195,7 @@ classdef Mapping
                 separator = ' | ';
                 right = ' |';
 
-            elseif strcmp(spm_file(filename, 'ext'), 'json')
+            elseif strcmp(bids.intenal.file_utils(filename, 'ext'), 'json')
 
                 output_is_json = true;
 
