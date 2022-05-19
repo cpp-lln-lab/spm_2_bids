@@ -37,7 +37,7 @@ make install_dev_octave
 ```matlab
 file = 'wmsub-01_desc-skullstripped_T1w.nii';
 
-new_filename = spm_2_bids(file);
+[new_filename, pth, json] = spm_2_bids(file);
 
 new_filename =
 
