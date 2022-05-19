@@ -55,8 +55,13 @@ function sources = identify_sources(derivatives)
 
     if prefix_based
         if numel(bf.prefix) < 2
+
             % needs at least 2 characters for this file to have some provenance in the
             % derivatives
+
+            % TODO: files that have been realigned but not resliced have no
+            % "prefix" so we may miss some transformation
+
             return
 
         else
