@@ -1,19 +1,27 @@
-function rawsource = identify_rawsource(derivatives, verbose)
+function rawsource = identify_rawsources(derivatives, verbose)
     %
-    %
+    % find the most likely files in the raw dataset
+    % that was used to create this derivatives
     %
     % USAGE::
     %
-    %   rawsource = identify_rawsource(derivatives)
+    %   rawsource = identify_rawsources(derivatives)
     %
     % :param file: SPM preprocessed filename (can be fullpath);
     %              for example ``wmsub-01_ses-01_T1w.nii``
     % :type file: string
     %
-    % :returns: - :new_filename: (string) BIDS compatible filename
-    %               for example ``sub-01_ses-01_space-IXI549Space_desc-preproc_T1w.nii``;
     %
     % (C) Copyright 2021 spm_2_bids developers
+
+    % TODO mean may involve several files from the source (across runs
+    % and sessions
+    %     prefixes = {
+    %                 'mean'
+    %                 'meanu'
+    %                 'meanua'
+    %                 'wmeanu'
+    %                };
 
     rawsource = '';
 
@@ -35,6 +43,6 @@ function rawsource = identify_rawsource(derivatives, verbose)
 
     bf.prefix = '';
 
-    rawsource = fullfile(bf.path, bf.bids_path, bf.filename);
+    rawsource = fullfile(bf.bids_path, bf.filename);
 
 end

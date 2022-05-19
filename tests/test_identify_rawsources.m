@@ -1,6 +1,6 @@
-% (C) Copyright 2021 spm_2_bids developers
+% (C) Copyright 2022 spm_2_bids developers
 
-function test_suite = test_identify_rawsource %#ok<*STOUT>
+function test_suite = test_identify_rawsources %#ok<*STOUT>
     try % assignment of 'localfunctions' is necessary in Matlab >= 2016
         test_functions = localfunctions(); %#ok<*NASGU>
     catch % no problem; early Matlab versions can use initTestSuite fine
@@ -8,7 +8,7 @@ function test_suite = test_identify_rawsource %#ok<*STOUT>
     initTestSuite;
 end
 
-function test_identify_rawsource_suffix()
+function test_identify_rawsources_suffix()
 
     input_output = {'sub-01_T1w_seg8.mat', 'sub-01_T1w.nii'
                     'sub-01_task-foo_bold_uw.mat', 'sub-01_task-foo_bold.nii'};
@@ -17,7 +17,7 @@ function test_identify_rawsource_suffix()
 
     for i = 1:size(input_output, 1)
 
-        rawsource = identify_rawsource(input_output{i, 1}, verbose);
+        rawsource = identify_rawsources(input_output{i, 1}, verbose);
 
         assertEqual(rawsource, ['sub-01/' input_output{i, 2}]);
 
@@ -25,7 +25,7 @@ function test_identify_rawsource_suffix()
 
 end
 
-function test_identify_rawsource_anat()
+function test_identify_rawsources_anat()
 
     anat_file = 'sub-01_T1w.nii';
 
@@ -48,7 +48,7 @@ function test_identify_rawsource_anat()
 
         file = [prefixes{i} anat_file];
 
-        rawsource = identify_rawsource(file, verbose);
+        rawsource = identify_rawsources(fullfile(pwd, 'sub-01', file), verbose);
 
         assertEqual(rawsource, 'sub-01/sub-01_T1w.nii');
 
@@ -56,7 +56,7 @@ function test_identify_rawsource_anat()
 
 end
 
-function test_identify_rawsource_func()
+function test_identify_rawsources_func()
 
     func_file = 'sub-01_ses-02_task-foo_bold.nii';
 
@@ -64,15 +64,11 @@ function test_identify_rawsource_func()
                 'u'
                 'rp_'
                 'rp_a'
-                'mean'
-                'meanu'
-                'meanua'
                 'w'
                 'wua'
                 'wu'
                 'wr'
                 'wra'
-                'wmeanu'
                 'sw'
                 'swua'
                 'swu'
@@ -91,7 +87,7 @@ function test_identify_rawsource_func()
 
         file = [prefixes{i} func_file];
 
-        rawsource = identify_rawsource(file, verbose);
+        rawsource = identify_rawsources(file, verbose);
 
         assertEqual(rawsource, 'sub-01/ses-02/sub-01_ses-02_task-foo_bold.nii');
 
