@@ -60,7 +60,7 @@ function sources = identify_sources(derivatives, map, verbose)
 
     end
 
-    bf = bids.File(derivatives, 'verbose', verbose);
+    bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
     if prefix_based
         if numel(bf.prefix) < 2
@@ -81,6 +81,16 @@ function sources = identify_sources(derivatives, map, verbose)
 
             elseif startsWith(bf.prefix, 'rp_a')
                 bf.prefix = bf.prefix(4:end);
+
+            elseif startsWith(bf.prefix, 'mean')
+                % TODO mean may involve several files from the source (across runs
+                % and sessions
+                %     prefixes = {
+                %                 'mean'
+                %                 'meanu'
+                %                 'meanua'
+                %                };
+                return
 
             else
                 % no idea
