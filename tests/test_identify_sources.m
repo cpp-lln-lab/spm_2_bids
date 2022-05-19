@@ -26,9 +26,11 @@ function test_identify_sources_func()
                      'su', 'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
                     };
 
+    map = default_mapping();
+
     for i  = 1:size(prefix_output, 1)
 
-        sources = identify_sources([prefix_output{i, 1} func_file], [], false);
+        sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
         assertEqual(sources{1}, fullfile('sub-01', prefix_output{i, 2}));
 
@@ -46,9 +48,11 @@ function test_identify_sources_mean()
                      'wmeanau', 'sub-01_task-auditory_space-individual_desc-mean_bold.nii'
                     };
 
+    map = default_mapping();
+
     for i  = 1:size(prefix_output, 1)
 
-        sources = identify_sources([prefix_output{i, 1} func_file], [], false);
+        sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
         assertEqual(sources{1}, fullfile('sub-01', prefix_output{i, 2}));
 
@@ -66,9 +70,11 @@ function test_identify_sources_anat()
                      'wc3', 'sub-01/sub-01_space-individual_label-CSF_probseg.nii'
                     };
 
+    map = default_mapping();
+
     for i  = 1:size(prefix_output, 1)
 
-        sources = identify_sources([prefix_output{i, 1} anat_file], [], false);
+        sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
 
         assertEqual(sources{1}, prefix_output{i, 2});
 
@@ -83,9 +89,11 @@ function test_identify_sources_suffix()
                     'asub-01_task-foo_bold_uw.mat', ...
                     'sub-01_task-foo_space-individual_desc-stc_bold.nii'};
 
+    map = default_mapping();
+
     for i = 1:size(input_output, 1)
 
-        sources = identify_sources(input_output{i, 1}, [], false);
+        sources = identify_sources(input_output{i, 1}, map, false);
 
         assertEqual(sources{1}, ['sub-01/' input_output{i, 2}]);
 
