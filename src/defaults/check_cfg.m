@@ -68,6 +68,7 @@ function fields_to_set = set_default_cfg()
 
     fields_to_set.space = SPM_SPACE;
 
+    % just to keep track of all the BIDS entities in the cfg
     bidsFile = bids.File('sub-01_T1.nii', 'use_schema', false);
     bidsFile = bidsFile.reorder_entities;
     fields_to_set.all_entity_order = bidsFile.entity_order;
