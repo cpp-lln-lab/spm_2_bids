@@ -21,7 +21,7 @@ function test_spm_2_bids_metadata_anat()
     assertEqual(json.content.Sources{2}, ...
                 'sub-01/sub-01_from-T1w_to-IXI549Space_mode-image_xfm.nii');
 
-    % bids.util.jsonencode(json.filename, json.content);
+    bids.util.jsonencode(json.filename, json.content);
 
 end
 
@@ -37,6 +37,6 @@ function test_spm_2_bids_metadata_func()
                 'sub-01/sub-01_task-foo_space-individual_desc-realignUnwarp_bold.nii');
     assertEqual(json.content.Sources{2}, 'TODO: add deformation field');
 
-    % bids.util.jsonencode(json.filename, json.content);
+    bids.util.jsonencode(json.filename, json.content);
 
 end

@@ -2,8 +2,7 @@
 
 .vscode
 
-*.m~
-*octave-workspace
+*.json
 
 env/
 

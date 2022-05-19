@@ -139,10 +139,27 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
 
     new_filename = bf.filename;
 
+    %% metadata
+    json = set_metadata(file, map, verbose, bf);
+
+end
+
+function json = set_metadata(file, map, verbose, bf)
+
     json = bids.derivatives_json(bf.filename);
 
-    json.content.RawSources = identify_rawsources(file, verbose);
-    json.content.Sources = identify_sources(file, map, verbose);
+    content = json.content;
+    content.RawSources = identify_rawsources(file, verbose);
+    content.Sources = identify_sources(file, map, verbose);
+
+    if isfield(bf.entities, 'space') && strcmp(bf.entities.space, 'IXI549Space')
+        content.SpatialReference  = struct('IXI549Space', ...
+                                           ['Reference space defined by the average ', ...
+                                            'of the ''549 subjects from the IXI dataset'' ', ...
+                                            'linearly transformed to ICBM MNI 452.']);
+    end
+
+    json.content = content;
 
 end
 
