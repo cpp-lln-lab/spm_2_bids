@@ -51,4 +51,3 @@
 | wmeanu\*.\* | \*space-IXI549Space_desc-mean_\*.\* |
 | wmeanua\*.\* | \*space-IXI549Space_desc-mean_\*.\* |
 | wmeanau\*.\* | \*space-IXI549Space_desc-mean_\*.\* |
-
