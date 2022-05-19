@@ -56,7 +56,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     spec = [];
 
-    % TODO se if some of the bids-query machinery cannot be kept for identifying
+    % TODO see if some of the bids-query machinery cannot be kept for identifying
     % the right mapping
 
     % look for the right prefix in the mapping
@@ -136,7 +136,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     new_filename = bf.filename;
 
     json = bids.derivatives_json(bf.filename);
-    json.content.RawSources{1} = strrep(bf.filename, bf.prefix, '');
+    json.content.RawSources{1} = identify_rawsources(file, false);
 
 end
 
