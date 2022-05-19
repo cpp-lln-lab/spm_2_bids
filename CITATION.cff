@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+
+title: "spm_2_bids"
+
+version: 0.2.0
+
+abstract: Toolbox to convert SPM output files to valid BIDS derivatives.
+
+message: "If you use this software, please cite it as below."
+
+repository-code: "https://github.com/cpp-lln-lab/spm_2_bids.git"
+
+contact:
+  - affiliation: "Université catholique de Louvain"
+    email: remi.gau@uclouvain.be
+    family-names: Gau
+    given-names: Rémi
+
+authors:
+- family-names: "Gau"
+  given-names: "Rémi"
+  orcid: "https://orcid.org/0000-0002-1535-9767"
+  affiliation: "Université catholique de Louvain"
+
+license: GPL-3.0
+
+keywords:
+  - BIDS
+  - brain imaging data structure
+  - neuroimaging
+  - converter
+  - MRI
+  - MATLAB
+  - Octave
+  - SPM

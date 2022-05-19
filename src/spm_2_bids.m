@@ -1,4 +1,4 @@
-function [new_filename, pth, json] = spm_2_bids(file, map)
+function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
     %
     % Provides a bids derivatives name for a file preprocessed with SPM
     %
@@ -26,9 +26,13 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
     %
     % (C) Copyright 2021 spm_2_bids developers
 
-    if nargin < 2
+    if nargin < 2 || isempty(map)
         map = Mapping();
         map = map.default();
+    end
+
+    if nargin < 3
+        verbose = true;
     end
 
     mapping = map.mapping;
@@ -56,7 +60,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     spec = [];
 
-    % TODO se if some of the bids-query machinery cannot be kept for identifying
+    % TODO see if some of the bids-query machinery cannot be kept for identifying
     % the right mapping
 
     % look for the right prefix in the mapping
@@ -111,7 +115,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
         spec = mapping(idx).name_spec;
     end
 
-    if isempty(spec)
+    if isempty(spec) && verbose
         % TODO this warning should probably go in the find_mapping methods
         msg = sprintf('Unknown prefix: %s', bf.prefix);
         warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
@@ -135,8 +139,27 @@ function [new_filename, pth, json] = spm_2_bids(file, map)
 
     new_filename = bf.filename;
 
+    %% metadata
+    json = set_metadata(file, map, verbose, bf);
+
+end
+
+function json = set_metadata(file, map, verbose, bf)
+
     json = bids.derivatives_json(bf.filename);
-    json.content.RawSources{1} = strrep(bf.filename, bf.prefix, '');
+
+    content = json.content;
+    content.RawSources = identify_rawsources(file, verbose);
+    content.Sources = identify_sources(file, map, verbose);
+
+    if isfield(bf.entities, 'space') && strcmp(bf.entities.space, 'IXI549Space')
+        content.SpatialReference  = struct('IXI549Space', ...
+                                           ['Reference space defined by the average ', ...
+                                            'of the ''549 subjects from the IXI dataset'' ', ...
+                                            'linearly transformed to ICBM MNI 452.']);
+    end
+
+    json.content = content;
 
 end
 
@@ -216,6 +239,8 @@ function bf = reorder_entities(bf, cfg)
     % and make sure that derivatives entities are in the right order
     %
     %
+
+    % TODO should be simplifiable with bids.File
 
     entities = fieldnames(bf.entities);
 

@@ -1,6 +1,9 @@
 function prefix_list = get_spm_prefix_list()
     %
     % load SPM default prefix values
+    % or use a hard coded one it this fails:
+    % can be useful for testing when spm
+    % is not there.
     %
     %
     % (C) Copyright 2021 spm_2_bids developers

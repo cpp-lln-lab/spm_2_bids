@@ -1,10 +1,15 @@
 % (C) Copyright 2019 spm_2_bids developers
 
-folderToCover = fullfile(pwd, 'src');
-testFolder = fullfile(pwd, 'tests');
+thisDir = fullfile(fileparts(mfilename('fullpath')));
 
-success = moxunit_runtests( ...
-                           testFolder, ...
+if isdir(fullfile(thisDir, 'lib', 'bids-matlab'))
+    addpath(fullfile(thisDir, 'lib', 'bids-matlab'));
+end
+
+folderToCover = fullfile(thisDir, 'src');
+testFolder = fullfile(thisDir, 'tests');
+
+success = moxunit_runtests(testFolder, ...
                            '-verbose', '-recursive', '-with_coverage', ...
                            '-cover', folderToCover, ...
                            '-cover_xml_file', 'coverage.xml', ...

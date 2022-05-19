@@ -11,24 +11,23 @@ end
 function test_spm_2_bids_order_entities()
 
     file = 'wmsub-01_desc-skullstripped_T1w.nii';
-    new_filename = spm_2_bids(file);
+    new_filename = spm_2_bids(file, default_mapping(), false);
     assertEqual(new_filename, 'sub-01_space-IXI549Space_desc-preproc_T1w.nii');
 
 end
 
 function test_spm_2_bids_suffix()
 
-    input_output = {
-                    'sub-01_T1w_seg8.mat', ...
-                    'sub-01_label-T1w_segparam.mat'
-                    'sub-01_task-auditory_bold_uw.mat', ...
-                    'sub-01_task-auditory_label-bold_unwarpparam.mat'};
+    map = default_mapping();
+
+    input_output = {'sub-01_T1w_seg8.mat',         'sub-01_label-T1w_segparam.mat'
+                    'sub-01_task-foo_bold_uw.mat', 'sub-01_task-foo_label-bold_unwarpparam.mat'};
 
     for i = 1:numel(size(input_output, 1))
 
         print_here('%s\n', input_output{i, 1});
 
-        filename = spm_2_bids(input_output{i, 1});
+        filename = spm_2_bids(input_output{i, 1}, map, false);
 
         expected = input_output{i, 2};
         assertEqual(filename, expected);
@@ -73,7 +72,7 @@ function test_spm_2_bids_new_mapping()
 
         print_here('%s\n', input_output{i, 1});
 
-        filename = spm_2_bids(input_output{i, 1}, map);
+        filename = spm_2_bids(input_output{i, 1}, map, false);
 
         expected = input_output{i, 2};
         assertEqual(filename, expected);
@@ -85,7 +84,7 @@ end
 function test_spm_2_bids_no_prefix()
 
     file = 'sub-01_ses-02_T1w.nii';
-    new_filename = spm_2_bids(file);
+    new_filename = spm_2_bids(file, default_mapping(), false);
     assertEqual(new_filename, file);
 
 end
@@ -106,7 +105,7 @@ end
 function test_spm_2_bids_json()
 
     file = 'c1sub-01_ses-02_T1w.nii';
-    [new_filename, pth, json] = spm_2_bids(file);
+    [new_filename, pth, json] = spm_2_bids(file, default_mapping(), false);
 
 end
 
@@ -128,6 +127,8 @@ function test_spm_2_bids_defor_field()
                            'sub-01_from-IXI549Space_to-T2w_mode-image_xfm.nii' ...
                           };
 
+    map =  default_mapping();
+
     for i = 1:size(prefix_input_output, 1)
 
         prefixes = get_prefixes(prefix_input_output, i);
@@ -138,7 +139,7 @@ function test_spm_2_bids_defor_field()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file);
+            filename = spm_2_bids(file, map, false);
 
             expected = prefix_input_output{i, 3};
             assertEqual(filename, expected);
@@ -172,7 +173,7 @@ function test_spm_2_bids_smooth_fwhm()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file, map);
+            filename = spm_2_bids(file, map, false);
 
             expected = prefix_and_output{i, 2};
             assertEqual(filename, expected);
@@ -201,6 +202,8 @@ function test_spm_2_bids_anat()
                          'wc3',  'sub-01_space-IXI549Space_label-CSF_probseg.nii' ...
                         };
 
+    map =  default_mapping();
+
     for i = 1:size(prefix_and_output, 1)
 
         prefixes = get_prefixes(prefix_and_output, i);
@@ -211,7 +214,7 @@ function test_spm_2_bids_anat()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file);
+            filename = spm_2_bids(file, map, false);
 
             expected = prefix_and_output{i, 2};
             assertEqual(filename, expected);
@@ -228,23 +231,25 @@ function test_spm_2_bids_func()
     func_file = 'sub-01_task-auditory_bold.nii';
 
     prefix_and_output = { ...
-                         {'a'}, ...
+                         {'a', 'au'}, ...
                          'sub-01_task-auditory_space-individual_desc-stc_bold.nii'; ...
-                         {'u'},  ...
+                         {'u', 'ua'},  ...
                          'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'; ...
-                         {'rp_', 'rp_a'}, ...
-                         'sub-01_task-auditory_desc-confounds_regressors.tsv'; ...
-                         {'mean', 'meanu', 'meanua'}, ...
+                         {'rp_', 'rp_a', 'rp_au'}, ...
+                         'sub-01_task-auditory_motion.tsv'; ...
+                         {'mean', 'meanu', 'meanua', 'meanau'}, ...
                          'sub-01_task-auditory_space-individual_desc-mean_bold.nii'; ...
                          {'w', 'wua', 'wu', 'wr', 'wra'}, ...
                          'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'; ...
-                         {'wmeanu'}, ...
+                         {'wmeanu', 'wmeanua', 'wmeanau'}, ...
                          'sub-01_task-auditory_space-IXI549Space_desc-mean_bold.nii'; ...
-                         {'sw', 'swua', 'swu', 'swr', 'swra'}, ...
+                         {'sw', 'swua', 'swau', 'swu', 'swr', 'swra'}, ...
                          'sub-01_task-auditory_space-IXI549Space_desc-smth_bold.nii'; ...
-                         {'s', 'sua', 'su', 'sr', 'sra'}, ...
+                         {'s', 'sua', 'su', 'sr', 'sra', 'sau'}, ...
                          'sub-01_task-auditory_space-individual_desc-smth_bold.nii' ...
                         };
+
+    map =  default_mapping();
 
     for i = 1:size(prefix_and_output, 1)
 
@@ -256,7 +261,7 @@ function test_spm_2_bids_func()
 
             print_here('%s\n', file);
 
-            filename = spm_2_bids(file);
+            filename = spm_2_bids(file, map, false);
 
             expected = prefix_and_output{i, 2};
             assertEqual(filename, expected);
@@ -290,4 +295,9 @@ function print_here(string, file)
     if test_cfg.verbosity
         fprintf(1, string, file);
     end
+end
+
+function map = default_mapping()
+    map = Mapping();
+    map = map.default();
 end

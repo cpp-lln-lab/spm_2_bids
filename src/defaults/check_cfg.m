@@ -16,6 +16,7 @@ function cfg = check_cfg(cfg)
     %
     % ``cfg`` fields:
     %
+    % - ``all_entity_order``: order of all the official bids entities
     % - ``entity_order``: order of the entities in bids derivatives
     % - ``fwhm``: value to append to smoothing desctiption label
     % - ``spec``: specfication details to over ride some of the defaults
@@ -65,10 +66,22 @@ function fields_to_set = set_default_cfg()
 
     SPM_SPACE = 'IXI549Space';
 
+    % TODO DARTEL uses
+    % MNI152NLin2009[a-c][Sym|Asym]
+    %
+    % See section: standard-template-identifiers of
+    % https://bids-specification.readthedocs.io/en/latest/99-appendices/08-coordinate-systems.html
+
     fields_to_set.space = SPM_SPACE;
+
+    % just to keep track of all the BIDS entities in the cfg
+    bidsFile = bids.File('sub-01_T1.nii', 'use_schema', false);
+    bidsFile = bidsFile.reorder_entities;
+    fields_to_set.all_entity_order = bidsFile.entity_order;
 
     fields_to_set.entity_order = {'hemi'; ...
                                   'space'; ...
+                                  'atlas'; ...
                                   'res'; ...
                                   'den'; ...
                                   'label'; ...
@@ -81,7 +94,7 @@ function fields_to_set = set_default_cfg()
 
     fields_to_set.spec = struct([]);
 
-    % fucntion to generate structures
+    % function to generate structures
     desc_gen = @(x) struct('entities', struct('space', 'individual', ...
                                               'desc', x));
     segment_gen = @(x) struct('entities', struct('space', 'individual', ...
@@ -92,8 +105,7 @@ function fields_to_set = set_default_cfg()
                                    'suffix', 'probseg');
 
     % Segmentation output
-    segment.bias_corrected = struct('entities', struct('desc', 'biascor', ...
-                                                       'space', 'individual'));
+    segment.bias_corrected = desc_gen('biascor');
 
     segment.gm = segment_gen('GM');
     segment.wm = segment_gen('WM');
@@ -131,9 +143,7 @@ function fields_to_set = set_default_cfg()
 
     fields_to_set.realign_unwarp = desc_gen('realignUnwarp');
     fields_to_set.realign_unwarp_param = struct('label', 'TBD', 'suffix', 'unwarpparam');
-    fields_to_set.real_param = struct('entities', ...
-                                      struct('desc', 'confounds'), ...
-                                      'suffix', 'regressors', ...
+    fields_to_set.real_param = struct('suffix', 'motion', ...
                                       'ext', '.tsv');
 
     fields_to_set.mean = desc_gen('mean');
