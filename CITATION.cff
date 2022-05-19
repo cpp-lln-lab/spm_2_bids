@@ -6,6 +6,8 @@ version: 0.1.0dev
 
 abstract: Toolbox to convert SPM output files to valid BIDS derivatives.
 
+message: "If you use this software, please cite it as below."
+
 repository-code: "https://github.com/cpp-lln-lab/spm_2_bids.git"
 
 contact:
