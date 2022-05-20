@@ -120,10 +120,12 @@ function sources = identify_sources(varargin)
                 %                 'meanu'
                 %                 'meanua'
                 %                };
+                sources = 'TODO';
                 return
 
             else
                 % no idea
+                sources = 'TODO';
                 return
 
             end
@@ -136,6 +138,7 @@ function sources = identify_sources(varargin)
 
     sources{1, 1} = fullfile(bf.bids_path, new_filename);
 
+    % for normalized images
     if add_deformation_field
 
         % for anatomical data we assume that

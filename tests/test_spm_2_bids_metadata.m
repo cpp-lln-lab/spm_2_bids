@@ -8,6 +8,20 @@ function test_suite = test_spm_2_bids_metadata %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_metadata_source_must_be_empty()
+
+    file = 'msub-01_T1w.nii';
+
+    [~, ~, json] = spm_2_bids(file, [], false);
+
+    assertEqual(fieldnames(json), {'filename'; 'content'});
+    assertEqual(fieldnames(json.content), {'Description'; 'RawSources'; 'SpatialReference'});
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii');
+
+    bids.util.jsonencode(json.filename, json.content);
+
+end
+
 function test_spm_2_bids_metadata_anat()
 
     file = 'wmsub-01_T1w.nii';
