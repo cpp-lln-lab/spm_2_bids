@@ -148,6 +148,10 @@ function json = set_metadata(file, map, verbose, bf)
 
     json = bids.derivatives_json(bf.filename);
 
+    if strcmp(bf.suffix, 'probseg')
+        json.content.Manual = false;
+    end
+
     content = json.content;
 
     content.RawSources = identify_rawsources(file, verbose);

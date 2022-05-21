@@ -39,7 +39,7 @@ function rawsource = identify_rawsources(derivatives, verbose)
         derivatives = strrep(derivatives, '_uw.mat', '.nii');
     end
 
-    bf = bids.File(derivatives, 'verbose', verbose);
+    bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
     bf.prefix = '';
 

@@ -113,6 +113,11 @@ function sources = identify_sources(varargin)
                     bf.prefix = bf.prefix(2:end);
                 end
 
+            elseif ismember(bf.prefix(1:2), {'c1', 'c2', 'c3', 'c4', 'c5'})
+                % TODO bias corrected image
+                sources = 'TODO';
+                return
+
             elseif startsWith(bf.prefix, 'u')
                 bf.prefix = bf.prefix(2:end);
 
