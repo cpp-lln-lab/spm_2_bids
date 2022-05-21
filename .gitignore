@@ -12,6 +12,7 @@ lib/JSONio
 coverage_html
 coverage.xml
 test_report.log
+mapping.md
 
 ## MATLAB / OCTAVE gitignore template
 

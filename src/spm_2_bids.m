@@ -148,9 +148,20 @@ function json = set_metadata(file, map, verbose, bf)
 
     json = bids.derivatives_json(bf.filename);
 
+    if strcmp(bf.suffix, 'probseg')
+        json.content.Manual = false;
+    end
+
     content = json.content;
+
     content.RawSources = identify_rawsources(file, verbose);
-    content.Sources = identify_sources(file, map, verbose);
+
+    Sources = identify_sources(file, map, verbose);
+    if ~isempty(Sources)
+        content.Sources = Sources;
+    elseif isfield(content, 'Sources')
+        content = rmfield(content, 'Sources');
+    end
 
     if isfield(bf.entities, 'space') && strcmp(bf.entities.space, 'IXI549Space')
         content.SpatialReference  = struct('IXI549Space', ...

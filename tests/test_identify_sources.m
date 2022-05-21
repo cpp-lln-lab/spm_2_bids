@@ -8,6 +8,29 @@ function test_suite = test_identify_sources %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_identify_sources_anat()
+
+    anat_file = 'sub-01_T1w.nii';
+
+    prefix_output = {'wm',  'sub-01/sub-01_space-individual_desc-biascor_T1w.nii'
+                     'wc1', 'sub-01/sub-01_space-individual_label-GM_probseg.nii'
+                     'wc2', 'sub-01/sub-01_space-individual_label-WM_probseg.nii'
+                     'wc3', 'sub-01/sub-01_space-individual_label-CSF_probseg.nii'
+                     'wc1', 'sub-01/sub-01_space-individual_label-GM_probseg.nii'
+                    };
+
+    map = default_mapping();
+
+    for i  = 1:size(prefix_output, 1)
+
+        sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
+
+        assertEqual(sources{1}, prefix_output{i, 2});
+
+    end
+
+end
+
 function test_identify_sources_func()
 
     func_file = 'sub-01_task-auditory_bold.nii';
@@ -55,28 +78,6 @@ function test_identify_sources_mean()
         sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
         assertEqual(sources{1}, fullfile('sub-01', prefix_output{i, 2}));
-
-    end
-
-end
-
-function test_identify_sources_anat()
-
-    anat_file = 'sub-01_T1w.nii';
-
-    prefix_output = {'wm',  'sub-01/sub-01_space-individual_desc-biascor_T1w.nii'
-                     'wc1', 'sub-01/sub-01_space-individual_label-GM_probseg.nii'
-                     'wc2', 'sub-01/sub-01_space-individual_label-WM_probseg.nii'
-                     'wc3', 'sub-01/sub-01_space-individual_label-CSF_probseg.nii'
-                    };
-
-    map = default_mapping();
-
-    for i  = 1:size(prefix_output, 1)
-
-        sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
-
-        assertEqual(sources{1}, prefix_output{i, 2});
 
     end
 

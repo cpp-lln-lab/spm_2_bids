@@ -102,7 +102,23 @@ function sources = identify_sources(varargin)
         else
             % remove the prefix of the last step
 
-            if startsWith(bf.prefix, 's') || startsWith(bf.prefix, 'u')
+            if startsWith(bf.prefix, 's')
+
+                % in case the prefix includes a number to denotate the FXHM used
+                % for smoothing
+                starts_with_fwhm = regexp(bf.prefix, '^s[0-9]*', 'match');
+                if ~isempty(starts_with_fwhm)
+                    bf.prefix = bf.prefix(length(starts_with_fwhm{1}) + 1:end);
+                else
+                    bf.prefix = bf.prefix(2:end);
+                end
+
+            elseif ismember(bf.prefix(1:2), {'c1', 'c2', 'c3', 'c4', 'c5'})
+                % TODO bias corrected image
+                sources = 'TODO';
+                return
+
+            elseif startsWith(bf.prefix, 'u')
                 bf.prefix = bf.prefix(2:end);
 
             elseif startsWith(bf.prefix, 'w')
@@ -120,10 +136,12 @@ function sources = identify_sources(varargin)
                 %                 'meanu'
                 %                 'meanua'
                 %                };
+                sources = 'TODO';
                 return
 
             else
                 % no idea
+                sources = 'TODO';
                 return
 
             end
@@ -136,6 +154,7 @@ function sources = identify_sources(varargin)
 
     sources{1, 1} = fullfile(bf.bids_path, new_filename);
 
+    % for normalized images
     if add_deformation_field
 
         % for anatomical data we assume that
