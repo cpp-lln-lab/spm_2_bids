@@ -8,6 +8,21 @@ function test_suite = test_spm_2_bids_metadata %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_metadata_smoothed_data()
+
+    file = 's6wusub-01_task-auditory_bold.nii';
+
+    [~, ~, json] = spm_2_bids(file, [], false);
+
+    assertEqual(fieldnames(json), {'filename'; 'content'});
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-auditory_bold.nii');
+    assertEqual(json.content.Sources{1}, ...
+                'sub-01/sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii');
+
+    bids.util.jsonencode(json.filename, json.content);
+
+end
+
 function test_spm_2_bids_metadata_source_must_be_empty()
 
     file = 'msub-01_T1w.nii';

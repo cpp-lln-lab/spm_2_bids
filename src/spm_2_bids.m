@@ -155,7 +155,7 @@ function json = set_metadata(file, map, verbose, bf)
     Sources = identify_sources(file, map, verbose);
     if ~isempty(Sources)
         content.Sources = Sources;
-    else
+    elseif isfield(content, 'Sources')
         content = rmfield(content, 'Sources');
     end
 

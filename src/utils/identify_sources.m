@@ -102,7 +102,18 @@ function sources = identify_sources(varargin)
         else
             % remove the prefix of the last step
 
-            if startsWith(bf.prefix, 's') || startsWith(bf.prefix, 'u')
+            if startsWith(bf.prefix, 's')
+
+                % in case the prefix includes a number to denotate the FXHM used
+                % for smoothing
+                starts_with_fwhm = regexp(bf.prefix, '^s[0-9]*', 'match');
+                if ~isempty(starts_with_fwhm)
+                    bf.prefix = bf.prefix(length(starts_with_fwhm{1}) + 1:end);
+                else
+                    bf.prefix = bf.prefix(2:end);
+                end
+
+            elseif startsWith(bf.prefix, 'u')
                 bf.prefix = bf.prefix(2:end);
 
             elseif startsWith(bf.prefix, 'w')
