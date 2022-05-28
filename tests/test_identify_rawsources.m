@@ -8,16 +8,36 @@ function test_suite = test_identify_rawsources %#ok<*STOUT>
     initTestSuite;
 end
 
-function test_identify_rawsources_suffix()
+function test_identify_rawsources_when_der_entities()
 
-    input_output = {'sub-01_T1w_seg8.mat', 'sub-01_T1w.nii'
-                    'sub-01_task-foo_bold_uw.mat', 'sub-01_task-foo_bold.nii'};
+    input_output = {'sub-01_desc-skullstripped_T1w.nii', 'sub-01_T1w.nii.gz'};
 
     verbose = false;
+    
+    map = default_mapping();
 
     for i = 1:size(input_output, 1)
 
-        rawsource = identify_rawsources(input_output{i, 1}, verbose);
+        rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
+
+        assertEqual(rawsource, {['sub-01/' input_output{i, 2}]});
+
+    end
+
+end
+
+function test_identify_rawsources_suffix()
+
+    input_output = {'sub-01_T1w_seg8.mat', 'sub-01_T1w.nii.gz'
+                    'sub-01_task-foo_bold_uw.mat', 'sub-01_task-foo_bold.nii.gz'};
+
+    verbose = false;
+    
+        map = default_mapping();
+
+    for i = 1:size(input_output, 1)
+
+        rawsource = identify_rawsources(input_output{i, 1},  map, verbose);
 
         assertEqual(rawsource, {['sub-01/' input_output{i, 2}]});
 
@@ -43,14 +63,16 @@ function test_identify_rawsources_anat()
                };
 
     verbose = false;
+    
+        map = default_mapping();
 
     for i = 1:numel(prefixes)
 
         file = [prefixes{i} anat_file];
 
-        rawsource = identify_rawsources(fullfile(pwd, 'sub-01', file), verbose);
+        rawsource = identify_rawsources(fullfile(pwd, 'sub-01', file), map,  verbose);
 
-        assertEqual(rawsource, {'sub-01/sub-01_T1w.nii'});
+        assertEqual(rawsource, {'sub-01/sub-01_T1w.nii.gz'});
 
     end
 
@@ -82,14 +104,16 @@ function test_identify_rawsources_func()
                };
 
     verbose = false;
+    
+        map = default_mapping();
 
     for i = 1:numel(prefixes)
 
         file = [prefixes{i} func_file];
 
-        rawsource = identify_rawsources(file, verbose);
+        rawsource = identify_rawsources(file, map, verbose);
 
-        assertEqual(rawsource, {'sub-01/ses-02/sub-01_ses-02_task-foo_bold.nii'});
+        assertEqual(rawsource, {'sub-01/ses-02/sub-01_ses-02_task-foo_bold.nii.gz'});
 
     end
 

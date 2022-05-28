@@ -15,7 +15,7 @@ function test_spm_2_bids_metadata_probseg()
     [~, ~, json] = spm_2_bids(file, [], false);
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
-    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii');
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii.gz');
     assertEqual(json.content.Manual, false);
 
     bids.util.jsonencode(json.filename, json.content);
@@ -29,7 +29,7 @@ function test_spm_2_bids_metadata_smoothed_data()
     [~, ~, json] = spm_2_bids(file, [], false);
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
-    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-auditory_bold.nii');
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-auditory_bold.nii.gz');
     assertEqual(json.content.Sources{1}, ...
                 'sub-01/sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii');
 
@@ -45,7 +45,7 @@ function test_spm_2_bids_metadata_source_must_be_empty()
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
     assertEqual(fieldnames(json.content), {'Description'; 'RawSources'; 'SpatialReference'});
-    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii');
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii.gz');
 
     bids.util.jsonencode(json.filename, json.content);
 
@@ -58,7 +58,7 @@ function test_spm_2_bids_metadata_anat()
     [~, ~, json] = spm_2_bids(file, [], false);
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
-    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii');
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii.gz');
     assertEqual(json.content.Sources{1}, ...
                 'sub-01/sub-01_space-individual_desc-biascor_T1w.nii');
     assertEqual(json.content.Sources{2}, ...
@@ -75,7 +75,7 @@ function test_spm_2_bids_metadata_func()
     [~, ~, json] = spm_2_bids(file, [], false);
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
-    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-foo_bold.nii');
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-foo_bold.nii.gz');
     assertEqual(json.content.Sources{1}, ...
                 'sub-01/sub-01_task-foo_space-individual_desc-realignUnwarp_bold.nii');
     assertEqual(json.content.Sources{2}, 'TODO: add deformation field');

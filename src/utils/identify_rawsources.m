@@ -1,4 +1,4 @@
-function rawsource = identify_rawsources(derivatives, verbose)
+function rawsource = identify_rawsources(derivatives, map, verbose)
     %
     % find the most likely files in the raw dataset
     % that was used to create this derivatives
@@ -41,9 +41,21 @@ function rawsource = identify_rawsources(derivatives, verbose)
         derivatives = strrep(derivatives, '_uw.mat', '.nii');
     end
 
+    % - remove prefix
+    % - remove eventual derivatives entities
+    % - use only .nii.gz
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
     bf.prefix = '';
+    
+    entities = fieldnames(bf.entities);
+    idx = find(ismember(entities, map.cfg.entity_order));
+    for i = 1:numel(idx)
+      bf.entities.(entities{idx(i)}) = '';
+    end
+    if strcmp(bf.extension, '.nii')
+      bf.extension = '.nii.gz';
+    end
 
     rawsource{1} = fullfile(bf.bids_path, bf.filename);
 
