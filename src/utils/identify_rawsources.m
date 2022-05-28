@@ -43,12 +43,18 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
         derivatives = strrep(derivatives, '_uw.mat', '.nii');
     end
 
+    % - only deal with files with official BIDS suffixes
     % - remove prefix
     % - remove eventual derivatives entities
     % - change surface extension to a volume one
     % - use only .nii.gz
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
+    if ~ismember(bf.suffix, fieldnames(map.cfg.schema.content.objects.suffixes))
+       rawsource{1} = 'TODO';
+       return
+    end
+    
     bf.prefix = '';
     
     entities = fieldnames(bf.entities);
