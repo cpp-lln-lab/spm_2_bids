@@ -38,7 +38,7 @@ function test_identify_sources_surface()
 
         sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
 
-        assertEqual(sources{1}, prefix_output{i, 2});
+        assertEqual(sources{end}, prefix_output{i, 2});
 
     end
 
@@ -61,7 +61,7 @@ function test_identify_sources_anat()
 
         sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
 
-        assertEqual(sources{1}, prefix_output{i, 2});
+        assertEqual(sources{end}, prefix_output{i, 2});
 
     end
 
@@ -91,7 +91,7 @@ function test_identify_sources_func()
 
         sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
-        assertEqual(sources{1}, fullfile('sub-01', prefix_output{i, 2}));
+        assertEqual(sources{end}, fullfile('sub-01', prefix_output{i, 2}));
 
     end
 
@@ -113,7 +113,7 @@ function test_identify_sources_mean()
 
         sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
-        assertEqual(sources{1}, fullfile('sub-01', prefix_output{i, 2}));
+        assertEqual(sources{end}, fullfile('sub-01', prefix_output{i, 2}));
 
     end
 
