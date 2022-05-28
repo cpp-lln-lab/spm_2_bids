@@ -154,7 +154,7 @@ function json = set_metadata(file, map, verbose, bf)
 
     content = json.content;
 
-    content.RawSources = identify_rawsources(file, verbose);
+    content.RawSources = identify_rawsources(file, map, verbose);
 
     Sources = identify_sources(file, map, verbose);
     if ~isempty(Sources)

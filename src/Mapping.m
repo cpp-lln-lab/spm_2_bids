@@ -28,9 +28,6 @@ classdef Mapping
     %
     % (C) Copyright 2021 spm_2_bids developers
 
-    % TODO add a print_mapping method to allow easy visualization
-    % of the input --> output relationship
-
     properties
 
         mapping

@@ -1,7 +1,9 @@
-function rawsource = identify_rawsources(derivatives, verbose)
+function rawsource = identify_rawsources(derivatives, map, verbose)
     %
     % find the most likely files in the raw dataset
     % that was used to create this derivatives
+    %
+    % Assumption: the raw file was zipped
     %
     % USAGE::
     %
@@ -41,9 +43,33 @@ function rawsource = identify_rawsources(derivatives, verbose)
         derivatives = strrep(derivatives, '_uw.mat', '.nii');
     end
 
+    % - only deal with files with official BIDS suffixes
+    % - remove prefix
+    % - remove eventual derivatives entities
+    % - change surface extension to a volume one
+    % - use only .nii.gz
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
+    if ~ismember(bf.suffix, fieldnames(map.cfg.schema.content.objects.suffixes))
+        rawsource{1} = 'TODO';
+        return
+    end
+
     bf.prefix = '';
+
+    entities = fieldnames(bf.entities);
+    idx = find(ismember(entities, map.cfg.entity_order));
+    for i = 1:numel(idx)
+        bf.entities.(entities{idx(i)}) = '';
+    end
+
+    if strcmp(bf.extension, '.surf.gii')
+        bf.extension = '.nii';
+    end
+
+    if strcmp(bf.extension, '.nii')
+        bf.extension = '.nii.gz';
+    end
 
     rawsource{1} = fullfile(bf.bids_path, bf.filename);
 

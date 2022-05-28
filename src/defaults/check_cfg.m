@@ -77,6 +77,7 @@ function fields_to_set = set_default_cfg()
     % just to keep track of all the BIDS entities in the cfg
     bidsFile = bids.File('sub-01_T1.nii', 'use_schema', false);
     bidsFile = bidsFile.reorder_entities;
+    fields_to_set.schema = bids.Schema;
     fields_to_set.all_entity_order = bidsFile.entity_order;
 
     fields_to_set.entity_order = {'hemi'; ...
