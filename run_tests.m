@@ -4,6 +4,7 @@ thisDir = fullfile(fileparts(mfilename('fullpath')));
 
 if isdir(fullfile(thisDir, 'lib', 'bids-matlab'))
     addpath(fullfile(thisDir, 'lib', 'bids-matlab'));
+    addpath(fullfile(thisDir, 'lib', 'JSONio'));
 end
 
 folderToCover = fullfile(thisDir, 'src');
