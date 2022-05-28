@@ -7,10 +7,14 @@ function sources = identify_sources(varargin)
     %
     %   sources = identify_sources(derivatives, map, verbose)
     %
-    % :param file: SPM preprocessed filename (can be fullpath);
-    %              for example ``wmsub-01_ses-01_T1w.nii``
-    % :type file: string
+    % :param derivatives: derivatives file whose source to identify
+    % :type derivatives: string
     %
+    % :param map: a mapping object. See ``Mapping`` class and or function ``default_mapping``
+    % :type map: object
+    %
+    % :param verbose: Defaults to ``true``
+    % :type verbose: boolean
     %
     % (C) Copyright 2021 spm_2_bids developers
 
@@ -114,7 +118,7 @@ function sources = identify_sources(varargin)
                 end
 
             elseif ismember(bf.prefix(1:2), {'c1', 'c2', 'c3', 'c4', 'c5'})
-                % TODO bias corrected image
+                % bias corrected image
                 sources = 'TODO';
                 return
 

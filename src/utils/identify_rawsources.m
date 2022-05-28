@@ -7,9 +7,11 @@ function rawsource = identify_rawsources(derivatives, verbose)
     %
     %   rawsource = identify_rawsources(derivatives)
     %
-    % :param file: SPM preprocessed filename (can be fullpath);
-    %              for example ``wmsub-01_ses-01_T1w.nii``
-    % :type file: string
+    % :param derivatives: derivatives file whose source to identify
+    % :type derivatives: string
+    %
+    % :param verbose: Defaults to ``true``
+    % :type verbose: boolean
     %
     %
     % (C) Copyright 2021 spm_2_bids developers
