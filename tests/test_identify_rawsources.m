@@ -13,7 +13,7 @@ function test_identify_rawsources_skip_unknown_suffix()
     input_output = {'wsub-01_label-brain_mask.nii', ''};
 
     verbose = false;
-    
+
     map = default_mapping();
 
     for i = 1:size(input_output, 1)
@@ -26,14 +26,12 @@ function test_identify_rawsources_skip_unknown_suffix()
 
 end
 
-
-
 function test_identify_rawsources_surface()
 
     input_output = {'c1sub-01_T1w.surf.gii', 'sub-01_T1w.nii.gz'};
 
     verbose = false;
-    
+
     map = default_mapping();
 
     for i = 1:size(input_output, 1)
@@ -51,7 +49,7 @@ function test_identify_rawsources_when_der_entities()
     input_output = {'sub-01_desc-skullstripped_T1w.nii', 'sub-01_T1w.nii.gz'};
 
     verbose = false;
-    
+
     map = default_mapping();
 
     for i = 1:size(input_output, 1)
@@ -70,8 +68,8 @@ function test_identify_rawsources_suffix()
                     'sub-01_task-foo_bold_uw.mat', 'sub-01_task-foo_bold.nii.gz'};
 
     verbose = false;
-    
-        map = default_mapping();
+
+    map = default_mapping();
 
     for i = 1:size(input_output, 1)
 
@@ -101,8 +99,8 @@ function test_identify_rawsources_anat()
                };
 
     verbose = false;
-    
-        map = default_mapping();
+
+    map = default_mapping();
 
     for i = 1:numel(prefixes)
 
@@ -142,8 +140,8 @@ function test_identify_rawsources_func()
                };
 
     verbose = false;
-    
-        map = default_mapping();
+
+    map = default_mapping();
 
     for i = 1:numel(prefixes)
 

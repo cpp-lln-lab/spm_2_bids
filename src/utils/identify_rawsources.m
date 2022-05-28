@@ -51,24 +51,24 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
     if ~ismember(bf.suffix, fieldnames(map.cfg.schema.content.objects.suffixes))
-       rawsource{1} = 'TODO';
-       return
+        rawsource{1} = 'TODO';
+        return
     end
-    
+
     bf.prefix = '';
-    
+
     entities = fieldnames(bf.entities);
     idx = find(ismember(entities, map.cfg.entity_order));
     for i = 1:numel(idx)
-      bf.entities.(entities{idx(i)}) = '';
+        bf.entities.(entities{idx(i)}) = '';
     end
-    
+
     if strcmp(bf.extension, '.surf.gii')
-      bf.extension = '.nii';
+        bf.extension = '.nii';
     end
-    
+
     if strcmp(bf.extension, '.nii')
-      bf.extension = '.nii.gz';
+        bf.extension = '.nii.gz';
     end
 
     rawsource{1} = fullfile(bf.bids_path, bf.filename);
