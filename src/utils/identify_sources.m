@@ -25,6 +25,8 @@ function sources = identify_sources(varargin)
     %     'wra'
     % those will throw warnings
 
+    % TODO adapt in case prefixes have been changed from SPM defaults
+
     % TODO
     % functional to anatomical coregistration
     % anatomical to functional coregistration
@@ -32,12 +34,9 @@ function sources = identify_sources(varargin)
     default_map = Mapping();
     default_map = default_map.default();
 
-    sources = '';
+    sources = {};
 
     prefix_based = true;
-
-    add_deformation_field = false;
-    deformation_field = 'TODO: add deformation field';
 
     args = inputParser;
 
@@ -72,8 +71,9 @@ function sources = identify_sources(varargin)
 
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
+    % unknown suffix
     if ~ismember(bf.suffix, fieldnames(map.cfg.schema.content.objects.suffixes))
-        sources{1} = 'TODO';
+        sources{1, 1} = 'TODO';
         return
     end
 
@@ -83,94 +83,123 @@ function sources = identify_sources(varargin)
         prefix_based = false;
     end
 
+    % unless this file already contains a derivative entity
+    % it needs at least 2 characters for this file
+    % to have some provenance in the derivatives
+    if length(bf.prefix) == 1 && any(ismember(fieldnames(bf.entities), map.cfg.entity_order))
+        bf.prefix = '';
+        sources{1, 1} = fullfile(bf.bids_path, bf.filename);
+        return
+    end
+
+    sources = add_deformation_field(bf, sources, map, verbose);
+
     % anything prefix based
     if prefix_based
 
-        if numel(bf.prefix) < 2
+        [status, bf] = update_prefix(bf, map);
 
-            % needs at least 2 characters for this file to have some provenance in the
-            % derivatives
-
-            % TODO: files that have been realigned but not resliced have no
-            % "prefix" so we may miss some transformation
-
+        if status == 0
             return
 
-        else
-            % remove the prefix of the last step
-
-            if startsWith(bf.prefix, 's')
-
-                % in case the prefix includes a number to denotate the FXHM used
-                % for smoothing
-                starts_with_fwhm = regexp(bf.prefix, '^s[0-9]*', 'match');
-                if ~isempty(starts_with_fwhm)
-                    bf.prefix = bf.prefix(length(starts_with_fwhm{1}) + 1:end);
-                else
-                    bf.prefix = bf.prefix(2:end);
-                end
-
-            elseif ismember(bf.prefix(1:2), {'c1', 'c2', 'c3', 'c4', 'c5'})
-                % bias corrected image
-                sources = 'TODO';
-                return
-
-            elseif startsWith(bf.prefix, 'u')
-                bf.prefix = bf.prefix(2:end);
-
-            elseif startsWith(bf.prefix, 'w')
-                bf.prefix = bf.prefix(2:end);
-                add_deformation_field = true;
-
-            elseif startsWith(bf.prefix, 'rp_a')
-                bf.prefix = bf.prefix(4:end);
-
-            elseif startsWith(bf.prefix, 'mean')
-                % TODO mean may involve several files from the source (across runs
-                % and sessions
-                %     prefixes = {
-                %                 'mean'
-                %                 'meanu'
-                %                 'meanua'
-                %                };
-                sources = 'TODO';
-                return
-
-            else
-                % no idea
-                sources = 'TODO';
-                return
-
-            end
+        elseif status == 1
+            sources = 'TODO';
+            return
 
         end
+
     end
 
     % call spm_2_bids what is the filename from the previous step
     new_filename = spm_2_bids(bf.filename, map, verbose);
 
-    sources{1, 1} = fullfile(bf.bids_path, new_filename);
+    sources{end + 1, 1} = fullfile(bf.bids_path, new_filename);
 
-    % for normalized images
-    if add_deformation_field
+end
 
-        % for anatomical data we assume that
-        % the deformation field comes from the anatomical file itself
-        if (~isempty(bf.modality) && ismember(bf.modality, {'anat'})) || ...
-           (~isempty(bf.suffix) && ~isempty(map.cfg.schema.find_suffix_group('anat', bf.suffix)))
+function sources = add_deformation_field(bf, sources, map, verbose)
 
-            bf.prefix = 'y_';
-            bf = bf.update;
-            new_filename = spm_2_bids(bf.filename, map, verbose);
-            deformation_field = fullfile(bf.bids_path, new_filename);
+    if ~startsWith(bf.prefix, map.norm)
+        return
+    end
 
-            % otherwise we can't guess it just from the file name
-        else
+    % for anatomical data we assume that
+    % the deformation field comes from the anatomical file itself
+    if (~isempty(bf.modality) && ismember(bf.modality, {'anat'})) || ...
+        (~isempty(bf.suffix) && ~isempty(map.cfg.schema.find_suffix_group('anat', bf.suffix)))
 
-        end
+        bf.prefix = 'y_';
+        bf = bf.update;
+        new_filename = spm_2_bids(bf.filename, map, verbose);
+        deformation_field = fullfile(bf.bids_path, new_filename);
 
-        sources{2, 1} = deformation_field;
+        % otherwise we can't guess it just from the file name
+    else
+        deformation_field = 'TODO: add deformation field';
 
     end
 
+    sources{end + 1, 1} = deformation_field;
+
+end
+
+function [status, bf] = update_prefix(bf, map)
+
+    status = 2;
+
+    if length(bf.prefix) < 2
+        % TODO: files that have been realigned but not resliced have no
+        % "prefix" so we may miss some transformation
+        status = 0;
+        return
+    end
+
+    % remove the prefix of the last step
+    if startsWith(bf.prefix, map.smooth)
+
+        % in case the prefix includes a number to denotate the FXHM used
+        % for smoothing
+        starts_with_fwhm = regexp(bf.prefix, '^s[0-9]*', 'match');
+        if ~isempty(starts_with_fwhm)
+            bf = shorten_prefix(bf, length(starts_with_fwhm{1}));
+        else
+            bf = shorten_prefix(bf, 1);
+        end
+
+    elseif startsWith(bf.prefix, map.unwarp)
+        bf = shorten_prefix(bf, 1);
+
+    elseif startsWith(bf.prefix, map.norm)
+        bf = shorten_prefix(bf, 1);
+
+    elseif startsWith(bf.prefix, ['rp_' map.stc])
+        bf = shorten_prefix(bf, 3);
+
+    elseif startsWith(bf.prefix, 'mean')
+        % TODO mean may involve several files from the source (across runs
+        % and sessions
+        %     prefixes = {
+        %                 'mean'
+        %                 'meanu'
+        %                 'meanua'
+        %                };
+        status = 1;
+        return
+
+    elseif ismember(bf.prefix(1:2), {'c1', 'c2', 'c3', 'c4', 'c5'})
+        % bias corrected image
+        status = 1;
+        return
+
+    else
+        % no idea
+        status = 1;
+        return
+
+    end
+
+end
+
+function bf = shorten_prefix(bf, len)
+    bf.prefix = bf.prefix((len + 1):end);
 end

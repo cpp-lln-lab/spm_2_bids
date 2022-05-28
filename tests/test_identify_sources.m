@@ -8,6 +8,24 @@ function test_suite = test_identify_sources %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_identify_sources_with_non_raw_entity()
+
+    file = 'sub-01_task-foo_desc-stc_bold.nii';
+
+    prefix_output = {'u',  'sub-01/sub-01_task-foo_desc-stc_bold.nii'};
+
+    map = default_mapping();
+
+    for i  = 1:size(prefix_output, 1)
+
+        sources = identify_sources([prefix_output{i, 1} file], map, false);
+
+        assertEqual(sources{1}, prefix_output{i, 2});
+
+    end
+
+end
+
 function test_identify_sources_surface()
 
     anat_file = 'sub-01_T1w.surf.gii';
@@ -20,7 +38,7 @@ function test_identify_sources_surface()
 
         sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
 
-        assertEqual(sources{1}, prefix_output{i, 2});
+        assertEqual(sources{end}, prefix_output{i, 2});
 
     end
 
@@ -43,7 +61,7 @@ function test_identify_sources_anat()
 
         sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
 
-        assertEqual(sources{1}, prefix_output{i, 2});
+        assertEqual(sources{end}, prefix_output{i, 2});
 
     end
 
@@ -73,7 +91,7 @@ function test_identify_sources_func()
 
         sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
-        assertEqual(sources{1}, fullfile('sub-01', prefix_output{i, 2}));
+        assertEqual(sources{end}, fullfile('sub-01', prefix_output{i, 2}));
 
     end
 
@@ -95,7 +113,7 @@ function test_identify_sources_mean()
 
         sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
-        assertEqual(sources{1}, fullfile('sub-01', prefix_output{i, 2}));
+        assertEqual(sources{end}, fullfile('sub-01', prefix_output{i, 2}));
 
     end
 
