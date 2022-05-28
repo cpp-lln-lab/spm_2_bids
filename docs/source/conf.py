@@ -22,7 +22,8 @@ project = "spm_2_bids"
 author = "Rémi Gau"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.2.0dev"
+with open('../../version.txt', encoding='utf-8') as version_file:
+    release = version_file.read()
 
 
 # -- General configuration ---------------------------------------------------
