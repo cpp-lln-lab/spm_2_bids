@@ -3,6 +3,8 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
     % find the most likely files in the raw dataset
     % that was used to create this derivatives
     %
+    % Assumption: the raw file was zipped
+    %
     % USAGE::
     %
     %   rawsource = identify_rawsources(derivatives)
@@ -43,6 +45,7 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
 
     % - remove prefix
     % - remove eventual derivatives entities
+    % - change surface extension to a volume one
     % - use only .nii.gz
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
@@ -53,6 +56,11 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
     for i = 1:numel(idx)
       bf.entities.(entities{idx(i)}) = '';
     end
+    
+    if strcmp(bf.extension, '.surf.gii')
+      bf.extension = '.nii';
+    end
+    
     if strcmp(bf.extension, '.nii')
       bf.extension = '.nii.gz';
     end

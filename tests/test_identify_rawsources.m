@@ -8,6 +8,24 @@ function test_suite = test_identify_rawsources %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_identify_rawsources_surface()
+
+    input_output = {'c1sub-01_T1w.surf.gii', 'sub-01_T1w.nii.gz'};
+
+    verbose = false;
+    
+    map = default_mapping();
+
+    for i = 1:size(input_output, 1)
+
+        rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
+
+        assertEqual(rawsource, {['sub-01/' input_output{i, 2}]});
+
+    end
+
+end
+
 function test_identify_rawsources_when_der_entities()
 
     input_output = {'sub-01_desc-skullstripped_T1w.nii', 'sub-01_T1w.nii.gz'};
