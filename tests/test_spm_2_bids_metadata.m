@@ -8,6 +8,20 @@ function test_suite = test_spm_2_bids_metadata %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_metadata_surface()
+
+    file = 'wmsub-01_T1w.surf.gii';
+
+    [~, ~, json] = spm_2_bids(file, [], false);
+
+    assertEqual(fieldnames(json), {'filename'; 'content'});
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii.gz');
+    assertEqual(json.content.Sources{1}, ...
+                'sub-01/sub-01_space-IXI549Space_desc-preproc_T1w.nii');
+
+    bids.util.jsonencode(json.filename, json.content);
+
+end
 function test_spm_2_bids_metadata_probseg()
 
     file = 'c1sub-01_T1w.nii';

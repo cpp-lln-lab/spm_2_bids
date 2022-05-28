@@ -91,6 +91,13 @@ function sources = identify_sources(varargin)
 
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
+    % deal with surface data
+    if strcmp(bf.extension, '.surf.gii')
+        bf.extension = '.nii';
+        prefix_based = false;
+    end
+
+    % anything prefix based
     if prefix_based
 
         if numel(bf.prefix) < 2

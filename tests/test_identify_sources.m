@@ -8,6 +8,24 @@ function test_suite = test_identify_sources %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_identify_sources_surface()
+
+    anat_file = 'sub-01_T1w.surf.gii';
+
+    prefix_output = {'wm',  'sub-01/sub-01_space-IXI549Space_desc-preproc_T1w.nii'};
+
+    map = default_mapping();
+
+    for i  = 1:size(prefix_output, 1)
+
+        sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
+
+        assertEqual(sources{1}, prefix_output{i, 2});
+
+    end
+
+end
+
 function test_identify_sources_anat()
 
     anat_file = 'sub-01_T1w.nii';
