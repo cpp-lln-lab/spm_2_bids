@@ -31,9 +31,9 @@ function test_spm_2_bids_metadata_func()
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
     assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-foo_bold.nii.gz');
-    assertEqual(json.content.Sources{1}, ...
+    assertEqual(json.content.Sources{2}, ...
                 'sub-01/sub-01_task-foo_space-individual_desc-realignUnwarp_bold.nii');
-    assertEqual(json.content.Sources{2}, 'TODO: add deformation field');
+    assertEqual(json.content.Sources{1}, 'TODO: add deformation field');
 
     bids.util.jsonencode(json.filename, json.content);
 
@@ -47,7 +47,7 @@ function test_spm_2_bids_non_raw_suffix()
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
     assertEqual(json.content.RawSources{1}, 'TODO');
-    assertEqual(json.content.Sources{1}, 'TODO');
+    assertEqual(json.content.Sources{end}, 'TODO');
 
     bids.util.jsonencode(json.filename, json.content);
 
@@ -61,7 +61,7 @@ function test_spm_2_bids_metadata_surface()
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
     assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_T1w.nii.gz');
-    assertEqual(json.content.Sources{1}, ...
+    assertEqual(json.content.Sources{end}, ...
                 'sub-01/sub-01_space-IXI549Space_desc-preproc_T1w.nii');
 
     bids.util.jsonencode(json.filename, json.content);
@@ -90,7 +90,7 @@ function test_spm_2_bids_metadata_smoothed_data()
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
     assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-auditory_bold.nii.gz');
-    assertEqual(json.content.Sources{1}, ...
+    assertEqual(json.content.Sources{end}, ...
                 'sub-01/sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii');
 
     bids.util.jsonencode(json.filename, json.content);

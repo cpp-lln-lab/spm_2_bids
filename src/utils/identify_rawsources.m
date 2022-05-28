@@ -27,8 +27,6 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
     %                 'wmeanu'
     %                };
 
-    % TODO adapt in case prefixes have been changed from SPM defaults
-
     rawsource = '';
 
     if nargin < 1 || isempty(derivatives)

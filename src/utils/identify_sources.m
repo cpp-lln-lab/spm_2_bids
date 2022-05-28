@@ -97,7 +97,7 @@ function sources = identify_sources(varargin)
     % anything prefix based
     if prefix_based
 
-        [status, bf] = update_prefix(bf);
+        [status, bf] = update_prefix(bf, map);
 
         if status == 0
             return
@@ -119,7 +119,7 @@ end
 
 function sources = add_deformation_field(bf, sources, map, verbose)
 
-    if ~startsWith(bf.prefix, 'w')
+    if ~startsWith(bf.prefix, map.norm)
         return
     end
 
@@ -143,7 +143,7 @@ function sources = add_deformation_field(bf, sources, map, verbose)
 
 end
 
-function [status, bf] = update_prefix(bf)
+function [status, bf] = update_prefix(bf, map)
 
     status = 2;
 
@@ -155,7 +155,7 @@ function [status, bf] = update_prefix(bf)
     end
 
     % remove the prefix of the last step
-    if startsWith(bf.prefix, 's')
+    if startsWith(bf.prefix, map.smooth)
 
         % in case the prefix includes a number to denotate the FXHM used
         % for smoothing
@@ -166,13 +166,13 @@ function [status, bf] = update_prefix(bf)
             bf = shorten_prefix(bf, 1);
         end
 
-    elseif startsWith(bf.prefix, 'u')
+    elseif startsWith(bf.prefix, map.unwarp)
         bf = shorten_prefix(bf, 1);
 
-    elseif startsWith(bf.prefix, 'w')
+    elseif startsWith(bf.prefix, map.norm)
         bf = shorten_prefix(bf, 1);
 
-    elseif startsWith(bf.prefix, 'rp_a')
+    elseif startsWith(bf.prefix, ['rp_' map.stc])
         bf = shorten_prefix(bf, 3);
 
     elseif startsWith(bf.prefix, 'mean')
