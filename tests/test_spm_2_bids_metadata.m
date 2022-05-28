@@ -8,6 +8,21 @@ function test_suite = test_spm_2_bids_metadata %#ok<*STOUT>
     initTestSuite;
 end
 
+function test_spm_2_bids_metadata_with_non_raw_entity()
+
+    file = 'usub-01_task-foo_desc-stc_bold.nii';
+
+    [~, ~, json] = spm_2_bids(file, [], false);
+
+    assertEqual(fieldnames(json), {'filename'; 'content'});
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-foo_bold.nii.gz');
+    assertEqual(json.content.Sources{1}, ...
+                'sub-01/sub-01_task-foo_desc-stc_bold.nii');
+
+    bids.util.jsonencode(json.filename, json.content);
+
+end
+
 function test_spm_2_bids_metadata_func()
 
     file = 'wuasub-01_task-foo_bold.nii';
