@@ -69,7 +69,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
     % TODO implement methods in Mapping to filter by suffix / extention /
     % entities
 
-    % if any suffix / extention mentioned in the mapping we check for that as well
+    % if any suffix / extension mentioned in the mapping we check for that as well
     % if none is mentioned anywhere in the mapping then anything goes
     suffix_match = true(size(mapping));
     if ~all(cellfun('isempty', {mapping.suffix}'))
