@@ -1,0 +1,38 @@
+name: tests_octave
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    branches: ['*']
+
+jobs:
+  test:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get -y -qq update
+        sudo apt-get -y install octave liboctave-dev
+
+    - name: Clone spm_2_bids
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+        fetch-depth: 2
+
+    - name: get bids-matlab and JSONio
+      run: make install_dev_octave
+
+    - name: MOxUnit Action
+      uses: joergbrech/moxunit-action@v1.2.0
+      with:
+        tests: tests
+        src: src src/defaults src/utils
+        ext: lib/JSONio lib/bids-matlab tests/utils
+        with_coverage: false
