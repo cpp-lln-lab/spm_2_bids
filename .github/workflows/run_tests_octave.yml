@@ -33,6 +33,6 @@ jobs:
       uses: joergbrech/moxunit-action@v1.2.0
       with:
         tests: tests
-        src: src
+        src: src src/defaults src/utils
         ext: lib/JSONio lib/bids-matlab tests/utils
         with_coverage: false
