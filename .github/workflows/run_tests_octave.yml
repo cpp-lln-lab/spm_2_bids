@@ -6,11 +6,11 @@ on:
       - master
       - dev
     paths:
-      - '**.m'      
+      - '**.m'
   pull_request:
     branches: ['*']
     paths:
-      - '**.m'    
+      - '**.m'
 
 jobs:
   test:
