@@ -102,7 +102,8 @@ function sources = identify_sources(varargin)
         else
             % remove the prefix of the last step
 
-            if bids.internal.starts_with(bf.prefix, 's') || bids.internal.starts_with(bf.prefix, 'u')
+            if bids.internal.starts_with(bf.prefix, 's') || ...
+                bids.internal.starts_with(bf.prefix, 'u')
                 bf.prefix = bf.prefix(2:end);
 
             elseif bids.internal.starts_with(bf.prefix, 'w')
