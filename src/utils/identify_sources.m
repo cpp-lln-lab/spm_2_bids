@@ -71,13 +71,13 @@ function sources = identify_sources(varargin)
         return
     end
 
-    if endsWith(derivatives, '_seg8.mat')
+    if bids.internal.ends_with(derivatives, '_seg8.mat')
 
         prefix_based = false;
 
         derivatives = strrep(derivatives, '_seg8.mat', '.nii');
 
-    elseif endsWith(derivatives, '_uw.mat')
+    elseif bids.internal.ends_with(derivatives, '_uw.mat')
 
         prefix_based = false;
 
@@ -102,17 +102,17 @@ function sources = identify_sources(varargin)
         else
             % remove the prefix of the last step
 
-            if startsWith(bf.prefix, 's') || startsWith(bf.prefix, 'u')
+            if bids.internal.starts_with(bf.prefix, 's') || bids.internal.starts_with(bf.prefix, 'u')
                 bf.prefix = bf.prefix(2:end);
 
-            elseif startsWith(bf.prefix, 'w')
+            elseif bids.internal.starts_with(bf.prefix, 'w')
                 bf.prefix = bf.prefix(2:end);
                 add_deformation_field = true;
 
-            elseif startsWith(bf.prefix, 'rp_a')
+            elseif bids.internal.starts_with(bf.prefix, 'rp_a')
                 bf.prefix = bf.prefix(4:end);
 
-            elseif startsWith(bf.prefix, 'mean')
+            elseif bids.internal.starts_with(bf.prefix, 'mean')
                 % TODO mean may involve several files from the source (across runs
                 % and sessions
                 %     prefixes = {
