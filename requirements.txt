@@ -1,4 +1,4 @@
-miss_hit==0.9.27
+miss_hit==0.9.33
 pre-commit
 jupyterlab
 octave_kernel

@@ -357,7 +357,7 @@ classdef Mapping
 
             idx = strcmp(p.Results.prefix, available_mapped_prefixes);
 
-        end
+        endclass
 
         function obj = rm_mapping(obj, idx)
 
@@ -366,21 +366,4 @@ classdef Mapping
         end
 
     end
-end
-
-function bf = prepare_for_printing(spec)
-
-    if isfield(spec, 'suffix') && isempty(spec.suffix) || ...
-        ~isfield(spec, 'suffix')
-        spec.suffix = '*';
-    end
-
-    if isfield(spec, 'ext') && ~isempty(spec.ext)
-        spec.extension = '.*';
-    end
-    if ~isfield(spec, 'extension') || isempty(spec.extension)
-        spec.ext = '.*';
-    end
-
-    bf = bids.File(spec);
 end
