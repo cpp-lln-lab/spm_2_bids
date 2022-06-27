@@ -357,7 +357,7 @@ classdef Mapping
 
             idx = strcmp(p.Results.prefix, available_mapped_prefixes);
 
-        endclass
+        end
 
         function obj = rm_mapping(obj, idx)
 
