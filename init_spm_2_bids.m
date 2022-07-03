@@ -55,7 +55,7 @@ function init_spm_2_bids
 
     add_dependencies();
 
-    disp('Correct matlab/octave verions and added to the path!');
+    disp('Correct matlab/octave versions and added to the path!');
 
 end
 
