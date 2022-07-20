@@ -116,9 +116,15 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
     end
 
     if isempty(spec) && verbose
-        % TODO this warning should probably go in the find_mapping methods
-        msg = sprintf('Unknown prefix: %s', bf.prefix);
-        warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
+        if isnan(str2double(bf.prefix(1))) && ...
+            ~bids.internal.starts_with(bf.prefix, 'c4') && ... % ALI toolbox prefixes
+             ~bids.internal.starts_with(bf.prefix, 'td_') % spmup toolbox truncated prefixes
+
+            % TODO this warning should probably go in the find_mapping methods
+            msg = sprintf('Unknown prefix: %s', bf.prefix);
+            warning('spm_2_bids:unknownPrefix', msg); %#ok<SPWRN>
+
+        end
         return
     end
 
