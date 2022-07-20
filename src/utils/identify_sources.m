@@ -102,15 +102,31 @@ function sources = identify_sources(varargin)
         else
             % remove the prefix of the last step
 
-            if bids.internal.starts_with(bf.prefix, 's') || ...
-                bids.internal.starts_with(bf.prefix, 'u')
+            if bids.internal.starts_with(bf.prefix, 's') && ...
+                ~bids.internal.starts_with(bf.prefix, 'std_') && ...
+                 ~bids.internal.starts_with(bf.prefix, 'segparam_')
+
+                % in case we have "s6" for the fwhm
+                if isnan(str2double(bf.prefix(2)))
+                    bf.prefix = bf.prefix(2:end);
+                else
+                    bf.prefix = bf.prefix(3:end);
+                end
+
+            elseif bids.internal.starts_with(bf.prefix, 'u') && ...
+                   ~bids.internal.starts_with(bf.prefix, 'unwarpparam_')
+
                 bf.prefix = bf.prefix(2:end);
 
+                add_deformation_field = true;
+
             elseif bids.internal.starts_with(bf.prefix, 'w')
+
                 bf.prefix = bf.prefix(2:end);
                 add_deformation_field = true;
 
             elseif bids.internal.starts_with(bf.prefix, 'rp_a')
+
                 bf.prefix = bf.prefix(4:end);
 
             elseif bids.internal.starts_with(bf.prefix, 'mean')
