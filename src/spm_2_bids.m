@@ -1,18 +1,21 @@
-function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
+function [new_filename, pth, json] = spm_2_bids(varargin)
     %
     % Provides a bids derivatives name for a file preprocessed with SPM
     %
     % USAGE::
     %
-    %   [new_filename, pth, json] = spm_2_bids(file)
-    %   [new_filename, pth, json] = spm_2_bids(file, map)
+    %   [new_filename, pth, json] = spm_2_bids(file [, map][, verbose])
     %
     % :param file: SPM preprocessed filename (can be fullpath);
     %              for example ``wmsub-01_ses-01_T1w.nii``
     % :type file: string
+    %
     % :param map: optional spm_2_bids map to overwrite the default
     %             map (see Mapping)
     % :param map: Mapping object
+    %
+    % :param verbose:
+    % :param verbose: boolean
     %
     % :returns: - :new_filename: (string) BIDS compatible filename
     %               for example ``sub-01_ses-01_space-IXI549Space_desc-preproc_T1w.nii``;
@@ -26,13 +29,21 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
     %
     % (C) Copyright 2021 spm_2_bids developers
 
-    if nargin < 2 || isempty(map)
+    args = inputParser;
+
+    addRequired(args, 'file', @ischar);
+    addOptional(args, 'map', []);
+    addOptional(args, 'verbose', true, @islogical);
+
+    parse(args, varargin{:});
+
+    file = args.Results.file;
+    map = args.Results.map;
+    verbose = args.Results.verbose;
+
+    if isempty(map)
         map = Mapping();
         map = map.default();
-    end
-
-    if nargin < 3
-        verbose = true;
     end
 
     mapping = map.mapping;
@@ -82,22 +93,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
                          strcmp({mapping.ext}', '*')], 2);
     end
 
-    % we compare the entities-label pairs present in the file
-    % to those required in the mapping (if any)
-    % if no entity requirement anywhere in the mapping then anything goes
-    entitiy_match = true(size(mapping));
-
-    needs_entity_check = ~cellfun('isempty', {mapping.entities}');
-    if any(needs_entity_check)
-
-        entitiy_match = false(size(mapping));
-
-        idx = find(needs_entity_check);
-        for i = 1:numel(idx)
-            status = check_field_content(bf.entities, mapping(idx(i)).entities);
-            entitiy_match(idx(i)) = status;
-        end
-    end
+    entitiy_match = get_entity_match(mapping);
 
     this_mapping = [prefix_match, suffix_match, entitiy_match, ext_match];
 
@@ -148,6 +144,25 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
     %% metadata
     json = set_metadata(file, map, verbose, bf);
 
+end
+
+function entitiy_match = get_entity_match(mapping)
+    % we compare the entities-label pairs present in the file
+    % to those required in the mapping (if any)
+    % if no entity requirement anywhere in the mapping then anything goes
+    entitiy_match = true(size(mapping));
+
+    needs_entity_check = ~cellfun('isempty', {mapping.entities}');
+    if any(needs_entity_check)
+
+        entitiy_match = false(size(mapping));
+
+        idx = find(needs_entity_check);
+        for i = 1:numel(idx)
+            status = check_field_content(bf.entities, mapping(idx(i)).entities);
+            entitiy_match(idx(i)) = status;
+        end
+    end
 end
 
 function json = set_metadata(file, map, verbose, bf)
