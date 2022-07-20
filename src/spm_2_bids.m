@@ -93,7 +93,7 @@ function [new_filename, pth, json] = spm_2_bids(varargin)
                          strcmp({mapping.ext}', '*')], 2);
     end
 
-    entitiy_match = get_entity_match(mapping);
+    entitiy_match = get_entity_match(mapping, bf);
 
     this_mapping = [prefix_match, suffix_match, entitiy_match, ext_match];
 
@@ -146,7 +146,7 @@ function [new_filename, pth, json] = spm_2_bids(varargin)
 
 end
 
-function entitiy_match = get_entity_match(mapping)
+function entitiy_match = get_entity_match(mapping, bf)
     % we compare the entities-label pairs present in the file
     % to those required in the mapping (if any)
     % if no entity requirement anywhere in the mapping then anything goes
