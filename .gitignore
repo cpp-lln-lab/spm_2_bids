@@ -3,6 +3,7 @@
 .vscode
 
 *.json
+mapping.md
 
 env/
 
