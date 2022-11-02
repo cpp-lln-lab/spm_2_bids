@@ -20,6 +20,7 @@ function structure = set_missing_fields(structure, fields_to_set, overwrite)
     % :returns: - :structure: (structure)
     %
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     if isempty(fields_to_set)

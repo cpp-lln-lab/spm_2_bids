@@ -48,6 +48,7 @@ function cfg = check_cfg(cfg)
     %
     %
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     if nargin < 1

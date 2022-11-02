@@ -8,6 +8,7 @@ function retval = is_octave()
     %
     % :returns: :retval: (boolean)
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     persistent cacheval   % speeds up repeated calls

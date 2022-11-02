@@ -26,6 +26,7 @@ classdef Mapping
     %           - ``norm = ''``
     %           - ``smooth = ''``
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     properties

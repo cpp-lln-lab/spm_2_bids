@@ -24,6 +24,7 @@ function [new_filename, pth, json] = spm_2_bids(file, map, verbose)
     % adapting the ``cfg``.
     %
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     if nargin < 2 || isempty(map)

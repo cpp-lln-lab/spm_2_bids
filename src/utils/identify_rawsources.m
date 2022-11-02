@@ -16,6 +16,7 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
     % :type verbose: boolean
     %
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     % TODO mean may involve several files from the source (across runs

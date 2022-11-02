@@ -8,6 +8,7 @@ function check_dependencies()
     %   check_dependencies()
     %
     %
+
     % (C) Copyright 2019 spm_2_bids developers
 
     fprintf('Checking dependencies\n');

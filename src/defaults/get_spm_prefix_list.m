@@ -6,6 +6,7 @@ function prefix_list = get_spm_prefix_list()
     % is not there.
     %
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     try
