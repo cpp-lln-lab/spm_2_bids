@@ -1,6 +1,6 @@
 function sources = add_deformation_field(bf, sources, map, verbose)
     % (C) Copyright 2021 spm_2_bids developers
-    if ~startsWith(bf.prefix, map.norm)
+    if ~bids.internal.starts_with(bf.prefix, map.norm)
         return
     end
 

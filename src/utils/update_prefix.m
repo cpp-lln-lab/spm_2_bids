@@ -10,7 +10,7 @@ function [status, bf] = update_prefix(bf, map)
     end
 
     % remove the prefix of the last step
-    if startsWith(bf.prefix, map.smooth)
+    if bids.internal.starts_with(bf.prefix, map.smooth)
 
         % in case the prefix includes a number to denotate the FXHM used
         % for smoothing
@@ -21,16 +21,16 @@ function [status, bf] = update_prefix(bf, map)
             bf = shorten_prefix(bf, 1);
         end
 
-    elseif startsWith(bf.prefix, map.unwarp)
+    elseif bids.internal.starts_with(bf.prefix, map.unwarp)
         bf = shorten_prefix(bf, 1);
 
-    elseif startsWith(bf.prefix, map.norm)
+    elseif bids.internal.starts_with(bf.prefix, map.norm)
         bf = shorten_prefix(bf, 1);
 
-    elseif startsWith(bf.prefix, ['rp_' map.stc])
+    elseif bids.internal.starts_with(bf.prefix, ['rp_' map.stc])
         bf = shorten_prefix(bf, 3);
 
-    elseif startsWith(bf.prefix, 'mean')
+    elseif bids.internal.starts_with(bf.prefix, 'mean')
         % TODO mean may involve several files from the source (across runs
         % and sessions
         %     prefixes = {
