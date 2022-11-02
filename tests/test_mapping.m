@@ -8,15 +8,6 @@ function test_suite = test_mapping %#ok<*STOUT>
     initTestSuite;
 end
 
-function test_constructor()
-
-    map = Mapping();
-    cfg = check_cfg();
-
-    assertEqual(map.cfg, cfg);
-
-end
-
 function test_add_mapping()
 
     map = Mapping();

@@ -1,5 +1,6 @@
 function status = check_field_content(struct_one, struct_two)
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     status = true;

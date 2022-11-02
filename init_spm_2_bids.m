@@ -1,4 +1,4 @@
-function init_spm_2_bids
+function init_spm_2_bids(add_dev)
     %
     % 1 - Check if version requirements
     % are satisfied and the packages are
@@ -14,6 +14,10 @@ function init_spm_2_bids
     % 2 - Add project to the O/M path
     %
     % (C) Copyright 2021 spm_2_bids developers
+
+    if nargin < 1
+        add_dev = false;
+    end
 
     OCTAVE_VER = '4.0.3';
     MATLAB_VER = '8.6.0';
@@ -53,7 +57,10 @@ function init_spm_2_bids
 
     end
 
-    add_dependencies();
+    add_dependencies(add_dev);
+
+    pth = fileparts(mfilename('fullpath'));
+    addpath(genpath(fullfile(pth, 'src')));
 
     disp('Correct matlab/octave versions and added to the path!');
 
@@ -90,11 +97,12 @@ function try_install_from_forge(package_name)
 
 end
 
-function add_dependencies()
+function add_dependencies(add_dev)
 
-    pth = fileparts(mfilename('fullpath'));
-    addpath(fullfile(pth, 'lib', 'bids-matlab'));
-    addpath(fullfile(pth, 'tests', 'utils'));
-    addpath(genpath(fullfile(pth, 'src')));
+    if add_dev
+        pth = fileparts(mfilename('fullpath'));
+        addpath(fullfile(pth, 'lib', 'bids-matlab'));
+        addpath(fullfile(pth, 'lib', 'JSONio'));
+    end
 
 end

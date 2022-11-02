@@ -26,10 +26,8 @@ classdef Mapping
     %           - ``norm = ''``
     %           - ``smooth = ''``
     %
-    % (C) Copyright 2021 spm_2_bids developers
 
-    % TODO add a print_mapping method to allow easy visualization
-    % of the input --> output relationship
+    % (C) Copyright 2021 spm_2_bids developers
 
     properties
 
@@ -228,19 +226,26 @@ classdef Mapping
                     input = obj.mapping(i);
                     input = prepare_for_printing(input);
 
+                    input_filename = input.filename;
+
                     %%
                     output = obj.mapping(i).name_spec;
                     output = prepare_for_printing(output);
 
-                    output.filename = ['*' output.filename];
+                    output_filename = output.filename;
+
+                    output_filename = ['*' output_filename];
+                    output_filename = strrep(output_filename, 'add-star', '*');
 
                     if fid ~= 1
-                        input.filename = strrep(input.filename, '*', '\*');
-                        output.filename = strrep(output.filename, '*', '\*');
+                        input_filename = strrep(input_filename, '*', '\*');
+                        input_filename = strrep(input_filename, '_', '\_');
+                        output_filename = strrep(output_filename, '*', '\*');
+                        output_filename = strrep(output_filename, '_', '\_');
                     end
 
                     fprintf(fid, '%s%s%s%s%s\n', ...
-                            left, input.filename, separator, output.filename, right);
+                            left, input_filename, separator, output_filename, right);
 
                 else
 

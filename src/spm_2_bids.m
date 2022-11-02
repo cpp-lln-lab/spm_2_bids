@@ -27,6 +27,7 @@ function [new_filename, pth, json] = spm_2_bids(varargin)
     % adapting the ``cfg``.
     %
     %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     args = inputParser;
@@ -80,7 +81,7 @@ function [new_filename, pth, json] = spm_2_bids(varargin)
     % TODO implement methods in Mapping to filter by suffix / extention /
     % entities
 
-    % if any suffix / extention mentioned in the mapping we check for that as well
+    % if any suffix / extension mentioned in the mapping we check for that as well
     % if none is mentioned anywhere in the mapping then anything goes
     suffix_match = true(size(mapping));
     if ~all(cellfun('isempty', {mapping.suffix}'))
@@ -169,9 +170,20 @@ function json = set_metadata(file, map, verbose, bf)
 
     json = bids.derivatives_json(bf.filename);
 
+    if strcmp(bf.suffix, 'probseg')
+        json.content.Manual = false;
+    end
+
     content = json.content;
-    content.RawSources = identify_rawsources(file, verbose);
-    content.Sources = identify_sources(file, map, verbose);
+
+    content.RawSources = identify_rawsources(file, map, verbose);
+
+    Sources = identify_sources(file, map, verbose);
+    if ~isempty(Sources)
+        content.Sources = Sources;
+    elseif isfield(content, 'Sources')
+        content = rmfield(content, 'Sources');
+    end
 
     if isfield(bf.entities, 'space') && strcmp(bf.entities.space, 'IXI549Space')
         content.SpatialReference  = struct('IXI549Space', ...

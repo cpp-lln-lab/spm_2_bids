@@ -7,11 +7,16 @@ function sources = identify_sources(varargin)
     %
     %   sources = identify_sources(derivatives, map, verbose)
     %
-    % :param file: SPM preprocessed filename (can be fullpath);
-    %              for example ``wmsub-01_ses-01_T1w.nii``
-    % :type file: string
+    % :param derivatives: derivatives file whose source to identify
+    % :type derivatives: string
     %
+    % :param map: a mapping object. See ``Mapping`` class and or function ``default_mapping``
+    % :type map: object
     %
+    % :param verbose: Defaults to ``true``
+    % :type verbose: boolean
+    %
+
     % (C) Copyright 2021 spm_2_bids developers
 
     % "r" could mean realigned or resliced...
@@ -21,6 +26,8 @@ function sources = identify_sources(varargin)
     %     'wra'
     % those will throw warnings
 
+    % TODO adapt in case prefixes have been changed from SPM defaults
+
     % TODO
     % functional to anatomical coregistration
     % anatomical to functional coregistration
@@ -28,11 +35,9 @@ function sources = identify_sources(varargin)
     default_map = Mapping();
     default_map = default_map.default();
 
-    sources = '';
+    sources = {};
 
     prefix_based = true;
-
-    deformation_field_needed = false;
 
     args = inputParser;
 
@@ -50,6 +55,7 @@ function sources = identify_sources(varargin)
         return
     end
 
+    % deal with SPM's funky suffixes
     if bids.internal.ends_with(derivatives, '_seg8.mat')
 
         prefix_based = false;
@@ -66,118 +72,48 @@ function sources = identify_sources(varargin)
 
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
+    % unknown suffix
+    if ~ismember(bf.suffix, fieldnames(map.cfg.schema.content.objects.suffixes))
+        sources{1, 1} = 'TODO';
+        return
+    end
+
+    % deal with surface data
+    if strcmp(bf.extension, '.surf.gii')
+        bf.extension = '.nii';
+        prefix_based = false;
+    end
+
+    % unless this file already contains a derivative entity
+    % it needs at least 2 characters for this file
+    % to have some provenance in the derivatives
+    if length(bf.prefix) == 1 && any(ismember(fieldnames(bf.entities), map.cfg.entity_order))
+        bf.prefix = '';
+        sources{1, 1} = fullfile(bf.bids_path, bf.filename);
+        return
+    end
+
+    sources = add_deformation_field(bf, sources, map, verbose);
+
+    % anything prefix based
     if prefix_based
 
-        if numel(bf.prefix) < 2
+        [status, bf] = update_prefix(bf, map);
 
-            % needs at least 2 characters for this file to have some provenance in the
-            % derivatives
-
-            % TODO: files that have been realigned but not resliced have no
-            % "prefix" so we may miss some transformation
-
+        if status == 0
             return
 
-        else
-            % remove the prefix of the last step
-
-            if bids.internal.starts_with(bf.prefix, 's') && ...
-                ~bids.internal.starts_with(bf.prefix, 'std_') && ...
-                 ~bids.internal.starts_with(bf.prefix, 'segparam_')
-
-                % in case we have "s6" for the fwhm
-                if isnan(str2double(bf.prefix(2)))
-                    bf.prefix = bf.prefix(2:end);
-                else
-                    bf.prefix = bf.prefix(3:end);
-                end
-
-            elseif bids.internal.starts_with(bf.prefix, 'u') && ...
-                   ~bids.internal.starts_with(bf.prefix, 'unwarpparam_')
-
-                bf.prefix = bf.prefix(2:end);
-
-                deformation_field_needed = true;
-
-            elseif bids.internal.starts_with(bf.prefix, 'w')
-
-                bf.prefix = bf.prefix(2:end);
-                deformation_field_needed = true;
-
-            elseif bids.internal.starts_with(bf.prefix, 'rp_a')
-
-                bf.prefix = bf.prefix(4:end);
-
-            elseif bids.internal.starts_with(bf.prefix, 'mean')
-                % TODO mean may involve several files from the source (across runs
-                % and sessions
-                %     prefixes = {
-                %                 'mean'
-                %                 'meanu'
-                %                 'meanua'
-                %                };
-                return
-
-            else
-                % no idea
-                return
-
-            end
+        elseif status == 1
+            sources = 'TODO';
+            return
 
         end
+
     end
 
     % call spm_2_bids what is the filename from the previous step
     new_filename = spm_2_bids(bf.filename, map, verbose);
 
-    sources{1, 1} = fullfile(bf.bids_path, new_filename);
+    sources{end + 1, 1} = fullfile(bf.bids_path, new_filename);
 
-    sources = add_deformation_field(sources, bf, map, verbose, deformation_field_needed);
-
-end
-
-function sources = add_deformation_field(sources, bf, map, verbose, deformation_field_needed)
-
-    deformation_field = 'TODO: add deformation field';
-
-    % TODO? grab all the anat suffixes from BIDS schema?
-    covered_suffixes = {'T1w', ...
-                        'T2w', ...
-                        'PDw', ...
-                        'T2starw', ...
-                        'inplaneT1', ...
-                        'inplaneT2', ...
-                        'PD', ...
-                        'PDT2', ...
-                        'T2star', ...
-                        'FLASH', ...
-                        'T1map', ...
-                        'T2map', ...
-                        'T2starmap', ...
-                        'R1map', ...
-                        'R2map', ...
-                        'R2starmap', ...
-                        'PDmap', ...
-                        'UNIT1'};
-
-    if deformation_field_needed
-
-        % for anatomical data we assume that
-        % the deformation field comes from the anatomical file itself
-        if (~isempty(bf.modality) && ismember(bf.modality, {'anat'})) || ...
-           (~isempty(bf.suffix) && ismember(bf.suffix, covered_suffixes))
-
-            bf.prefix = 'y_';
-            bf = bf.update;
-            new_filename = spm_2_bids(bf.filename, map, verbose);
-            deformation_field = fullfile(bf.bids_path, new_filename);
-
-            % otherwise we can't guess it just from the file name
-        else
-
-        end
-
-        sources{2, 1} = deformation_field;
-
-    end
 end

@@ -9,6 +9,7 @@ function version_number = get_version()
     %
     % :returns: :version_number: (string) Use semantic versioning format (like v0.1.0)
     %
+
     % (C) Copyright 2020 spm_2_bids developers
 
     try

@@ -2,6 +2,11 @@ function bf = prepare_for_printing(spec)
     %
     % (C) Copyright 2022 spm_2_bids developers
 
+    if isfield(spec, 'entities') && strcmp(spec.entities, '*')
+        spec.entities = struct('add', 'joker');
+    end
+    bf = bids.File(spec, 'tolerant', true);
+
     if isfield(spec, 'suffix') && isempty(spec.suffix) || ...
         ~isfield(spec, 'suffix')
         spec.suffix = '*';
@@ -14,5 +19,4 @@ function bf = prepare_for_printing(spec)
         spec.ext = '.*';
     end
 
-    bf = bids.File(spec);
 end

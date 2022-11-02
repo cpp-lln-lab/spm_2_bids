@@ -5,9 +5,14 @@ thisDir = fullfile(fileparts(mfilename('fullpath')));
 if isdir(fullfile(thisDir, 'lib', 'bids-matlab'))
     addpath(fullfile(thisDir, 'lib', 'bids-matlab'));
 end
+if isdir(fullfile(thisDir, 'lib', 'JSONio'))
+    addpath(fullfile(thisDir, 'lib', 'JSONio'));
+end
 
 folderToCover = fullfile(thisDir, 'src');
 testFolder = fullfile(thisDir, 'tests');
+
+addpath(fullfile(testFolder, 'utils'));
 
 success = moxunit_runtests(testFolder, ...
                            '-verbose', '-recursive', '-with_coverage', ...
