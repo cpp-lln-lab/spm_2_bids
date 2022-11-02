@@ -118,6 +118,4 @@ function sources = identify_sources(varargin)
 
 end
 
-function bf = shorten_prefix(bf, len)
-    bf.prefix = bf.prefix((len + 1):end);
-end
+

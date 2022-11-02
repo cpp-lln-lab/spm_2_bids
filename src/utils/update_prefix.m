@@ -54,3 +54,7 @@ function [status, bf] = update_prefix(bf, map)
     end
 
 end
+
+function bf = shorten_prefix(bf, len)
+    bf.prefix = bf.prefix((len + 1):end);
+end

@@ -20,7 +20,7 @@ function test_identify_rawsources_skip_unknown_suffix()
 
         rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
 
-        assertEqual(rawsource, {'TODO'});
+        assertEqual(rawsource, {'sub-01/sub-01_mask.nii.gz'});
 
     end
 

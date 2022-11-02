@@ -46,8 +46,8 @@ function test_spm_2_bids_non_raw_suffix()
     [~, ~, json] = spm_2_bids(file, [], false);
 
     assertEqual(fieldnames(json), {'filename'; 'content'});
-    assertEqual(json.content.RawSources{1}, 'TODO');
-    assertEqual(json.content.Sources{end}, 'TODO');
+    assertEqual(json.content.RawSources{1}, 'sub-01/sub-01_task-foo_mask.nii.gz');
+    assertEqual(json.content.Sources{end}, 'sub-01/sub-01_task-foo_space-individual_desc-realignUnwarp_mask.nii');
 
     bids.util.jsonencode(json.filename, json.content);
 
