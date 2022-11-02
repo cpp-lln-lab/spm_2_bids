@@ -6,7 +6,7 @@ function bf = prepare_for_printing(spec)
         spec.entities = struct('add', 'joker');
     end
     bf = bids.File(spec, 'tolerant', true);
-    
+
     if isfield(spec, 'suffix') && isempty(spec.suffix) || ...
         ~isfield(spec, 'suffix')
         spec.suffix = '*';

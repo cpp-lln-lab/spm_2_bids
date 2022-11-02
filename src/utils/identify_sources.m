@@ -117,5 +117,3 @@ function sources = identify_sources(varargin)
     sources{end + 1, 1} = fullfile(bf.bids_path, new_filename);
 
 end
-
-
