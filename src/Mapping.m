@@ -102,26 +102,26 @@ classdef Mapping
             % filter.ext
             %
 
-            p = inputParser;
+            args = inputParser;
 
-            addParameter(p, 'prefix', obj.default_value);
-            addParameter(p, 'suffix', obj.default_value);
-            addParameter(p, 'entities', obj.default_value);
-            addParameter(p, 'ext', obj.default_value);
-            addParameter(p, 'name_spec', obj.default_value);
+            addParameter(args, 'prefix', obj.default_value);
+            addParameter(args, 'suffix', obj.default_value);
+            addParameter(args, 'entities', obj.default_value);
+            addParameter(args, 'ext', obj.default_value);
+            addParameter(args, 'name_spec', obj.default_value);
 
-            parse(p, varargin{:});
+            parse(args, varargin{:});
 
-            prefix = p.Results.prefix;
+            prefix = args.Results.prefix;
             if ~iscell(prefix)
                 prefix = {prefix};
             end
 
             obj.mapping(end + 1, 1).prefix = prefix;
-            obj.mapping(end, 1).suffix = p.Results.suffix;
-            obj.mapping(end, 1).entities = p.Results.entities;
-            obj.mapping(end, 1).ext = p.Results.ext;
-            obj.mapping(end, 1).name_spec = p.Results.name_spec;
+            obj.mapping(end, 1).suffix = args.Results.suffix;
+            obj.mapping(end, 1).entities = args.Results.entities;
+            obj.mapping(end, 1).ext = args.Results.ext;
+            obj.mapping(end, 1).name_spec = args.Results.name_spec;
 
         end
 
@@ -322,6 +322,8 @@ classdef Mapping
                                  [obj.smooth, obj.norm, obj.unwarp], ...
                                  [obj.smooth, obj.norm, obj.realign] },        obj.cfg.smooth_norm};
 
+            spec_preproc = {{[obj.realign, obj.stc]},                obj.cfg.preproc};
+
             spec_preproc_norm = {{obj.norm, ...
                                   [obj.norm, obj.bias_cor], ...
                                   [obj.norm, obj.stc,     obj.unwarp], ...
@@ -334,6 +336,7 @@ classdef Mapping
                        spec_smooth, ...
                        spec_smooth_norm, ...
                        spec_preproc_norm, ...
+                       spec_preproc, ...
                        spec_mean, ...
                        spec_norm_mean);
 
@@ -353,15 +356,15 @@ classdef Mapping
             %    idx = obj.find_mapping('prefix', str)
             %
 
-            p = inputParser;
+            args = inputParser;
 
-            addParameter(p, 'prefix', @ischar);
+            addParameter(args, 'prefix', @ischar);
 
-            parse(p, varargin{:});
+            parse(args, varargin{:});
 
             available_mapped_prefixes = {obj.mapping.prefix}';
 
-            idx = strcmp(p.Results.prefix, available_mapped_prefixes);
+            idx = strcmp(args.Results.prefix, available_mapped_prefixes);
 
         end
 

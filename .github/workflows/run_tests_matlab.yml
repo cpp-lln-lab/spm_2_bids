@@ -19,13 +19,13 @@ jobs:
     steps:
 
       - name: Install MATLAB
-        uses: matlab-actions/setup-matlab@v1.0.1
+        uses: matlab-actions/setup-matlab@v1.2.2
         with:
           # MATLAB release to set up R2020a
           release: R2020a
 
       - name: Clone spm_2_bids
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
           fetch-depth: 2
@@ -36,11 +36,10 @@ jobs:
           git clone https://github.com/MOcov/MOcov.git --depth 1
 
       - name: get bids-matlab and JSONio
-        run: |
-          make install_dev
+        run: make install_dev
 
       - name: Run commands
-        uses: matlab-actions/run-command@v1.0.1
+        uses: matlab-actions/run-command@v1.1.1
         with:
           command: cd(fullfile(getenv('GITHUB_WORKSPACE'), '.github', 'workflows')); run tests_matlab;
 
@@ -50,7 +49,7 @@ jobs:
           bash <(curl -s https://codecov.io/bash)
 
       - name: Code coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           file: coverage.xml # optional
           flags: unittests # optional

@@ -62,7 +62,7 @@ function sources = identify_sources(varargin)
 
         derivatives = strrep(derivatives, '_seg8.mat', '.nii');
 
-    elseif endsWith(derivatives, '_uw.mat')
+    elseif bids.internal.ends_with(derivatives, '_uw.mat')
 
         prefix_based = false;
 

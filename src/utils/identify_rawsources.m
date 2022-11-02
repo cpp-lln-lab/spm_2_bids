@@ -38,9 +38,9 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
         verbose = true;
     end
 
-    if endsWith(derivatives, '_seg8.mat')
+    if bids.internal.ends_with(derivatives, '_seg8.mat')
         derivatives = strrep(derivatives, '_seg8.mat', '.nii');
-    elseif endsWith(derivatives, '_uw.mat')
+    elseif bids.internal.ends_with(derivatives, '_uw.mat')
         derivatives = strrep(derivatives, '_uw.mat', '.nii');
     end
 
