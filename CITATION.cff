@@ -2,7 +2,7 @@ cff-version: 1.2.0
 
 title: "spm_2_bids"
 
-version: 0.2.1
+version: 0.3.0
 
 abstract: Toolbox to convert SPM output files to valid BIDS derivatives.
 

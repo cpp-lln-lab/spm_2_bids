@@ -1,4 +1,4 @@
-.PHONY: clean
+.PHONY: clean version.txt
 
 install_dev_octave: install_dev
 	cd lib/JSONio && mkoctfile --mex jsonread.c jsmn.c -DJSMN_PARENT_LINKS
