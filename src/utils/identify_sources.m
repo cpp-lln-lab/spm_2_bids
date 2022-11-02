@@ -135,4 +135,3 @@ function sources = identify_sources(varargin)
     sources = add_deformation_field(sources, bf, map, verbose, deformation_field_needed);
 
 end
-

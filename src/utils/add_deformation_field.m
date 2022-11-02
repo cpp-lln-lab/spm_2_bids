@@ -1,6 +1,6 @@
 function sources = add_deformation_field(sources, bf, map, verbose, deformation_field_needed)
     % (C) Copyright 2021 spm_2_bids developers
-    
+
     deformation_field = 'TODO: add deformation field';
 
     % TODO? grab all the anat suffixes from BIDS schema?
