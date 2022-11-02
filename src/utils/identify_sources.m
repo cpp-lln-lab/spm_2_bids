@@ -56,7 +56,7 @@ function sources = identify_sources(varargin)
     end
 
     % deal with SPM's funky suffixes
-    if endsWith(derivatives, '_seg8.mat')
+    if bids.internal.ends_with(derivatives, '_seg8.mat')
 
         prefix_based = false;
 
