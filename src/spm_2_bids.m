@@ -78,7 +78,7 @@ function [new_filename, pth, json] = spm_2_bids(varargin)
     % look for the right prefix in the mapping
     prefix_match = map.find_mapping('prefix', bf.prefix);
 
-    % TODO implement methods in Mapping to filter by suffix / extention /
+    % TODO implement methods in Mapping to filter by suffix / extension /
     % entities
 
     % if any suffix / extension mentioned in the mapping we check for that as well
@@ -98,7 +98,7 @@ function [new_filename, pth, json] = spm_2_bids(varargin)
 
     this_mapping = [prefix_match, suffix_match, entitiy_match, ext_match];
 
-    % We check whether all conditons are met
+    % We check whether all conditions are met
     % otherwise we only rely on the prefix
     if any(sum(this_mapping, 2) > 0) && any(prefix_match)
 

@@ -18,8 +18,8 @@ function cfg = check_cfg(cfg)
     %
     % - ``all_entity_order``: order of all the official bids entities
     % - ``entity_order``: order of the entities in bids derivatives
-    % - ``fwhm``: value to append to smoothing desctiption label
-    % - ``spec``: specfication details to over ride some of the defaults
+    % - ``fwhm``: value to append to smoothing description label
+    % - ``spec``: specification details to over ride some of the defaults
     %
     % BIDS derivatives defining fields:
     %
