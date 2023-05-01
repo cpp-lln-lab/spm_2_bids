@@ -27,7 +27,7 @@ jobs:
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v1.2.4
         with:
-          release: ${{ matrix.matlab-version }}
+          release: ${{ matrix.version }}
 
       - name: Clone spm_2_bids
         uses: actions/checkout@v3
