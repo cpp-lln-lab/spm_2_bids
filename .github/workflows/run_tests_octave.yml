@@ -1,10 +1,11 @@
+---
 name: tests_octave
 
 on:
   push:
     branches:
-      - master
-      - dev
+    - master
+    - dev
   pull_request:
     branches: ['*']
 

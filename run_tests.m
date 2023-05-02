@@ -14,14 +14,21 @@ testFolder = fullfile(thisDir, 'tests');
 
 addpath(fullfile(testFolder, 'utils'));
 
-success = moxunit_runtests(testFolder, ...
-                           '-verbose', '-recursive', '-with_coverage', ...
-                           '-cover', folderToCover, ...
-                           '-cover_xml_file', 'coverage.xml', ...
-                           '-cover_html_dir', fullfile(pwd, 'coverage_html'));
+if ispc
+    success = moxunit_runtests(test_folder, '-verbose');
 
-if success
-    system('echo 0 > test_report.log');
 else
-    system('echo 1 > test_report.log');
+    success = moxunit_runtests(test_folder, ...
+                               '-verbose', '-recursive', '-with_coverage', ...
+                               '-cover', folder_to_cover, ...
+                               '-cover_xml_file', 'coverage.xml', ...
+                               '-cover_html_dir', fullfile(pwd, 'coverage_html'));
 end
+
+fileID = fopen('test_report.log', 'w');
+if success
+    fprintf(fileID, '0');
+else
+    fprintf(fileID, '1');
+end
+fclose(fileID);
