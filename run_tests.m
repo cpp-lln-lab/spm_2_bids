@@ -2,6 +2,9 @@
 
 thisDir = fullfile(fileparts(mfilename('fullpath')));
 
+folderToCover = fullfile(thisDir, 'src');
+addpath(genpath(folderToCover));
+
 if isdir(fullfile(thisDir, 'lib', 'bids-matlab'))
     addpath(fullfile(thisDir, 'lib', 'bids-matlab'));
 end
@@ -9,18 +12,17 @@ if isdir(fullfile(thisDir, 'lib', 'JSONio'))
     addpath(fullfile(thisDir, 'lib', 'JSONio'));
 end
 
-folderToCover = fullfile(thisDir, 'src');
 testFolder = fullfile(thisDir, 'tests');
 
 addpath(fullfile(testFolder, 'utils'));
 
 if ispc
-    success = moxunit_runtests(test_folder, '-verbose');
+    success = moxunit_runtests(testFolder, '-verbose');
 
 else
-    success = moxunit_runtests(test_folder, ...
+    success = moxunit_runtests(testFolder, ...
                                '-verbose', '-recursive', '-with_coverage', ...
-                               '-cover', folder_to_cover, ...
+                               '-cover', folderToCover, ...
                                '-cover_xml_file', 'coverage.xml', ...
                                '-cover_html_dir', fullfile(pwd, 'coverage_html'));
 end
