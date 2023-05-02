@@ -20,7 +20,7 @@ function test_identify_rawsources_skip_unknown_suffix()
 
         rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
 
-        assertEqual(rawsource, {'sub-01/sub-01_mask.nii.gz'});
+        assertEqual(rawsource, {fullfile('sub-01', 'sub-01_mask.nii.gz')});
 
     end
 
@@ -38,7 +38,7 @@ function test_identify_rawsources_surface()
 
         rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
 
-        assertEqual(rawsource, {['sub-01/' input_output{i, 2}]});
+        assertEqual(rawsource, {fullfile('sub-01/', input_output{i, 2})});
 
     end
 
@@ -56,7 +56,7 @@ function test_identify_rawsources_when_der_entities()
 
         rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
 
-        assertEqual(rawsource, {['sub-01/' input_output{i, 2}]});
+        assertEqual(rawsource, {fullfile('sub-01/', input_output{i, 2})});
 
     end
 
@@ -75,7 +75,7 @@ function test_identify_rawsources_suffix()
 
         rawsource = identify_rawsources(input_output{i, 1},  map, verbose);
 
-        assertEqual(rawsource, {['sub-01/' input_output{i, 2}]});
+        assertEqual(rawsource, {fullfile('sub-01', input_output{i, 2})});
 
     end
 
@@ -108,7 +108,7 @@ function test_identify_rawsources_anat()
 
         rawsource = identify_rawsources(fullfile(pwd, 'sub-01', file), map,  verbose);
 
-        assertEqual(rawsource, {'sub-01/sub-01_T1w.nii.gz'});
+        assertEqual(rawsource, {fullfile('sub-01', 'sub-01_T1w.nii.gz')});
 
     end
 
@@ -149,7 +149,9 @@ function test_identify_rawsources_func()
 
         rawsource = identify_rawsources(file, map, verbose);
 
-        assertEqual(rawsource, {'sub-01/ses-02/sub-01_ses-02_task-foo_bold.nii.gz'});
+        assertEqual(rawsource, {fullfile('sub-01', ...
+                                         'ses-02', ...
+                                         'sub-01_ses-02_task-foo_bold.nii.gz')});
 
     end
 
