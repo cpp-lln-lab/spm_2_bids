@@ -12,7 +12,7 @@ function test_identify_sources_with_non_raw_entity()
 
     file = 'sub-01_task-foo_desc-stc_bold.nii';
 
-    prefix_output = {'u',  'sub-01/sub-01_task-foo_desc-stc_bold.nii'};
+    prefix_output = {'u',  fullfile('sub-01', 'sub-01_task-foo_desc-stc_bold.nii')};
 
     map = default_mapping();
 
@@ -30,7 +30,7 @@ function test_identify_sources_surface()
 
     anat_file = 'sub-01_T1w.surf.gii';
 
-    prefix_output = {'wm',  'sub-01/sub-01_space-IXI549Space_desc-preproc_T1w.nii'};
+    prefix_output = {'wm',  fullfile('sub-01', 'sub-01_space-IXI549Space_desc-preproc_T1w.nii')};
 
     map = default_mapping();
 
@@ -48,11 +48,11 @@ function test_identify_sources_anat()
 
     anat_file = 'sub-01_T1w.nii';
 
-    prefix_output = {'wm',  'sub-01/sub-01_space-individual_desc-biascor_T1w.nii'
-                     'wc1', 'sub-01/sub-01_space-individual_label-GM_probseg.nii'
-                     'wc2', 'sub-01/sub-01_space-individual_label-WM_probseg.nii'
-                     'wc3', 'sub-01/sub-01_space-individual_label-CSF_probseg.nii'
-                     'wc1', 'sub-01/sub-01_space-individual_label-GM_probseg.nii'
+    prefix_output = {'wm',  fullfile('sub-01', 'sub-01_space-individual_desc-biascor_T1w.nii')
+                     'wc1', fullfile('sub-01', 'sub-01_space-individual_label-GM_probseg.nii')
+                     'wc2', fullfile('sub-01', 'sub-01_space-individual_label-WM_probseg.nii')
+                     'wc3', fullfile('sub-01', 'sub-01_space-individual_label-CSF_probseg.nii')
+                     'wc1', fullfile('sub-01', 'sub-01_space-individual_label-GM_probseg.nii')
                     };
 
     map = default_mapping();
@@ -72,17 +72,17 @@ function test_identify_sources_func()
     func_file = 'sub-01_task-auditory_bold.nii';
 
     prefix_output = {
-                     'ua', 'sub-01_task-auditory_space-individual_desc-stc_bold.nii'
+                     'ua',   'sub-01_task-auditory_space-individual_desc-stc_bold.nii'
                      'rp_a', 'sub-01_task-auditory_space-individual_desc-stc_bold.nii'
-                     'wua', 'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
-                     'wu', 'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
-                     'sw', 'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
+                     'wua',  'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
+                     'wu',   'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
+                     'sw',   'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
                      'swua', 'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
-                     'swu', 'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
-                     'swr', 'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
+                     'swu',  'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
+                     'swr',  'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
                      'swra', 'sub-01_task-auditory_space-IXI549Space_desc-preproc_bold.nii'
-                     'sua', 'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
-                     'su', 'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
+                     'sua',  'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
+                     'su',   'sub-01_task-auditory_space-individual_desc-realignUnwarp_bold.nii'
                     };
 
     map = default_mapping();
@@ -132,7 +132,7 @@ function test_identify_sources_suffix()
 
         sources = identify_sources(input_output{i, 1}, map, false);
 
-        assertEqual(sources{1}, ['sub-01/' input_output{i, 2}]);
+        assertEqual(sources{1}, fullfile('sub-01', input_output{i, 2}));
 
     end
 
