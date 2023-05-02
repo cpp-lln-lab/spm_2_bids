@@ -40,4 +40,13 @@ jobs:
         tests: tests
         src: src src/defaults src/utils
         ext: lib/JSONio lib/bids-matlab tests/utils
-        with_coverage: false
+        with_coverage: true
+        cover_xml_file: coverage.xml
+
+    - name: Code coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: coverage.xml
+        flags: ubuntu-latest_octave
+        name: codecov-umbrella
+        fail_ci_if_error: true

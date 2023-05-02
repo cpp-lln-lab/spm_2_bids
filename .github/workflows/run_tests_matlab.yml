@@ -71,11 +71,3 @@ jobs:
         flags: ${{ matrix.os }}_matlab-${{ matrix.version }}
         with_coverage: true
         cover_xml_file: coverage.xml
-
-    - name: Code coverage
-      uses: codecov/codecov-action@v3
-      with:
-        file: coverage.xml
-        flags: ubuntu-latest_octave
-        name: codecov-umbrella
-        fail_ci_if_error: true
