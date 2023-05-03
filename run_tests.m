@@ -17,7 +17,7 @@ testFolder = fullfile(thisDir, 'tests');
 addpath(fullfile(testFolder, 'utils'));
 
 if ispc
-    success = moxunit_runtests(testFolder, '-verbose');
+    success = moxunit_runtests(testFolder, '-verbose', '-recursive');
 
 else
     success = moxunit_runtests(testFolder, ...
