@@ -96,8 +96,7 @@ function test_spm_2_bids_unknown_prefix()
     end
 
     file = 'wtfsub-01_ses-02_T1w.nii';
-    assertWarning( ...
-                  @()spm_2_bids(file), ...
+    assertWarning(@()spm_2_bids(file), ...
                   'spm_2_bids:unknownPrefix');
 
 end
