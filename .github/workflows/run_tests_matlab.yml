@@ -54,7 +54,6 @@ jobs:
         command: cd(fullfile(getenv('GITHUB_WORKSPACE'), '.github', 'workflows')); run tests_matlab;
 
     - name: Code coverage
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
       uses: codecov/codecov-action@v3
       with:
         file: coverage.xml
