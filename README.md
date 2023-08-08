@@ -1,6 +1,7 @@
 [![tests and coverage with matlab](https://github.com/cpp-lln-lab/spm_2_bids/actions/workflows/run_tests_matlab.yml/badge.svg)](https://github.com/cpp-lln-lab/spm_2_bids/actions/workflows/run_tests_matlab.yml)
 [![codecov](https://codecov.io/gh/cpp-lln-lab/spm_2_bids/branch/master/graph/badge.svg?token=yaL40GJK9y)](https://codecov.io/gh/cpp-lln-lab/spm_2_bids)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6564109.svg)](https://doi.org/10.5281/zenodo.6564109)
+[![View spm_2_bids on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://nl.mathworks.com/matlabcentral/fileexchange/133392-spm_2_bids)
 
 # spm_2_bids
 
