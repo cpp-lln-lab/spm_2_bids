@@ -12,7 +12,7 @@ function sources = add_deformation_field(bf, sources, map, verbose)
         bf.prefix = 'y_';
         bf = bf.update;
         new_filename = spm_2_bids(bf.filename, map, verbose);
-        deformation_field = fullfile(bf.bids_path, new_filename);
+        deformation_field = fullfile(bf.bids_path, bf.modality, new_filename);
 
         % otherwise we can't guess it just from the file name
     else
