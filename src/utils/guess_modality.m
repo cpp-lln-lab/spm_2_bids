@@ -1,7 +1,7 @@
 function modality = guess_modality(bf)
 
     % (C) Copyright 2023 spm_2_bids developers
-    %     modality = '';
+    modality = '';
     switch bf.suffix
         case {'bold', 'regressors'}
             modality = 'func';
