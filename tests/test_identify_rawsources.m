@@ -18,9 +18,10 @@ function test_identify_rawsources_skip_unknown_suffix()
 
     for i = 1:size(input_output, 1)
 
-        rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
+        rawsource = identify_rawsources(fullfile('sub-01', 'anat', input_output{i, 1}), ...
+                                        map, verbose);
 
-        assertEqual(rawsource, {fullfile('sub-01', 'sub-01_mask.nii.gz')});
+        assertEqual(rawsource, {fullfile('sub-01', 'anat', 'sub-01_mask.nii.gz')});
 
     end
 
@@ -36,9 +37,10 @@ function test_identify_rawsources_surface()
 
     for i = 1:size(input_output, 1)
 
-        rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
+        rawsource = identify_rawsources(fullfile('sub-01', 'anat', input_output{i, 1}), ...
+                                        map, verbose);
 
-        assertEqual(rawsource, {fullfile('sub-01/', input_output{i, 2})});
+        assertEqual(rawsource, {fullfile('sub-01', 'anat', input_output{i, 2})});
 
     end
 
@@ -54,9 +56,10 @@ function test_identify_rawsources_when_der_entities()
 
     for i = 1:size(input_output, 1)
 
-        rawsource = identify_rawsources(input_output{i, 1}, map, verbose);
+        rawsource = identify_rawsources(fullfile('sub-01', 'anat', input_output{i, 1}), ...
+                                        map, verbose);
 
-        assertEqual(rawsource, {fullfile('sub-01/', input_output{i, 2})});
+        assertEqual(rawsource, {fullfile('sub-01', 'anat', input_output{i, 2})});
 
     end
 
@@ -64,8 +67,7 @@ end
 
 function test_identify_rawsources_suffix()
 
-    input_output = {'sub-01_T1w_seg8.mat', 'sub-01_T1w.nii.gz'
-                    'sub-01_task-foo_bold_uw.mat', 'sub-01_task-foo_bold.nii.gz'};
+    input_output = {'sub-01_task-foo_bold_uw.mat', 'sub-01_task-foo_bold.nii.gz'};
 
     verbose = false;
 
@@ -75,7 +77,25 @@ function test_identify_rawsources_suffix()
 
         rawsource = identify_rawsources(input_output{i, 1},  map, verbose);
 
-        assertEqual(rawsource, {fullfile('sub-01', input_output{i, 2})});
+        assertEqual(rawsource, {fullfile('sub-01', 'func', input_output{i, 2})});
+
+    end
+
+end
+
+function test_identify_rawsources_suffix_anat()
+
+    input_output = {'sub-01_T1w_seg8.mat', 'sub-01_T1w.nii.gz'};
+
+    verbose = false;
+
+    map = default_mapping();
+
+    for i = 1:size(input_output, 1)
+
+        rawsource = identify_rawsources(input_output{i, 1},  map, verbose);
+
+        assertEqual(rawsource, {fullfile('sub-01', 'anat', input_output{i, 2})});
 
     end
 
@@ -106,9 +126,9 @@ function test_identify_rawsources_anat()
 
         file = [prefixes{i} anat_file];
 
-        rawsource = identify_rawsources(fullfile(pwd, 'sub-01', file), map,  verbose);
+        rawsource = identify_rawsources(fullfile(pwd, 'sub-01', 'anat', file), map,  verbose);
 
-        assertEqual(rawsource, {fullfile('sub-01', 'sub-01_T1w.nii.gz')});
+        assertEqual(rawsource, {fullfile('sub-01', 'anat', 'sub-01_T1w.nii.gz')});
 
     end
 
@@ -145,12 +165,13 @@ function test_identify_rawsources_func()
 
     for i = 1:numel(prefixes)
 
-        file = [prefixes{i} func_file];
+        file = fullfile(pwd, 'sub-01', 'ses-02', 'func', [prefixes{i} func_file]);
 
         rawsource = identify_rawsources(file, map, verbose);
 
         assertEqual(rawsource, {fullfile('sub-01', ...
                                          'ses-02', ...
+                                         'func', ...
                                          'sub-01_ses-02_task-foo_bold.nii.gz')});
 
     end

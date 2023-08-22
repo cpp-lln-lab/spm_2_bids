@@ -1,20 +1,20 @@
 function sources = identify_sources(varargin)
     %
-    % finds the most likely files in the detrivatives that was used to create
-    % this file
+    % finds the most likely files in the detrivatives
+    % that was used to create this file
     %
     % USAGE::
     %
     %   sources = identify_sources(derivatives, map, verbose)
     %
     % :param derivatives: derivatives file whose source to identify
-    % :type derivatives: string
+    % :type  derivatives: char
     %
     % :param map: a mapping object. See ``Mapping`` class and or function ``default_mapping``
-    % :type map: object
+    % :type  map: object
     %
     % :param verbose: Defaults to ``true``
-    % :type verbose: boolean
+    % :type  verbose: logical
     %
 
     % (C) Copyright 2021 spm_2_bids developers
@@ -71,6 +71,10 @@ function sources = identify_sources(varargin)
     end
 
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
+
+    if isempty(bf.modality)
+        bf.modality = guess_modality(bf);
+    end
 
     % unknown suffix
     if ~ismember(bf.suffix, fieldnames(map.cfg.schema.content.objects.suffixes))

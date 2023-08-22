@@ -51,6 +51,10 @@ function rawsource = identify_rawsources(derivatives, map, verbose)
     % - use only .nii.gz
     bf = bids.File(derivatives, 'verbose', verbose, 'use_schema', false);
 
+    if isempty(bf.modality)
+        bf.modality = guess_modality(bf);
+    end
+
     if ~ismember(bf.suffix, fieldnames(map.cfg.schema.content.objects.suffixes))
         rawsource{1} = 'TODO';
         return

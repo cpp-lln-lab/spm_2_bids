@@ -12,13 +12,14 @@ function test_identify_sources_with_non_raw_entity()
 
     file = 'sub-01_task-foo_desc-stc_bold.nii';
 
-    prefix_output = {'u',  fullfile('sub-01', 'sub-01_task-foo_desc-stc_bold.nii')};
+    prefix_output = {'u',  fullfile('sub-01', 'func', 'sub-01_task-foo_desc-stc_bold.nii')};
 
     map = default_mapping();
 
     for i  = 1:size(prefix_output, 1)
 
-        sources = identify_sources([prefix_output{i, 1} file], map, false);
+        sources = identify_sources(fullfile('sub-01', 'func', [prefix_output{i, 1} file]), ...
+                                   map, false);
 
         assertEqual(sources{1}, prefix_output{i, 2});
 
@@ -30,15 +31,16 @@ function test_identify_sources_surface()
 
     anat_file = 'sub-01_T1w.surf.gii';
 
-    prefix_output = {'wm',  fullfile('sub-01', 'sub-01_space-IXI549Space_desc-preproc_T1w.nii')};
+    prefix_output = {'wm',  'sub-01_space-IXI549Space_desc-preproc_T1w.nii'};
 
     map = default_mapping();
 
     for i  = 1:size(prefix_output, 1)
 
-        sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
+        sources = identify_sources(fullfile('sub-01', 'anat', [prefix_output{i, 1} anat_file]), ...
+                                   map, false);
 
-        assertEqual(sources{end}, prefix_output{i, 2});
+        assertEqual(sources{end}, fullfile('sub-01', 'anat', prefix_output{i, 2}));
 
     end
 
@@ -48,11 +50,11 @@ function test_identify_sources_anat()
 
     anat_file = 'sub-01_T1w.nii';
 
-    prefix_output = {'wm',  fullfile('sub-01', 'sub-01_space-individual_desc-biascor_T1w.nii')
-                     'wc1', fullfile('sub-01', 'sub-01_space-individual_label-GM_probseg.nii')
-                     'wc2', fullfile('sub-01', 'sub-01_space-individual_label-WM_probseg.nii')
-                     'wc3', fullfile('sub-01', 'sub-01_space-individual_label-CSF_probseg.nii')
-                     'wc1', fullfile('sub-01', 'sub-01_space-individual_label-GM_probseg.nii')
+    prefix_output = {'wm',  'sub-01_space-individual_desc-biascor_T1w.nii'
+                     'wc1', 'sub-01_space-individual_label-GM_probseg.nii'
+                     'wc2', 'sub-01_space-individual_label-WM_probseg.nii'
+                     'wc3', 'sub-01_space-individual_label-CSF_probseg.nii'
+                     'wc1', 'sub-01_space-individual_label-GM_probseg.nii'
                     };
 
     map = default_mapping();
@@ -61,7 +63,7 @@ function test_identify_sources_anat()
 
         sources = identify_sources([prefix_output{i, 1} anat_file], map, false);
 
-        assertEqual(sources{end}, prefix_output{i, 2});
+        assertEqual(sources{end}, fullfile('sub-01', 'anat', prefix_output{i, 2}));
 
     end
 
@@ -91,7 +93,7 @@ function test_identify_sources_func()
 
         sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
-        assertEqual(sources{end}, fullfile('sub-01', prefix_output{i, 2}));
+        assertEqual(sources{end}, fullfile('sub-01', 'func', prefix_output{i, 2}));
 
     end
 
@@ -113,17 +115,31 @@ function test_identify_sources_mean()
 
         sources = identify_sources([prefix_output{i, 1} func_file], map, false);
 
-        assertEqual(sources{end}, fullfile('sub-01', prefix_output{i, 2}));
+        assertEqual(sources{end}, fullfile('sub-01', 'func', prefix_output{i, 2}));
 
     end
 
 end
 
-function test_identify_sources_suffix()
+function test_identify_sources_suffix_anat()
 
-    input_output = {'msub-01_T1w_seg8.mat', ...
-                    'sub-01_space-individual_desc-biascor_T1w.nii'
-                    'asub-01_task-foo_bold_uw.mat', ...
+    input_output = {'msub-01_T1w_seg8.mat', 'sub-01_space-individual_desc-biascor_T1w.nii'};
+
+    map = default_mapping();
+
+    for i = 1:size(input_output, 1)
+
+        sources = identify_sources(input_output{i, 1}, map, false);
+
+        assertEqual(sources{1}, fullfile('sub-01', 'anat', input_output{i, 2}));
+
+    end
+
+end
+
+function test_identify_sources_suffix_func()
+
+    input_output = {'asub-01_task-foo_bold_uw.mat', ...
                     'sub-01_task-foo_space-individual_desc-stc_bold.nii'};
 
     map = default_mapping();
@@ -132,7 +148,7 @@ function test_identify_sources_suffix()
 
         sources = identify_sources(input_output{i, 1}, map, false);
 
-        assertEqual(sources{1}, fullfile('sub-01', input_output{i, 2}));
+        assertEqual(sources{1}, fullfile('sub-01', 'func', input_output{i, 2}));
 
     end
 
