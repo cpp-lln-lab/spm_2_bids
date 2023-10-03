@@ -43,7 +43,7 @@ repos:
   - id: rst-inline-touching-normal     # Detect mistake of inline code touching normal text in rst
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.5
+  rev: v2.2.6
   hooks:
   - id: codespell
 
