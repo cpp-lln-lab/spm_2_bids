@@ -5,7 +5,7 @@ install_dev_octave: install_dev
 install_dev: lib/bids-matlab lib/JSONio
 
 lib/bids-matlab:
-	git clone https://github.com/bids-standard/bids-matlab.git --branch dev lib/bids-matlab
+	git clone https://github.com/bids-standard/bids-matlab.git --branch main lib/bids-matlab
 
 lib/JSONio:
 	git clone https://github.com/gllmflndn/JSONio.git --depth 1 lib/JSONio
