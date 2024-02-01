@@ -44,7 +44,7 @@ jobs:
         cover_xml_file: coverage.xml
 
     - name: Code coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: coverage.xml
         flags: ubuntu-latest_octave
