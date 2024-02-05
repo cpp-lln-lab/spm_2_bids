@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [R2021a, R2021b, R2022a, R2022b]
+        version: [R2021a, R2022a, R2023a]
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false  # Don't cancel all jobs if one fails
 
@@ -54,9 +54,10 @@ jobs:
         command: cd(fullfile(getenv('GITHUB_WORKSPACE'), '.github', 'workflows')); run tests_matlab;
 
     - name: Code coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: coverage.xml
         flags: ${{ matrix.os }}_matlab-${{ matrix.version }}
         name: codecov-umbrella
         fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}
