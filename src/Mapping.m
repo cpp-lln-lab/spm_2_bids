@@ -170,39 +170,36 @@ classdef Mapping
 
             obj = flatten_mapping(obj);
 
-            % print to screen be default;
-            output_is_json = false;
+            if nargin > 1 && strcmp(bids.internal.file_utils(filename, 'ext'), 'json')
+                output_is_json = true;
+                content = {};
+                for i = 1:size(obj.mapping, 1)
+                    input = obj.mapping(i);
+                    input = rmfield(input, 'name_spec');
+                    content{i, 1} = struct('input', input, ...
+                                           'output', obj.mapping(i).name_spec);
+                end
+                bids.util.jsonencode(filename, content);
+                return
+            end
+
+            % print to screen by default
+            fid = 1;
 
             % what to separate input and output with
             left = ' ';
             separator = ' --> ';
             right = ' ';
 
-            if nargin < 2
-
-                fid = 1;
-
-            elseif ~strcmp(bids.internal.file_utils(filename, 'ext'), 'json')
-
+            if nargin > 1
                 fid = fopen(filename, 'Wt');
                 if fid == -1
                     error('Unable to write file %s.', filename);
                 end
-
+                % markdown table separators
                 left = '| ';
                 separator = ' | ';
                 right = ' |';
-
-            elseif strcmp(bids.internal.file_utils(filename, 'ext'), 'json')
-
-                output_is_json = true;
-
-                content = {};
-
-            else
-
-                fid = 1;
-
             end
 
             header = ['<!--\n', ...
@@ -212,60 +209,44 @@ classdef Mapping
                       '# Mapping\n\n', ...
                       left, 'input', separator, 'output', right,  '\n', ...
                       left, '-',     separator, '-',      right,  '\n'];
-            if ~output_is_json
-                fprintf(fid, '\n');
-                if fid ~= 1
-                    fprintf(fid, header);
-                end
+
+            fprintf(fid, '\n');
+            if fid ~= 1
+                fprintf(fid, header);
             end
 
             for i = 1:size(obj.mapping, 1)
 
-                if ~output_is_json
-                    %%
-                    input = obj.mapping(i);
-                    input = prepare_for_printing(input);
+                %%
+                input = obj.mapping(i);
+                input = prepare_for_printing(input);
 
-                    input_filename = input.filename;
+                input_filename = input.filename;
 
-                    %%
-                    output = obj.mapping(i).name_spec;
-                    output = prepare_for_printing(output);
+                %%
+                output = obj.mapping(i).name_spec;
+                output = prepare_for_printing(output);
 
-                    output_filename = output.filename;
+                output_filename = output.filename;
 
-                    output_filename = ['*' output_filename];
-                    output_filename = strrep(output_filename, 'add-star', '*');
+                output_filename = ['*' output_filename];
+                output_filename = strrep(output_filename, 'add-star', '*');
 
-                    if fid ~= 1
-                        input_filename = strrep(input_filename, '*', '\*');
-                        input_filename = strrep(input_filename, '_', '\_');
-                        output_filename = strrep(output_filename, '*', '\*');
-                        output_filename = strrep(output_filename, '_', '\_');
-                    end
-
-                    fprintf(fid, '%s%s%s%s%s\n', ...
-                            left, input_filename, separator, output_filename, right);
-
-                else
-
-                    input = obj.mapping(i);
-                    input = rmfield(input, 'name_spec');
-                    content{i, 1} = struct('input', input, ...
-                                           'output', obj.mapping(i).name_spec);
-
+                if fid ~= 1
+                    input_filename = strrep(input_filename, '*', '\*');
+                    input_filename = strrep(input_filename, '_', '\_');
+                    output_filename = strrep(output_filename, '*', '\*');
+                    output_filename = strrep(output_filename, '_', '\_');
                 end
+
+                fprintf(fid, '%s%s%s%s%s\n', ...
+                        left, input_filename, separator, output_filename, right);
 
             end
 
-            if ~output_is_json
-                fprintf(fid, '\n');
-                if fid ~= 1
-                    fclose(fid);
-                end
-            else
-                bids.util.jsonencode(filename, content);
-
+            fprintf(fid, '\n');
+            if fid ~= 1
+                fclose(fid);
             end
 
         end
