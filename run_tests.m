@@ -1,6 +1,6 @@
 % (C) Copyright 2019 spm_2_bids developers
 
-thisDir = fullfile(fileparts(mfilename('fullpath')));
+thisDir = fileparts(mfilename('fullpath'));
 
 folderToCover = fullfile(thisDir, 'src');
 addpath(genpath(folderToCover));
