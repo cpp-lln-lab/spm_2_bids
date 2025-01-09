@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get -y -qq update
-        sudo apt-get -y install octave liboctave-dev
+        sudo apt-get -y install octave octave-dev
 
     - name: Clone spm_2_bids
       uses: actions/checkout@v4
