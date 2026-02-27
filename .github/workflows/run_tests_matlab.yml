@@ -51,7 +51,7 @@ jobs:
       run: make install_dev
 
     - name: Run commands
-      uses: matlab-actions/run-command@v2.3.0
+      uses: matlab-actions/run-command@v2.4.0
       with:
         command: cd(fullfile(getenv('GITHUB_WORKSPACE'), '.github', 'workflows')); run tests_matlab;
 
