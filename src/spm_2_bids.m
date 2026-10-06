@@ -18,7 +18,7 @@ function [new_filename, pth, json] = spm_2_bids(varargin)
     % :param verbose: boolean
     %
     % :returns: - :new_filename: (string) BIDS compatible filename
-    %               for example ``sub-01_ses-01_space-IXI549Space_desc-preproc_T1w.nii``;
+    %               for example ``sub-01_ses-01_space-MNI152NLin2009cAsym_desc-preproc_T1w.nii``;
     %           - :pth: (string) relative BIDS path
     %               for example ``sub-01/ses-01``
     %           - :json: (structure) JSON derivatives content
@@ -185,11 +185,10 @@ function json = set_metadata(file, map, verbose, bf)
         content = rmfield(content, 'Sources');
     end
 
-    if isfield(bf.entities, 'space') && strcmp(bf.entities.space, 'IXI549Space')
-        content.SpatialReference  = struct('IXI549Space', ...
-                                           ['Reference space defined by the average ', ...
-                                            'of the ''549 subjects from the IXI dataset'' ', ...
-                                            'linearly transformed to ICBM MNI 452.']);
+    if isfield(bf.entities, 'space') && strcmp(bf.entities.space, 'space-MNI152NLin2009cAsym')
+        content.SpatialReference  = struct('space-MNI152NLin2009cAsym', ...
+                                           ['ICBM 152 Nonlinear Asymmetrical template version 2009c ', ...
+                                            'http://nist.mni.mcgill.ca/?p=904']);
     end
 
     json.content = content;
