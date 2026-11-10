@@ -3,13 +3,9 @@ Function details
 
 ``spm_2_bids`` only provides names to use but does not actually rename the files.
 
-.. automodule:: src
+.. autofunction:: spm_2_bids.m
 
-.. autofunction:: spm_2_bids
+.. autofunction:: defaults/check_cfg.m
 
-.. automodule:: src.defaults
-
-.. autofunction:: check_cfg
-
-.. autoclass:: Mapping
+.. autoclass:: Mapping.m
     :members:

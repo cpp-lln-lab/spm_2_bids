@@ -37,7 +37,17 @@ extensions = [
     "sphinx_copybutton",
     "myst_parser",
 ]
-matlab_src_dir = os.path.dirname(os.path.abspath("../../src"))
+matlab_src_code_project_root = "../../src"
+# Help text is incomplete in places: report, do not fail.
+matlab_api_check_rules = {
+    "description": "warning",
+    "method-description": "warning",
+    "inputs": "warning",
+    "outputs": "warning",
+    "name-value": "warning",
+    "sidecar-documented": "warning",
+    "sidecar-links": "warning",
+}
 primary_domain = "mat"
 
 # Add any paths that contain templates here, relative to this directory.
