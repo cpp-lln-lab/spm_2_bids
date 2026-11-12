@@ -38,11 +38,11 @@ extensions = [
     'sphinx.ext.autodoc']
 ```
 
-`matlab_src_dir` in `docs/source/conf.py` should have the path (relative to
-`conf.py`) to the folder containing your matlab code:
+`matlab_src_code_project_root` in `docs/source/conf.py` should have the path
+(relative to `conf.py`) to the folder containing your matlab code:
 
 ```python
-matlab_src_dir = os.path.dirname(os.path.abspath('../../src'))
+matlab_src_code_project_root = "../../src"
 ```
 
 ## reStructured text markup
@@ -67,9 +67,7 @@ be done automatically.
 
 ```rst
 
-.. automodule:: src.folder_name .. <-- This is necessary for auto-documenting the rest
-
-.. autofunction:: function to document
+.. autofunction:: folder_name/function_to_document.m
 
 ```
 
