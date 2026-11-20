@@ -21,10 +21,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        version: [R2021a, R2025b]
+        version: [R2023b, R2026b]
         include:
         - os: macos-latest
-          version: R2025b
+          version: R2026b
       fail-fast: false  # Don't cancel all jobs if one fails
 
     runs-on: ${{ matrix.os }}
