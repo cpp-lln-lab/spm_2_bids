@@ -33,14 +33,21 @@ jobs:
     - name: get bids-matlab and JSONio
       run: make install_dev_octave
 
-    - name: MOxUnit Action
-      uses: joergbrech/moxunit-action@v1.3.0
-      with:
-        tests: tests
-        src: src src/defaults src/utils
-        ext: lib/JSONio lib/bids-matlab tests/utils
-        with_coverage: true
-        cover_xml_file: coverage.xml
+    - name: Install MOxUnit and MOcov
+      run: |
+        git clone https://github.com/MOxUnit/MOxUnit.git --depth 1
+        git clone https://github.com/MOcov/MOcov.git --depth 1
+
+    # run the tests with the octave installed on the runner:
+    # the JSONio mex file is compiled against it
+    - name: Run tests
+      run: |
+        octave --no-gui --no-window-system --eval " \
+          addpath(fullfile(pwd, 'MOcov', 'MOcov')); \
+          addpath(fullfile(pwd, 'MOxUnit', 'MOxUnit')); \
+          moxunit_set_path(); \
+          init_spm_2_bids(); \
+          run_tests;"
 
     - name: Code coverage
       uses: codecov/codecov-action@v7
